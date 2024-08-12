@@ -380,7 +380,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
     attrs: {
-      id: 'app'
+      id: 'root',
+      class: 'todoapp'
       // dataCount: count, // we use the count here
     },
     children: ['The current count is: ', String(count)].concat(_toConsumableArray(Array.from({
@@ -394,10 +395,20 @@ var createVApp = function createVApp(count) {
     })))
   });
 };
-var vApp = createVApp(6);
+var count = 1;
+var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
-(0, _mount.default)($app, document.getElementById('app'));
+var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 
+// Example of a specific event handler
+function handleImageClick() {
+  count++;
+  var vNewApp = createVApp(count);
+  var patch = (0, _diff.default)(vApp, vNewApp);
+  $rootEl = patch($rootEl);
+  vApp = vNewApp;
+}
+$rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
 
 // setInterval(() => {
@@ -436,7 +447,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43393" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32983" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

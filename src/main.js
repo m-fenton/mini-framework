@@ -5,7 +5,8 @@ import diff from './vdom/diff';
 
 const createVApp = count => createElement('div', {
   attrs: {
-    id: 'app',
+    id: 'root',
+    class: 'todoapp',
     // dataCount: count, // we use the count here
   },
   children: [
@@ -18,11 +19,21 @@ const createVApp = count => createElement('div', {
     })),
   ],
 });
-
-let vApp = createVApp(6);
+let count = 1
+let vApp = createVApp(count);
 const $app = render(vApp);
-mount($app, document.getElementById('app'));
+let $rootEl = mount($app, document.getElementById('root'));
 
+// Example of a specific event handler
+function handleImageClick() {
+  count++;
+  const vNewApp = createVApp(count);
+  const patch = diff(vApp, vNewApp);
+  $rootEl = patch($rootEl);
+  vApp = vNewApp;
+}
+
+$rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
 
 // setInterval(() => {
