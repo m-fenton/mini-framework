@@ -6,7 +6,7 @@ import diff from './vdom/diff';
 const createVApp = count => createElement('div', {
   attrs: {
     id: 'app',
-    dataCount: count, // we use the count here
+    // dataCount: count, // we use the count here
   },
   children: [
     'The current count is: ',
@@ -19,18 +19,20 @@ const createVApp = count => createElement('div', {
   ],
 });
 
-let vApp = createVApp(0);
+let vApp = createVApp(6);
 const $app = render(vApp);
-let $rootEl = mount($app, document.getElementById('app'));
+mount($app, document.getElementById('app'));
 
-setInterval(() => {
-  const n = Math.floor(Math.random() * 10);
-  const vNewApp = createVApp(n);
-  const patch = diff(vApp, vNewApp);
+// let $rootEl = mount($app, document.getElementById('app'));
 
-  // we might replace the whole $rootEl,
-  // so we want the patch will return the new $rootEl
-  $rootEl = patch($rootEl);
+// setInterval(() => {
+//   const n = Math.floor(Math.random() * 10);
+//   const vNewApp = createVApp(n);
+//   const patch = diff(vApp, vNewApp);
 
-  vApp = vNewApp;
-}, 1000);
+//   // we might replace the whole $rootEl,
+//   // so we want the patch will return the new $rootEl
+//   $rootEl = patch($rootEl);
+
+//   vApp = vNewApp;
+// }, 1000);

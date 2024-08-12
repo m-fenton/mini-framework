@@ -380,8 +380,8 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
     attrs: {
-      id: 'app',
-      dataCount: count // we use the count here
+      id: 'app'
+      // dataCount: count, // we use the count here
     },
     children: ['The current count is: ', String(count)].concat(_toConsumableArray(Array.from({
       length: count
@@ -394,19 +394,23 @@ var createVApp = function createVApp(count) {
     })))
   });
 };
-var vApp = createVApp(0);
+var vApp = createVApp(6);
 var $app = (0, _render.default)(vApp);
-var $rootEl = (0, _mount.default)($app, document.getElementById('app'));
-setInterval(function () {
-  var n = Math.floor(Math.random() * 10);
-  var vNewApp = createVApp(n);
-  var patch = (0, _diff.default)(vApp, vNewApp);
+(0, _mount.default)($app, document.getElementById('app'));
 
-  // we might replace the whole $rootEl,
-  // so we want the patch will return the new $rootEl
-  $rootEl = patch($rootEl);
-  vApp = vNewApp;
-}, 1000);
+// let $rootEl = mount($app, document.getElementById('app'));
+
+// setInterval(() => {
+//   const n = Math.floor(Math.random() * 10);
+//   const vNewApp = createVApp(n);
+//   const patch = diff(vApp, vNewApp);
+
+//   // we might replace the whole $rootEl,
+//   // so we want the patch will return the new $rootEl
+//   $rootEl = patch($rootEl);
+
+//   vApp = vNewApp;
+// }, 1000);
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -432,7 +436,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40115" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43393" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
