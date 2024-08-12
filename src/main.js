@@ -3,23 +3,29 @@ import render from './vdom/render';
 import mount from './vdom/mount';
 import diff from './vdom/diff';
 
+import { createFooter } from './vdom/components/createFooter';
+
+let count = 1
+
+
 const createVApp = count => createElement('div', {
   attrs: {
     id: 'root',
     class: 'todoapp',
-    // dataCount: count, // we use the count here
+    dataCount: count, // we use the count here
   },
   children: [
     'The current count is: ',
-    String(count), // and here
+    String(count),
     ...Array.from({ length: count }, () => createElement('img', {
       attrs: {
         src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
       },
     })),
+    createFooter(count),
   ],
 });
-let count = 1
+
 let vApp = createVApp(count);
 const $app = render(vApp);
 let $rootEl = mount($app, document.getElementById('root'));
