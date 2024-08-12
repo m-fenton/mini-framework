@@ -363,13 +363,68 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"main.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createFooter = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Function to create the footer element
+var createFooter = exports.createFooter = function createFooter(count) {
+  return (0, _createElement.default)("footer", {
+    attrs: {
+      class: "footer"
+    },
+    children: [(0, _createElement.default)("span", {
+      attrs: {
+        class: "todo-count"
+      },
+      children: ["".concat(count, " Items Left")] // Show the current count
+    }), (0, _createElement.default)("ul", {
+      attrs: {
+        class: "filters"
+      },
+      children: [(0, _createElement.default)("li", {
+        children: [(0, _createElement.default)("a", {
+          attrs: {
+            class: "",
+            href: "#/"
+          },
+          children: ["All"]
+        }), (0, _createElement.default)("a", {
+          attrs: {
+            class: "",
+            href: "#/active"
+          },
+          children: ["Active"]
+        }), (0, _createElement.default)("a", {
+          attrs: {
+            class: "",
+            href: "#/completed"
+          },
+          children: ["Completed"]
+        })]
+      })]
+    }), (0, _createElement.default)("button", {
+      attrs: {
+        class: "clear-completed",
+        disabled: "" // or remove this line if you want the button to be enabled
+      },
+      children: ["Clear completed"]
+    })]
+  });
+};
+},{"../createElement":"vdom/createElement.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
+var _createFooter = require("./vdom/components/createFooter");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -377,12 +432,13 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var count = 1;
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
     attrs: {
       id: 'root',
-      class: 'todoapp'
-      // dataCount: count, // we use the count here
+      class: 'todoapp',
+      dataCount: count // we use the count here
     },
     children: ['The current count is: ', String(count)].concat(_toConsumableArray(Array.from({
       length: count
@@ -392,10 +448,9 @@ var createVApp = function createVApp(count) {
           src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
         }
       });
-    })))
+    })), [(0, _createFooter.createFooter)(count)])
   });
 };
-var count = 1;
 var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
@@ -422,7 +477,7 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -447,7 +502,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34069" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46445" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
