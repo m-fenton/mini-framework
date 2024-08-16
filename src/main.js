@@ -24,12 +24,20 @@ const createVApp = count => createElement('div', {
     })),
     createFooter(count),
   ],
+  
 });
+
+function updateURLWithCount(count) {
+  // Remove any existing count from the pathname
+  const basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  const newUrl = `${basePath}/${count}`;
+  history.replaceState({ count }, '', newUrl);
+}
 
 let vApp = createVApp(count);
 const $app = render(vApp);
 let $rootEl = mount($app, document.getElementById('root'));
-
+console.log(window.location)
 // Example of a specific event handler
 function handleImageClick() {
   count++;
@@ -37,6 +45,8 @@ function handleImageClick() {
   const patch = diff(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
+  updateURLWithCount(count);
+
 }
 
 $rootEl.addEventListener('click', handleImageClick);

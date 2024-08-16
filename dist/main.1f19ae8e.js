@@ -451,10 +451,18 @@ var createVApp = function createVApp(count) {
     })), [(0, _createFooter.createFooter)(count)])
   });
 };
+function updateURLWithCount(count) {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  var newUrl = "".concat(basePath, "/").concat(count);
+  history.replaceState({
+    count: count
+  }, '', newUrl);
+}
 var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
-
+console.log(window.location);
 // Example of a specific event handler
 function handleImageClick() {
   count++;
@@ -462,6 +470,7 @@ function handleImageClick() {
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
+  updateURLWithCount(count);
 }
 $rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
@@ -502,7 +511,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46445" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35011" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
