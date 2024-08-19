@@ -16,14 +16,13 @@ export const createMain = () =>
               class: "toggle-all",
               type: "checkbox",
             },
-            children: [
-              createElement("label", {
-                attrs: {
-                  class: "toggle-all-label",
-                  for: "toggle-all",
-                },
-              }),
-            ],
+
+          }),
+          createElement("label", {
+            attrs: {
+              class: "toggle-all-label",
+              for: "toggle-all",
+            },
           }),
         ],
       }),
