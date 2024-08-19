@@ -3,6 +3,7 @@ import render from './vdom/render';
 import mount from './vdom/mount';
 import diff from './vdom/diff';
 
+import { createMain } from './vdom/components/createMain';
 import { createFooter } from './vdom/components/createFooter';
 
 let count = 1
@@ -15,13 +16,15 @@ const createVApp = count => createElement('div', {
     dataCount: count, // we use the count here
   },
   children: [
-    'The current count is: ',
-    String(count),
-    ...Array.from({ length: count }, () => createElement('img', {
-      attrs: {
-        src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
-      },
-    })),
+    // 'The current count is: ',
+    // String(count),
+    // ...Array.from({ length: count }, () => createElement('img', {
+    //   attrs: {
+    //     src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
+    //   },
+    // })),
+
+    createMain(),
     createFooter(count),
   ],
 });
