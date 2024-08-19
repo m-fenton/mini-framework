@@ -17,7 +17,7 @@ const handleDoubleClickEdit = (event) => {
 };
 
 // Example of registering the event
-registerEvent('dblclick', 'label', handleDoubleClickEdit);
+//registerEvent('dblclick', 'label', handleDoubleClickEdit);
 
 
 //NEEDS TO BE CHANGED MASSIVELY TO WORK, JUST A PLACEHOLDER FORM CHAT

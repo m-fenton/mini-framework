@@ -1,3 +1,5 @@
+import registerEvent from "../registerEvent";
+
 const handleEnterKeySubmit = (event) => {
     if (event.key === 'Enter') {
         // Trigger the submit action
@@ -7,4 +9,8 @@ const handleEnterKeySubmit = (event) => {
 };
 
 // Example of registering the event
-registerEvent('keydown', 'todo-input', handleEnterKeySubmit);
+//registerEvent('keydown', 'todo-input', handleEnterKeySubmit);
+//registerEvent('keydown', 'label', handleEnterKeySubmit);
+
+// Only instances of using enter key should be upon submitting a task from todo-input
+// And hitting enter to submit edit to task after double-clicking to edit

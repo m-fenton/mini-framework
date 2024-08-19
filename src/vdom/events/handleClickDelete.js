@@ -1,11 +1,22 @@
-const handleClickDelete = (event) => {
+export const handleClickDelete = (event) => {
+    console.log("event", event)
     const deleteButton = event.target;
-    const item = deleteButton.closest('.todo-item');
+    console.log("event.target", event.target)
+    console.log("delete button", deleteButton)
+    const item = deleteButton.closest('li');
 
-    item.remove();
+    console.log("do we get here?")
 
-    console.log(`Item ${item.id} deleted`);
+    if (item) {
+        item.remove();
+        console.log(`Item ${item.id} deleted`);
+    } else {
+        console.error('Item not found');
+    }
 };
 
 // Example of registering the event
-registerEvent('click', '.delete-button', handleClickDelete);
+//registerEvent('click', 'destroy', handleClickDelete);
+
+// This is the only instance of usage of this function. Upon deleting task usinghte x button.
+// If there is an error try a .destroy instead

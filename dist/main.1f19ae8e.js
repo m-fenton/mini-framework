@@ -418,8 +418,8 @@ function updateURLWithCount(count) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
-var eventRegistry = {};
+exports.eventRegistry = exports.default = void 0;
+var eventRegistry = exports.eventRegistry = {};
 var _default = exports.default = function _default(type, selector, handler) {
   if (!eventRegistry[type]) {
     eventRegistry[type] = [];
@@ -428,7 +428,9 @@ var _default = exports.default = function _default(type, selector, handler) {
     selector: selector,
     handler: handler
   });
-}; // Centralized event registry
+  console.log("in event registry", eventRegistry);
+}; // Exporting for use in triggerEvent.js if necessary
+// Centralized event registry
 // const eventRegistry = {};
 // export const registerEvent = (type, selector, handler) => {
 //     if (!eventRegistry[type]) {
@@ -444,31 +446,42 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _default = exports.default = function _default(elementId, eventType, event) {
-  if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
-    eventRegistry[elementId][eventType].forEach(function (handler) {
-      return handler(event);
+var _registerEvent = require("./registerEvent");
+// export default (elementId, eventType, event) => {
+//     if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
+//         eventRegistry[elementId][eventType].forEach(handler => handler(event));
+//     }
+// }
+// Ensure you import eventRegistry if needed
+/**
+ * Trigger an event of a given type for elements matching a selector.
+ * @param {string} eventType - Type of the event to trigger (e.g., 'click').
+ * @param {Event} event - The event object to pass to handlers.
+ */
+var _default = exports.default = function _default(eventType, event) {
+  console.log("do i get to trigger");
+  console.log("TE event", event);
+  if (_registerEvent.eventRegistry[eventType]) {
+    console.log("do i get to trigger if statement");
+    _registerEvent.eventRegistry[eventType].forEach(function (_ref) {
+      var selector = _ref.selector,
+        handler = _ref.handler;
+      // Query elements matching the selector
+
+      console.log("selector", selector);
+      console.log("handler", handler);
+      var elements = document.querySelectorAll(selector);
+      console.log("elements", elements);
+      elements.forEach(function (element) {
+        if (element.matches(selector)) {
+          console.log("handler being called at end of TriggerEvent");
+          handler(event); // Call the handler
+        }
+      });
     });
   }
-}; // import eventRegistry from './registerEvent';
-// export const triggerEvent = (element, eventType, event) => {
-//     const { id, className, tagName } = element;
-//     const matchesSelector = (selector) => {
-//         return (
-//             (id && selector === `#${id}`) ||
-//             (className && selector === `.${className}`) ||
-//             selector.toLowerCase() === tagName.toLowerCase()
-//         );
-//     };
-//     if (eventRegistry[eventType]) {
-//         eventRegistry[eventType].forEach(({ selector, handler }) => {
-//             if (matchesSelector(selector)) {
-//                 handler.call(element, event);
-//             }
-//         });
-//     }
-// };
-},{}],"vdom/components/createHeader.js":[function(require,module,exports) {
+};
+},{"./registerEvent":"vdom/registerEvent.js"}],"vdom/components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -631,7 +644,87 @@ var createFooter = exports.createFooter = function createFooter(count) {
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"main.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleClickDelete = void 0;
+var handleClickDelete = exports.handleClickDelete = function handleClickDelete(event) {
+  console.log("event", event);
+  var deleteButton = event.target;
+  console.log("event.target", event.target);
+  console.log("delete button", deleteButton);
+  var item = deleteButton.closest('li');
+  console.log("do we get here?");
+  if (item) {
+    item.remove();
+    console.log("Item ".concat(item.id, " deleted"));
+  } else {
+    console.error('Item not found');
+  }
+};
+
+// Example of registering the event
+//registerEvent('click', 'destroy', handleClickDelete);
+
+// This is the only instance of usage of this function. Upon deleting task usinghte x button.
+// If there is an error try a .destroy instead
+},{}],"vdom/events/handleSingleClickToggle.js":[function(require,module,exports) {
+var handleSingleClickToggle = function handleSingleClickToggle(event) {
+  var checkbox = event.target;
+  var item = checkbox.closest('.todo-item');
+  if (checkbox.checked) {
+    item.classList.add('completed');
+  } else {
+    item.classList.remove('completed');
+  }
+  console.log("Item ".concat(item.id, " marked as ").concat(checkbox.checked ? 'completed' : 'not completed'));
+};
+
+// Example of registering the event
+//registerEvent('click', '.todo-checkbox', handleSingleClickToggle);
+},{}],"vdom/events/handleDoubleClickEdit.js":[function(require,module,exports) {
+var handleDoubleClickEdit = function handleDoubleClickEdit(event) {
+  var item = event.target;
+  var originalText = item.textContent;
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.value = originalText;
+  item.replaceWith(input);
+  input.addEventListener('blur', function () {
+    var newValue = input.value.trim() || originalText;
+    input.replaceWith(document.createTextNode(newValue));
+    console.log("Item edited to: ".concat(newValue));
+  });
+  input.focus();
+};
+
+// Example of registering the event
+//registerEvent('dblclick', 'label', handleDoubleClickEdit);
+
+//NEEDS TO BE CHANGED MASSIVELY TO WORK, JUST A PLACEHOLDER FORM CHAT
+},{}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+"use strict";
+
+var _registerEvent = _interopRequireDefault(require("../registerEvent"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var handleEnterKeySubmit = function handleEnterKeySubmit(event) {
+  if (event.key === 'Enter') {
+    // Trigger the submit action
+    console.log('Submit action triggered by Enter key');
+    // Add your logic for adding the item to the list
+  }
+};
+
+// Example of registering the event
+//registerEvent('keydown', 'todo-input', handleEnterKeySubmit);
+//registerEvent('keydown', 'label', handleEnterKeySubmit);
+
+// Only instances of using enter key should be upon submitting a task from todo-input
+// And hitting enter to submit edit to task after double-clicking to edit
+},{"../registerEvent":"vdom/registerEvent.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
@@ -645,10 +738,16 @@ var _triggerEvent = _interopRequireDefault(require("./vdom/triggerEvent"));
 var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
+var _handleClickDelete = require("./vdom/events/handleClickDelete");
+var _handleSingleClickToggle = require("./vdom/events/handleSingleClickToggle");
+var _handleDoubleClickEdit = require("./vdom/events/handleDoubleClickEdit");
+var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // functionality
 
 // elements
+
+//events
 
 var count = 1;
 var createVApp = function createVApp(count) {
@@ -689,7 +788,25 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+(0, _registerEvent.default)('click', '.destroy', _handleClickDelete.handleClickDelete);
+
+// Triggering an event
+
+var deleteButton = document.querySelector('.destroy');
+// Create a simulated event object
+var simulatedEvent = {
+  type: 'click',
+  target: deleteButton,
+  bubbles: true,
+  cancelable: true
+  // Additional custom properties can be added here
+};
+console.log("simulated event", simulatedEvent);
+window.onclick = (0, _triggerEvent.default)('click', simulatedEvent);
+// Trigger the registered click events
+//triggerEvent('click', simulatedEvent);
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleSingleClickToggle":"vdom/events/handleSingleClickToggle.js","./vdom/events/handleDoubleClickEdit":"vdom/events/handleDoubleClickEdit.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -714,7 +831,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56233" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50526" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

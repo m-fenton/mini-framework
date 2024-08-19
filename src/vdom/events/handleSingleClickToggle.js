@@ -12,4 +12,4 @@ const handleSingleClickToggle = (event) => {
 };
 
 // Example of registering the event
-registerEvent('click', '.todo-checkbox', handleSingleClickToggle);
+//registerEvent('click', '.todo-checkbox', handleSingleClickToggle);

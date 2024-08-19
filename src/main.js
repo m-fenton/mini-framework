@@ -13,6 +13,11 @@ import { createHeader } from './vdom/components/createHeader';
 import { createMain } from './vdom/components/createMain';
 import { createFooter } from './vdom/components/createFooter';
 
+//events
+import { handleClickDelete } from './vdom/events/handleClickDelete';
+import { handleSingleClickToggle } from './vdom/events/handleSingleClickToggle';
+import { handleDoubleClickEdit } from './vdom/events/handleDoubleClickEdit';
+import { handleEnterKeySubmit } from './vdom/events/handleEnterKeySubmit';
 
 let count = 1
 
@@ -61,3 +66,24 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
+
+registerEvent('click', '.destroy', handleClickDelete);
+
+// Triggering an event
+
+const deleteButton = document.querySelector('.destroy');
+// Create a simulated event object
+const simulatedEvent = {
+  type: 'click',
+  target: deleteButton,
+  bubbles: true,
+  cancelable: true,
+  // Additional custom properties can be added here
+};
+
+console.log("simulated event", simulatedEvent)
+
+window.onclick = triggerEvent('click', simulatedEvent);
+// Trigger the registered click events
+//triggerEvent('click', simulatedEvent);
+
