@@ -3,6 +3,7 @@ import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
 import diff from './vdom/diff';
+import { routing } from './vdom/routing';
 import { updateURLWithCount } from './vdom/updateURLWithCount';
 import registerEvent from './vdom/components/registerEvent';
 import triggerEvent from './vdom/components/triggerEvent';
@@ -46,6 +47,7 @@ function handleImageClick() {
   $rootEl = patch($rootEl);
   vApp = vNewApp;
   updateURLWithCount(count);
+  routing()
 }
 
 $rootEl.addEventListener('click', handleImageClick);

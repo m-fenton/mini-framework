@@ -363,7 +363,21 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/routing.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.routing = routing;
+function routing() {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  // const newUrl = `${basePath}/${count}`;
+  // history.replaceState({ count }, '', newUrl);
+  console.log("basePath:", basePath);
+}
+},{}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -511,6 +525,7 @@ var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
+var _routing = require("./vdom/routing");
 var _updateURLWithCount = require("./vdom/updateURLWithCount");
 var _registerEvent = _interopRequireDefault(require("./vdom/components/registerEvent"));
 var _triggerEvent = _interopRequireDefault(require("./vdom/components/triggerEvent"));
@@ -555,6 +570,7 @@ function handleImageClick() {
   $rootEl = patch($rootEl);
   vApp = vNewApp;
   (0, _updateURLWithCount.updateURLWithCount)(count);
+  (0, _routing.routing)();
 }
 $rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
@@ -570,7 +586,7 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/registerEvent":"vdom/components/registerEvent.js","./vdom/components/triggerEvent":"vdom/components/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/registerEvent":"vdom/components/registerEvent.js","./vdom/components/triggerEvent":"vdom/components/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -595,7 +611,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46421" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40105" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
