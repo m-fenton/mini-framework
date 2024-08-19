@@ -1,4 +1,5 @@
 import createElement from "../createElement";
+import { createListItem } from "./createListItem";
 
 export const createMain = () =>
   createElement("main", {
@@ -32,33 +33,7 @@ export const createMain = () =>
           class: "todo-list",
         },
         children: [
-          createElement("li", {
-            children: [
-              createElement("div", {
-                attrs: {
-                  class: "view",
-                },
-                children: [
-                  createElement("input", {
-                    attrs: {
-                      class: "toggle",
-                      type: "checkbox",
-                    },
-                  }),
-                  createElement("label", {
-                    attrs: {
-                      class: "label",
-                    },
-                  }),
-                  createElement("button", {
-                    attrs: {
-                      class: "destroy",
-                    },
-                  }),
-                ],
-              }),
-            ],
-          }),
+          createListItem()
         ],
       }),
     ],
