@@ -462,6 +462,38 @@ var createHeader = exports.createHeader = function createHeader() {
     })]
   });
 };
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createListItem = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var createListItem = exports.createListItem = function createListItem() {
+  return (0, _createElement.default)("li", {
+    children: [(0, _createElement.default)("div", {
+      attrs: {
+        class: "view"
+      },
+      children: [(0, _createElement.default)("input", {
+        attrs: {
+          class: "toggle",
+          type: "checkbox"
+        }
+      }), (0, _createElement.default)("label", {
+        attrs: {
+          class: "label"
+        }
+      }), (0, _createElement.default)("button", {
+        attrs: {
+          class: "destroy"
+        }
+      })]
+    })]
+  });
+};
 },{"../createElement":"vdom/createElement.js"}],"vdom/components/createMain.js":[function(require,module,exports) {
 "use strict";
 
@@ -470,6 +502,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createMain = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
+var _createListItem = require("./createListItem");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 var createMain = exports.createMain = function createMain() {
   return (0, _createElement.default)("main", {
@@ -495,31 +528,11 @@ var createMain = exports.createMain = function createMain() {
       attrs: {
         class: "todo-list"
       },
-      children: [(0, _createElement.default)("li", {
-        children: [(0, _createElement.default)("div", {
-          attrs: {
-            class: "view"
-          },
-          children: [(0, _createElement.default)("input", {
-            attrs: {
-              class: "toggle",
-              type: "checkbox"
-            }
-          }), (0, _createElement.default)("label", {
-            attrs: {
-              class: "label"
-            }
-          }), (0, _createElement.default)("button", {
-            attrs: {
-              class: "destroy"
-            }
-          })]
-        })]
-      })]
+      children: [(0, _createListItem.createListItem)()]
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js","./createListItem":"vdom/components/createListItem.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -656,7 +669,11 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+<<<<<<< HEAD
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "65193" + '/');
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42085" + '/');
+>>>>>>> Rupert
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
