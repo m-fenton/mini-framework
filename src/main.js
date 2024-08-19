@@ -1,13 +1,20 @@
+// functionality
 import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
 import diff from './vdom/diff';
+import { routing } from './vdom/routing';
+import { updateURLWithCount } from './vdom/updateURLWithCount';
+import registerEvent from './vdom/components/registerEvent';
+import triggerEvent from './vdom/components/triggerEvent';
 
+// elements
+import { createHeader } from './vdom/components/createHeader';
 import { createMain } from './vdom/components/createMain';
 import { createFooter } from './vdom/components/createFooter';
 
-let count = 1
 
+let count = 1
 
 const createVApp = count => createElement('div', {
   attrs: {
@@ -16,18 +23,14 @@ const createVApp = count => createElement('div', {
     dataCount: count, // we use the count here
   },
   children: [
-    // 'The current count is: ',
-    // String(count),
-    // ...Array.from({ length: count }, () => createElement('img', {
-    //   attrs: {
-    //     src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
-    //   },
-    // })),
-
+    createHeader(),
     createMain(),
     createFooter(count),
   ],
+
 });
+
+
 
 let vApp = createVApp(count);
 const $app = render(vApp);
@@ -40,6 +43,8 @@ function handleImageClick() {
   const patch = diff(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
+  updateURLWithCount(count);
+  routing()
 }
 
 $rootEl.addEventListener('click', handleImageClick);

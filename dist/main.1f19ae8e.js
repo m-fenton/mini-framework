@@ -363,12 +363,17 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
+<<<<<<< HEAD
 },{"./render":"vdom/render.js"}],"vdom/components/createMain.js":[function(require,module,exports) {
+=======
+},{"./render":"vdom/render.js"}],"vdom/routing.js":[function(require,module,exports) {
+>>>>>>> Rupert
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+<<<<<<< HEAD
 exports.createMain = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
@@ -417,6 +422,99 @@ var createMain = exports.createMain = function createMain() {
             }
           })]
         })]
+=======
+exports.routing = routing;
+function routing() {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  // const newUrl = `${basePath}/${count}`;
+  // history.replaceState({ count }, '', newUrl);
+  console.log("basePath:", basePath);
+}
+},{}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateURLWithCount = updateURLWithCount;
+function updateURLWithCount(count) {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  var newUrl = "".concat(basePath, "/").concat(count);
+  history.replaceState({
+    count: count
+  }, '', newUrl);
+}
+},{}],"vdom/components/registerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var eventRegistry = {};
+var _default = exports.default = function _default(elementId, eventType, handler) {
+  if (!eventRegistry[elementId]) {
+    eventRegistry[elementId] = {};
+  }
+  if (!eventRegistry[elementId][eventType]) {
+    eventRegistry[elementId][eventType] = [];
+  }
+  eventRegistry[elementId][eventType].push(handler);
+};
+},{}],"vdom/components/triggerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = exports.default = function _default(elementId, eventType, event) {
+  if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
+    eventRegistry[elementId][eventType].forEach(function (handler) {
+      return handler(event);
+    });
+  }
+};
+},{}],"vdom/components/createHeader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createHeader = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Function to create the footer element
+var createHeader = exports.createHeader = function createHeader() {
+  return (0, _createElement.default)("header", {
+    attrs: {
+      class: "header"
+    },
+    children: [(0, _createElement.default)("h1", {
+      children: ["todos", (0, _createElement.default)("div", {
+        attrs: {
+          class: "input-container"
+        },
+        children: [(0, _createElement.default)("input", {
+          attrs: {
+            id: "todo-input",
+            class: "new-todo",
+            type: "text",
+            placeholder: "What needs to be done?",
+            value: ""
+          }
+        })
+        // createElement("label", {
+        //     attrs: {
+        //         class: "visually-hidden",
+        //         for: "todo-input"
+        //     },
+        //     children: ["New Todo Input"]
+        // })
+        ]
+>>>>>>> Rupert
       })]
     })]
   });
@@ -482,9 +580,26 @@ var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
+<<<<<<< HEAD
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+=======
+var _routing = require("./vdom/routing");
+var _updateURLWithCount = require("./vdom/updateURLWithCount");
+var _registerEvent = _interopRequireDefault(require("./vdom/components/registerEvent"));
+var _triggerEvent = _interopRequireDefault(require("./vdom/components/triggerEvent"));
+var _createHeader = require("./vdom/components/createHeader");
+var _createFooter = require("./vdom/components/createFooter");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; } // functionality
+// elements
+>>>>>>> Rupert
 var count = 1;
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
@@ -493,6 +608,7 @@ var createVApp = function createVApp(count) {
       class: 'todoapp',
       dataCount: count // we use the count here
     },
+<<<<<<< HEAD
     children: [
     // 'The current count is: ',
     // String(count),
@@ -503,12 +619,23 @@ var createVApp = function createVApp(count) {
     // })),
 
     (0, _createMain.createMain)(), (0, _createFooter.createFooter)(count)]
+=======
+    children: [(0, _createHeader.createHeader)()].concat(_toConsumableArray(Array.from({
+      length: count
+    }, function () {
+      return (0, _createElement.default)('img', {
+        attrs: {
+          src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
+        }
+      });
+    })), [(0, _createFooter.createFooter)(count)])
+>>>>>>> Rupert
   });
 };
 var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
-
+console.log(window.location);
 // Example of a specific event handler
 function handleImageClick() {
   count++;
@@ -516,6 +643,8 @@ function handleImageClick() {
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
+  (0, _updateURLWithCount.updateURLWithCount)(count);
+  (0, _routing.routing)();
 }
 $rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
@@ -531,7 +660,11 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
+<<<<<<< HEAD
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+=======
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/registerEvent":"vdom/components/registerEvent.js","./vdom/components/triggerEvent":"vdom/components/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+>>>>>>> Rupert
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -556,8 +689,12 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+<<<<<<< HEAD
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "65193" + '/');
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "49400" + '/');
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40105" + '/');
+>>>>>>> Rupert
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
