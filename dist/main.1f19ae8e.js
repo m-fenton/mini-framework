@@ -137,7 +137,27 @@ var _default = exports.default = function _default(tagName) {
     children: children
   });
   return vElem;
-};
+}; // import { registerEvent } from './registerEvent';
+// const createElement = (tagName, { attrs = {}, children = [] } = {}) => {
+//     // Create a virtual element object
+//     const vElem = {
+//         tagName,
+//         attrs: { ...attrs },
+//         children: children.map(child => 
+//             typeof child === 'string' ? child : createElement(child.tagName, child)
+//         ),
+//     };
+//     // Register events in the event registry
+//     for (let attr in attrs) {
+//         if (attr.startsWith('on')) {
+//             const eventType = attr.slice(2).toLowerCase();
+//             registerEvent(eventType, `#${attrs.id}`, attrs[attr]);
+//             delete vElem.attrs[attr]; // Remove the event handler from attributes
+//         }
+//     }
+//     return vElem;
+// };
+// export default createElement;
 },{}],"vdom/render.js":[function(require,module,exports) {
 "use strict";
 
@@ -392,7 +412,7 @@ function updateURLWithCount(count) {
     count: count
   }, '', newUrl);
 }
-},{}],"vdom/components/registerEvent.js":[function(require,module,exports) {
+},{}],"vdom/registerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -400,16 +420,24 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var eventRegistry = {};
-var _default = exports.default = function _default(elementId, eventType, handler) {
-  if (!eventRegistry[elementId]) {
-    eventRegistry[elementId] = {};
+var _default = exports.default = function _default(type, selector, handler) {
+  if (!eventRegistry[type]) {
+    eventRegistry[type] = [];
   }
-  if (!eventRegistry[elementId][eventType]) {
-    eventRegistry[elementId][eventType] = [];
-  }
-  eventRegistry[elementId][eventType].push(handler);
-};
-},{}],"vdom/components/triggerEvent.js":[function(require,module,exports) {
+  eventRegistry[type].push({
+    selector: selector,
+    handler: handler
+  });
+}; // Centralized event registry
+// const eventRegistry = {};
+// export const registerEvent = (type, selector, handler) => {
+//     if (!eventRegistry[type]) {
+//         eventRegistry[type] = [];
+//     }
+//     eventRegistry[type].push({ selector, handler });
+// };
+// export default eventRegistry; // Export the registry for use in other modules
+},{}],"vdom/triggerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -422,7 +450,24 @@ var _default = exports.default = function _default(elementId, eventType, event) 
       return handler(event);
     });
   }
-};
+}; // import eventRegistry from './registerEvent';
+// export const triggerEvent = (element, eventType, event) => {
+//     const { id, className, tagName } = element;
+//     const matchesSelector = (selector) => {
+//         return (
+//             (id && selector === `#${id}`) ||
+//             (className && selector === `.${className}`) ||
+//             selector.toLowerCase() === tagName.toLowerCase()
+//         );
+//     };
+//     if (eventRegistry[eventType]) {
+//         eventRegistry[eventType].forEach(({ selector, handler }) => {
+//             if (matchesSelector(selector)) {
+//                 handler.call(element, event);
+//             }
+//         });
+//     }
+// };
 },{}],"vdom/components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
@@ -595,8 +640,8 @@ var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
 var _routing = require("./vdom/routing");
 var _updateURLWithCount = require("./vdom/updateURLWithCount");
-var _registerEvent = _interopRequireDefault(require("./vdom/components/registerEvent"));
-var _triggerEvent = _interopRequireDefault(require("./vdom/components/triggerEvent"));
+var _registerEvent = _interopRequireDefault(require("./vdom/registerEvent"));
+var _triggerEvent = _interopRequireDefault(require("./vdom/triggerEvent"));
 var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
@@ -644,7 +689,7 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/registerEvent":"vdom/components/registerEvent.js","./vdom/components/triggerEvent":"vdom/components/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -670,10 +715,14 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
 <<<<<<< HEAD
+<<<<<<< HEAD
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "65193" + '/');
 =======
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "42085" + '/');
 >>>>>>> Rupert
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56233" + '/');
+>>>>>>> Martin
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
