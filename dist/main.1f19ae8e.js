@@ -137,7 +137,27 @@ var _default = exports.default = function _default(tagName) {
     children: children
   });
   return vElem;
-};
+}; // import { registerEvent } from './registerEvent';
+// const createElement = (tagName, { attrs = {}, children = [] } = {}) => {
+//     // Create a virtual element object
+//     const vElem = {
+//         tagName,
+//         attrs: { ...attrs },
+//         children: children.map(child => 
+//             typeof child === 'string' ? child : createElement(child.tagName, child)
+//         ),
+//     };
+//     // Register events in the event registry
+//     for (let attr in attrs) {
+//         if (attr.startsWith('on')) {
+//             const eventType = attr.slice(2).toLowerCase();
+//             registerEvent(eventType, `#${attrs.id}`, attrs[attr]);
+//             delete vElem.attrs[attr]; // Remove the event handler from attributes
+//         }
+//     }
+//     return vElem;
+// };
+// export default createElement;
 },{}],"vdom/render.js":[function(require,module,exports) {
 "use strict";
 
@@ -363,7 +383,131 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/routing.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.routing = routing;
+function routing() {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  // const newUrl = `${basePath}/${count}`;
+  // history.replaceState({ count }, '', newUrl);
+  console.log("basePath:", basePath);
+}
+},{}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateURLWithCount = updateURLWithCount;
+function updateURLWithCount(count) {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  var newUrl = "".concat(basePath, "/").concat(count);
+  history.replaceState({
+    count: count
+  }, '', newUrl);
+}
+},{}],"vdom/registerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var eventRegistry = {};
+var _default = exports.default = function _default(type, selector, handler) {
+  if (!eventRegistry[type]) {
+    eventRegistry[type] = [];
+  }
+  eventRegistry[type].push({
+    selector: selector,
+    handler: handler
+  });
+}; // Centralized event registry
+// const eventRegistry = {};
+// export const registerEvent = (type, selector, handler) => {
+//     if (!eventRegistry[type]) {
+//         eventRegistry[type] = [];
+//     }
+//     eventRegistry[type].push({ selector, handler });
+// };
+// export default eventRegistry; // Export the registry for use in other modules
+},{}],"vdom/triggerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = exports.default = function _default(elementId, eventType, event) {
+  if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
+    eventRegistry[elementId][eventType].forEach(function (handler) {
+      return handler(event);
+    });
+  }
+}; // import eventRegistry from './registerEvent';
+// export const triggerEvent = (element, eventType, event) => {
+//     const { id, className, tagName } = element;
+//     const matchesSelector = (selector) => {
+//         return (
+//             (id && selector === `#${id}`) ||
+//             (className && selector === `.${className}`) ||
+//             selector.toLowerCase() === tagName.toLowerCase()
+//         );
+//     };
+//     if (eventRegistry[eventType]) {
+//         eventRegistry[eventType].forEach(({ selector, handler }) => {
+//             if (matchesSelector(selector)) {
+//                 handler.call(element, event);
+//             }
+//         });
+//     }
+// };
+},{}],"vdom/components/createHeader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createHeader = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Function to create the footer element
+var createHeader = exports.createHeader = function createHeader() {
+  return (0, _createElement.default)("header", {
+    attrs: {
+      class: "header"
+    },
+    children: [(0, _createElement.default)("h1", {
+      children: ["todos"]
+    }), (0, _createElement.default)("div", {
+      attrs: {
+        class: "input-container"
+      },
+      children: [(0, _createElement.default)("input", {
+        attrs: {
+          id: "todo-input",
+          class: "new-todo",
+          type: "text",
+          placeholder: "What needs to be done?",
+          value: ""
+        }
+      }), (0, _createElement.default)("label", {
+        attrs: {
+          class: "visually-hidden",
+          for: "todo-input"
+        }
+        // children: ["New Todo Input"]
+      })]
+    })]
+  });
+};
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -494,9 +638,18 @@ var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
+var _routing = require("./vdom/routing");
+var _updateURLWithCount = require("./vdom/updateURLWithCount");
+var _registerEvent = _interopRequireDefault(require("./vdom/registerEvent"));
+var _triggerEvent = _interopRequireDefault(require("./vdom/triggerEvent"));
+var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// functionality
+
+// elements
+
 var count = 1;
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
@@ -505,16 +658,7 @@ var createVApp = function createVApp(count) {
       class: 'todoapp',
       dataCount: count // we use the count here
     },
-    children: [
-    // 'The current count is: ',
-    // String(count),
-    // ...Array.from({ length: count }, () => createElement('img', {
-    //   attrs: {
-    //     src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
-    //   },
-    // })),
-
-    (0, _createMain.createMain)(), (0, _createFooter.createFooter)(count)]
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(count)]
   });
 };
 var vApp = createVApp(count);
@@ -528,6 +672,8 @@ function handleImageClick() {
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
+  (0, _updateURLWithCount.updateURLWithCount)(count);
+  (0, _routing.routing)();
 }
 $rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
@@ -543,7 +689,7 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -568,7 +714,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57427" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56233" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

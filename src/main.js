@@ -5,8 +5,8 @@ import mount from './vdom/mount';
 import diff from './vdom/diff';
 import { routing } from './vdom/routing';
 import { updateURLWithCount } from './vdom/updateURLWithCount';
-import registerEvent from './vdom/components/registerEvent';
-import triggerEvent from './vdom/components/triggerEvent';
+import registerEvent from './vdom/registerEvent';
+import triggerEvent from './vdom/triggerEvent';
 
 // elements
 import { createHeader } from './vdom/components/createHeader';
