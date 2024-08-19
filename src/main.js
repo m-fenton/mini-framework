@@ -1,12 +1,18 @@
+// functionality
 import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
 import diff from './vdom/diff';
+import { updateURLWithCount } from './vdom/updateURLWithCount';
+import registerEvent from './vdom/components/registerEvent';
+import triggerEvent from './vdom/components/triggerEvent';
 
+// elements
+import { createHeader } from './vdom/components/createHeader';
 import { createFooter } from './vdom/components/createFooter';
 
-let count = 1
 
+let count = 1
 
 const createVApp = count => createElement('div', {
   attrs: {
@@ -15,8 +21,7 @@ const createVApp = count => createElement('div', {
     dataCount: count, // we use the count here
   },
   children: [
-    'The current count is: ',
-    String(count),
+    createHeader(),
     ...Array.from({ length: count }, () => createElement('img', {
       attrs: {
         src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
@@ -24,15 +29,10 @@ const createVApp = count => createElement('div', {
     })),
     createFooter(count),
   ],
-  
+
 });
 
-function updateURLWithCount(count) {
-  // Remove any existing count from the pathname
-  const basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
-  const newUrl = `${basePath}/${count}`;
-  history.replaceState({ count }, '', newUrl);
-}
+
 
 let vApp = createVApp(count);
 const $app = render(vApp);
@@ -46,7 +46,6 @@ function handleImageClick() {
   $rootEl = patch($rootEl);
   vApp = vNewApp;
   updateURLWithCount(count);
-
 }
 
 $rootEl.addEventListener('click', handleImageClick);

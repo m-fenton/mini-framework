@@ -363,7 +363,94 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateURLWithCount = updateURLWithCount;
+function updateURLWithCount(count) {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  var newUrl = "".concat(basePath, "/").concat(count);
+  history.replaceState({
+    count: count
+  }, '', newUrl);
+}
+},{}],"vdom/components/registerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var eventRegistry = {};
+var _default = exports.default = function _default(elementId, eventType, handler) {
+  if (!eventRegistry[elementId]) {
+    eventRegistry[elementId] = {};
+  }
+  if (!eventRegistry[elementId][eventType]) {
+    eventRegistry[elementId][eventType] = [];
+  }
+  eventRegistry[elementId][eventType].push(handler);
+};
+},{}],"vdom/components/triggerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = exports.default = function _default(elementId, eventType, event) {
+  if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
+    eventRegistry[elementId][eventType].forEach(function (handler) {
+      return handler(event);
+    });
+  }
+};
+},{}],"vdom/components/createHeader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createHeader = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Function to create the footer element
+var createHeader = exports.createHeader = function createHeader() {
+  return (0, _createElement.default)("header", {
+    attrs: {
+      class: "header"
+    },
+    children: [(0, _createElement.default)("h1", {
+      children: ["todos", (0, _createElement.default)("div", {
+        attrs: {
+          class: "input-container"
+        },
+        children: [(0, _createElement.default)("input", {
+          attrs: {
+            id: "todo-input",
+            class: "new-todo",
+            type: "text",
+            placeholder: "What needs to be done?",
+            value: ""
+          }
+        })
+        // createElement("label", {
+        //     attrs: {
+        //         class: "visually-hidden",
+        //         for: "todo-input"
+        //     },
+        //     children: ["New Todo Input"]
+        // })
+        ]
+      })]
+    })]
+  });
+};
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -424,6 +511,10 @@ var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
+var _updateURLWithCount = require("./vdom/updateURLWithCount");
+var _registerEvent = _interopRequireDefault(require("./vdom/components/registerEvent"));
+var _triggerEvent = _interopRequireDefault(require("./vdom/components/triggerEvent"));
+var _createHeader = require("./vdom/components/createHeader");
 var _createFooter = require("./vdom/components/createFooter");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
@@ -431,7 +522,8 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; } // functionality
+// elements
 var count = 1;
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
@@ -440,7 +532,7 @@ var createVApp = function createVApp(count) {
       class: 'todoapp',
       dataCount: count // we use the count here
     },
-    children: ['The current count is: ', String(count)].concat(_toConsumableArray(Array.from({
+    children: [(0, _createHeader.createHeader)()].concat(_toConsumableArray(Array.from({
       length: count
     }, function () {
       return (0, _createElement.default)('img', {
@@ -451,14 +543,6 @@ var createVApp = function createVApp(count) {
     })), [(0, _createFooter.createFooter)(count)])
   });
 };
-function updateURLWithCount(count) {
-  // Remove any existing count from the pathname
-  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
-  var newUrl = "".concat(basePath, "/").concat(count);
-  history.replaceState({
-    count: count
-  }, '', newUrl);
-}
 var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
@@ -470,7 +554,7 @@ function handleImageClick() {
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
-  updateURLWithCount(count);
+  (0, _updateURLWithCount.updateURLWithCount)(count);
 }
 $rootEl.addEventListener('click', handleImageClick);
 // let $rootEl = mount($app, document.getElementById('app'));
@@ -486,7 +570,7 @@ $rootEl.addEventListener('click', handleImageClick);
 
 //   vApp = vNewApp;
 // }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/registerEvent":"vdom/components/registerEvent.js","./vdom/components/triggerEvent":"vdom/components/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -511,7 +595,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35011" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46421" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
