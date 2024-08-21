@@ -588,43 +588,109 @@ var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 // }
 // $rootEl.addEventListener('click', handleImageClick);
 
-function handleEnterPress() {
-  // Get the current value from the input field
-  var todoInput = document.getElementById("todo-input");
-  var todoInputValue = todoInput.value;
-  if (todoInputValue != "") {
-    // Create a new to-do element using the current input value
-    var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
-
-    // Find the to-do list element in the DOM
-    var toDoListElement = document.getElementsByClassName("todo-list")[0];
-
-    // Append the new to-do element to the list
-    toDoListElement.appendChild(newToDoElement);
-
-    // Clear the input field by setting its value to an empty string
-    todoInput.value = "";
-    // const vNewApp = createVApp(toDoList);
-    // const patch = diff(vApp, vNewApp);
-    // $rootEl = patch($rootEl);
-    // vApp = vNewApp;
-
-    (0, _updateURLWithCount.updateURLWithCount)(toDoListElement.childElementCount);
-    console.log("todoList", toDoList);
-  }
-}
-
 // let eventRegistryTest = []
 
+// window.onkeydown = (event) => {
+//   console.log(event.key);
+//   if (event.key == 'Enter') {
+//     handleEnterPress()
+//   }
+// };
+function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
+  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
+    // Remove the parent element of the target (usually a list item)
+    var listItem = event.target.closest(elementToRemove);
+    if (listItem) {
+      listItem.remove();
+    }
+  }
+}
+function addElementHandler(event, elementToAppendToClassOrId, elementToAppend) {
+  // Get the current value from the input field
+  // let todoInput = document.getElementById("todo-input");
+  // let todoInputValue = todoInput.value;
+  // if (todoInputValue != "") {
+  // Create a new to-do element using the current input value
+  // let newToDoElement = render(createListItem(todoInputValue));
+
+  // Find the to-do list element in the DOM
+  var toDoListElement = document.getElementsByClassName(elementToAppendToClassOrId)[0];
+
+  // Append the new to-do element to the list
+  toDoListElement.appendChild(elementToAppend);
+
+  // Clear the input field by setting its value to an empty string
+  // todoInput.value = "";
+  // const vNewApp = createVApp(toDoList);
+  // const patch = diff(vApp, vNewApp);
+  // $rootEl = patch($rootEl);
+  // vApp = vNewApp;
+
+  (0, _updateURLWithCount.updateURLWithCount)(toDoListElement.childElementCount);
+  console.log("todoList", toDoList);
+  // }
+}
 window.onkeydown = function (event) {
-  console.log(event.key);
-  if (event.key == 'Enter') {
-    handleEnterPress();
+  if (event.key == "Enter") {
+    var todoInput = document.getElementById("todo-input");
+    var todoInputValue = todoInput.value;
+    if (todoInputValue != "") {
+      // Create a new to-do element using the current input value
+      var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
+
+      // Find the to-do list element in the DOM
+      // let toDoListElement = document.getElementsByClassName("todo-list")[0];
+
+      // Append the new to-do element to the list
+      // toDoListElement.appendChild(elementToAppend);
+
+      // Clear the input field by setting its value to an empty string
+      todoInput.value = "";
+      addElementHandler(event, "todo-list", newToDoElement);
+    }
   }
 };
+// function handleEnterPress() {
+
+//   // Get the current value from the input field
+//   let todoInput = document.getElementById("todo-input");
+//   let todoInputValue = todoInput.value;
+//   if (todoInputValue != "") {
+//     // Create a new to-do element using the current input value
+//     let newToDoElement = render(createListItem(todoInputValue));
+
+//     // Find the to-do list element in the DOM
+//     let toDoListElement = document.getElementsByClassName("todo-list")[0];
+
+//     // Append the new to-do element to the list
+//     toDoListElement.appendChild(newToDoElement);
+
+//     // Clear the input field by setting its value to an empty string
+//     todoInput.value = "";
+//     // const vNewApp = createVApp(toDoList);
+//     // const patch = diff(vApp, vNewApp);
+//     // $rootEl = patch($rootEl);
+//     // vApp = vNewApp;
+
+//     updateURLWithCount(toDoListElement.childElementCount);
+//     console.log("todoList", toDoList)
+//   }
+
+// }
+
 window.onclick = function (event) {
-  console.log("click");
+  return removeElementHandler(event, "destroy", "li");
 };
+// window.onkeydown = (event) => removeElementHandler(event, "destroy", "li")
+// window.onclick = (event) => {
+//   if (event.target.classList.contains("destroy") || (event.target.id === "destroy")) {
+//     // Remove the parent element of the target (usually a list item)
+//     const listItem = event.target.closest("li");
+//     if (listItem) {
+//       listItem.remove();
+//     }
+//   }
+// };
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -650,7 +716,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36679" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35033" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
