@@ -1,4 +1,4 @@
-const eventRegistry = {};
+export const eventRegistry = {};
 
 export default (type, selector, handler) => {
     if (!eventRegistry[type]) {

@@ -378,37 +378,6 @@ function updateURLWithCount(count) {
     count: count
   }, '', newUrl);
 }
-},{}],"vdom/registerEvent.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var eventRegistry = {};
-var _default = exports.default = function _default(type, selector, handler) {
-  if (!eventRegistry[type]) {
-    eventRegistry[type] = [];
-  }
-  eventRegistry[type].push({
-    selector: selector,
-    handler: handler
-  });
-};
-},{}],"vdom/triggerEvent.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = exports.default = function _default(elementId, eventType, event) {
-  if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
-    eventRegistry[elementId][eventType].forEach(function (handler) {
-      return handler(event);
-    });
-  }
-};
 },{}],"vdom/components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
@@ -438,12 +407,7 @@ var createHeader = exports.createHeader = function createHeader() {
           class: "new-todo",
           type: "text",
           placeholder: "What needs to be done?",
-          value: "",
-          onkeydown: function onkeydown(event) {
-            if (event.key === 'Enter') {
-              console.log("Entered value:", this.value); // Logs the value when Enter is pressed
-            }
-          }
+          value: ""
         }
       }), (0, _createElement.default)("label", {
         attrs: {
@@ -501,7 +465,7 @@ exports.createMain = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
 var _createListItem = require("./createListItem");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var createMain = exports.createMain = function createMain() {
+var createMain = exports.createMain = function createMain(toDoList) {
   return (0, _createElement.default)("main", {
     attrs: {
       class: "main"
@@ -525,7 +489,7 @@ var createMain = exports.createMain = function createMain() {
       attrs: {
         class: "todo-list"
       },
-      children: [(0, _createListItem.createListItem)("hello")]
+      children: toDoList
     })]
   });
 };
@@ -591,11 +555,10 @@ var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
 var _updateURLWithCount = require("./vdom/updateURLWithCount");
-var _registerEvent = _interopRequireDefault(require("./vdom/registerEvent"));
-var _triggerEvent = _interopRequireDefault(require("./vdom/triggerEvent"));
 var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
+var _createListItem = require("./vdom/components/createListItem");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // functionality
 
@@ -609,7 +572,7 @@ var createVApp = function createVApp(toDoList) {
       class: 'todoapp',
       dataCount: toDoList.length // we use the count here
     },
-    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(toDoList.length)]
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(toDoList), (0, _createFooter.createFooter)(toDoList.length)]
   });
 };
 var vApp = createVApp(toDoList);
@@ -617,17 +580,37 @@ var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 
 // Example of a specific event handler
-function handleImageClick() {
+// function handleImageClick() {
+//   const vNewApp = createVApp(toDoList);
+//   const patch = diff(vApp, vNewApp);
+//   $rootEl = patch($rootEl);
+//   vApp = vNewApp;
+//   updateURLWithCount(toDoList.length);
+// }
+// $rootEl.addEventListener('click', handleImageClick);
+
+function handleEnterPress() {
+  toDoList.push((0, _createListItem.createListItem)("New String"));
   var vNewApp = createVApp(toDoList);
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
   (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
+  console.log("todoList", toDoList);
 }
-$rootEl.addEventListener('click', handleImageClick);
-var toDoListElement = document.getElementsByClassName("todo-list");
-console.log(toDoListElement);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+// let eventRegistryTest = []
+
+window.onkeydown = function (event) {
+  console.log(event.key);
+  if (event.key == 'Enter') {
+    handleEnterPress();
+  }
+};
+window.onclick = function (event) {
+  console.log("click");
+};
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -652,7 +635,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38219" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43279" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

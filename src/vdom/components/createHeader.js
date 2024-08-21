@@ -22,12 +22,6 @@ export const createHeader = () => createElement("header", {
                         type: "text",
                         placeholder: "What needs to be done?",
                         value: "",
-                        onkeydown: function(event) {
-                            if (event.key === 'Enter') {
-                                console.log("Entered value:", this.value); // Logs the value when Enter is pressed
-                            }
-                        }
-                
                     }
                 }),
                 createElement("label", {
@@ -44,6 +38,6 @@ export const createHeader = () => createElement("header", {
 }
 )
 
- function addListItem(toDoString) {
+function addListItem(toDoString) {
     console.log(createListItem(toDoString))
 }

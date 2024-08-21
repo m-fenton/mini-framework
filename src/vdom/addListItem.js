@@ -4,5 +4,5 @@ import { createListItem } from "./components/createListItem"
 
 
 export function addListItem(toDoString) {
-    console.log(createListItem(toDoString))
+    console.log("addListItem", createListItem(toDoString))
 }

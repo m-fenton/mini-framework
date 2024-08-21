@@ -1,7 +1,7 @@
 import createElement from "../createElement";
 import { createListItem } from "./createListItem";
 
-export const createMain = () =>
+export const createMain = (toDoList) =>
   createElement("main", {
     attrs: {
       class: "main",
@@ -32,9 +32,7 @@ export const createMain = () =>
         attrs: {
           class: "todo-list",
         },
-        children: [
-          createListItem("hello")
-        ],
+        children: toDoList,
       }),
     ],
   });
