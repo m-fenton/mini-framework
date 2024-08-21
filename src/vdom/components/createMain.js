@@ -32,6 +32,8 @@ export const createMain = () =>
         attrs: {
           class: "todo-list",
         },
+        children: [
+        ],
       }),
     ],
   });

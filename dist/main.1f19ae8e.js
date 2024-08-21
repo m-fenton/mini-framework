@@ -488,7 +488,8 @@ var createMain = exports.createMain = function createMain() {
     }), (0, _createElement.default)("ul", {
       attrs: {
         class: "todo-list"
-      }
+      },
+      children: []
     })]
   });
 };
@@ -546,7 +547,53 @@ var createFooter = exports.createFooter = function createFooter(count) {
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"main.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"dom/addElementHandler.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.addElementHandler = addElementHandler;
+var _updateURLWithCount = require("../vdom/updateURLWithCount");
+function addElementHandler(event, elementToAppendToClassOrId, elementToAppend) {
+  // Find the to-do list element in the DOM
+  var toDoListElement = document.getElementsByClassName(elementToAppendToClassOrId)[0];
+
+  // Append the new to-do element to the list
+  toDoListElement.appendChild(elementToAppend);
+  (0, _updateURLWithCount.updateURLWithCount)(toDoListElement.childElementCount);
+}
+},{"../vdom/updateURLWithCount":"vdom/updateURLWithCount.js"}],"dom/removeElementHandler.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.removeElementHandler = removeElementHandler;
+function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
+  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
+    // Remove the parent element of the target (usually a list item)
+    var listItem = event.target.closest(elementToRemove);
+    if (listItem) {
+      listItem.remove();
+    }
+  }
+}
+},{}],"dom/obtainNumberOfToDOItems.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.obtainNumberOfToDoItems = obtainNumberOfToDoItems;
+function obtainNumberOfToDoItems() {
+  var toDoListElement = document.getElementsByClassName("todo-list")[0];
+  if (toDoListElement.childElementCount != undefined) {
+    return toDoListElement.childElementCount;
+  }
+  return 0;
+}
+},{}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
@@ -558,25 +605,46 @@ var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
 var _createListItem = require("./vdom/components/createListItem");
+var _addElementHandler = require("./dom/addElementHandler");
+var _removeElementHandler = require("./dom/removeElementHandler");
+var _obtainNumberOfToDOItems = require("./dom/obtainNumberOfToDOItems");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // functionality
 
 // elements
 
-var toDoList = [];
-var createVApp = function createVApp(toDoList) {
+var number = 0;
+var createVApp = function createVApp(number) {
   return (0, _createElement.default)('div', {
     attrs: {
       id: 'root',
-      class: 'todoapp',
-      dataCount: toDoList.length // we use the count here
+      class: 'todoapp'
     },
-    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(toDoList), (0, _createFooter.createFooter)(toDoList.length)]
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(number)]
   });
 };
-var vApp = createVApp(toDoList);
+var vApp = createVApp(number);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
+window.onkeydown = function (event) {
+  if (event.key == "Enter") {
+    var todoInput = document.getElementById("todo-input");
+    var todoInputValue = todoInput.value;
+    if (todoInputValue != "") {
+      // Create a new to-do element using the current input value
+      var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
+
+      // Clear the input field by setting its value to an empty string
+      todoInput.value = "";
+      (0, _addElementHandler.addElementHandler)(event, "todo-list", newToDoElement);
+      number = (0, _obtainNumberOfToDOItems.obtainNumberOfToDoItems)();
+      console.log(number);
+    }
+  }
+};
+window.onclick = function (event) {
+  return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
+};
 
 // Example of a specific event handler
 // function handleImageClick() {
@@ -587,111 +655,7 @@ var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 //   updateURLWithCount(toDoList.length);
 // }
 // $rootEl.addEventListener('click', handleImageClick);
-
-// let eventRegistryTest = []
-
-// window.onkeydown = (event) => {
-//   console.log(event.key);
-//   if (event.key == 'Enter') {
-//     handleEnterPress()
-//   }
-// };
-function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
-  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
-    // Remove the parent element of the target (usually a list item)
-    var listItem = event.target.closest(elementToRemove);
-    if (listItem) {
-      listItem.remove();
-    }
-  }
-}
-function addElementHandler(event, elementToAppendToClassOrId, elementToAppend) {
-  // Get the current value from the input field
-  // let todoInput = document.getElementById("todo-input");
-  // let todoInputValue = todoInput.value;
-  // if (todoInputValue != "") {
-  // Create a new to-do element using the current input value
-  // let newToDoElement = render(createListItem(todoInputValue));
-
-  // Find the to-do list element in the DOM
-  var toDoListElement = document.getElementsByClassName(elementToAppendToClassOrId)[0];
-
-  // Append the new to-do element to the list
-  toDoListElement.appendChild(elementToAppend);
-
-  // Clear the input field by setting its value to an empty string
-  // todoInput.value = "";
-  // const vNewApp = createVApp(toDoList);
-  // const patch = diff(vApp, vNewApp);
-  // $rootEl = patch($rootEl);
-  // vApp = vNewApp;
-
-  (0, _updateURLWithCount.updateURLWithCount)(toDoListElement.childElementCount);
-  console.log("todoList", toDoList);
-  // }
-}
-window.onkeydown = function (event) {
-  if (event.key == "Enter") {
-    var todoInput = document.getElementById("todo-input");
-    var todoInputValue = todoInput.value;
-    if (todoInputValue != "") {
-      // Create a new to-do element using the current input value
-      var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
-
-      // Find the to-do list element in the DOM
-      // let toDoListElement = document.getElementsByClassName("todo-list")[0];
-
-      // Append the new to-do element to the list
-      // toDoListElement.appendChild(elementToAppend);
-
-      // Clear the input field by setting its value to an empty string
-      todoInput.value = "";
-      addElementHandler(event, "todo-list", newToDoElement);
-    }
-  }
-};
-// function handleEnterPress() {
-
-//   // Get the current value from the input field
-//   let todoInput = document.getElementById("todo-input");
-//   let todoInputValue = todoInput.value;
-//   if (todoInputValue != "") {
-//     // Create a new to-do element using the current input value
-//     let newToDoElement = render(createListItem(todoInputValue));
-
-//     // Find the to-do list element in the DOM
-//     let toDoListElement = document.getElementsByClassName("todo-list")[0];
-
-//     // Append the new to-do element to the list
-//     toDoListElement.appendChild(newToDoElement);
-
-//     // Clear the input field by setting its value to an empty string
-//     todoInput.value = "";
-//     // const vNewApp = createVApp(toDoList);
-//     // const patch = diff(vApp, vNewApp);
-//     // $rootEl = patch($rootEl);
-//     // vApp = vNewApp;
-
-//     updateURLWithCount(toDoListElement.childElementCount);
-//     console.log("todoList", toDoList)
-//   }
-
-// }
-
-window.onclick = function (event) {
-  return removeElementHandler(event, "destroy", "li");
-};
-// window.onkeydown = (event) => removeElementHandler(event, "destroy", "li")
-// window.onclick = (event) => {
-//   if (event.target.classList.contains("destroy") || (event.target.id === "destroy")) {
-//     // Remove the parent element of the target (usually a list item)
-//     const listItem = event.target.closest("li");
-//     if (listItem) {
-//       listItem.remove();
-//     }
-//   }
-// };
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js","./dom/addElementHandler":"dom/addElementHandler.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./dom/obtainNumberOfToDOItems":"dom/obtainNumberOfToDOItems.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -716,7 +680,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35033" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36133" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
