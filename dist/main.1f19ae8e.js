@@ -363,21 +363,7 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/routing.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.routing = routing;
-function routing() {
-  // Remove any existing count from the pathname
-  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
-  // const newUrl = `${basePath}/${count}`;
-  // history.replaceState({ count }, '', newUrl);
-  console.log("basePath:", basePath);
-}
-},{}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -392,7 +378,7 @@ function updateURLWithCount(count) {
     count: count
   }, '', newUrl);
 }
-},{}],"vdom/components/registerEvent.js":[function(require,module,exports) {
+},{}],"vdom/registerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -400,16 +386,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var eventRegistry = {};
-var _default = exports.default = function _default(elementId, eventType, handler) {
-  if (!eventRegistry[elementId]) {
-    eventRegistry[elementId] = {};
+var _default = exports.default = function _default(type, selector, handler) {
+  if (!eventRegistry[type]) {
+    eventRegistry[type] = [];
   }
-  if (!eventRegistry[elementId][eventType]) {
-    eventRegistry[elementId][eventType] = [];
-  }
-  eventRegistry[elementId][eventType].push(handler);
+  eventRegistry[type].push({
+    selector: selector,
+    handler: handler
+  });
 };
-},{}],"vdom/components/triggerEvent.js":[function(require,module,exports) {
+},{}],"vdom/triggerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -432,6 +418,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.createHeader = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// import addListItem from "../addListItem";
+
 // Function to create the footer element
 var createHeader = exports.createHeader = function createHeader() {
   return (0, _createElement.default)("header", {
@@ -450,7 +438,12 @@ var createHeader = exports.createHeader = function createHeader() {
           class: "new-todo",
           type: "text",
           placeholder: "What needs to be done?",
-          value: ""
+          value: "",
+          onkeydown: function onkeydown(event) {
+            if (event.key === 'Enter') {
+              console.log("Entered value:", this.value); // Logs the value when Enter is pressed
+            }
+          }
         }
       }), (0, _createElement.default)("label", {
         attrs: {
@@ -462,6 +455,9 @@ var createHeader = exports.createHeader = function createHeader() {
     })]
   });
 };
+function addListItem(toDoString) {
+  console.log(createListItem(toDoString));
+}
 },{"../createElement":"vdom/createElement.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
 "use strict";
 
@@ -471,7 +467,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.createListItem = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var createListItem = exports.createListItem = function createListItem() {
+var createListItem = exports.createListItem = function createListItem(toDoString) {
   return (0, _createElement.default)("li", {
     children: [(0, _createElement.default)("div", {
       attrs: {
@@ -485,7 +481,8 @@ var createListItem = exports.createListItem = function createListItem() {
       }), (0, _createElement.default)("label", {
         attrs: {
           class: "label"
-        }
+        },
+        children: [toDoString]
       }), (0, _createElement.default)("button", {
         attrs: {
           class: "destroy"
@@ -528,7 +525,7 @@ var createMain = exports.createMain = function createMain() {
       attrs: {
         class: "todo-list"
       },
-      children: [(0, _createListItem.createListItem)()]
+      children: [(0, _createListItem.createListItem)("hello")]
     })]
   });
 };
@@ -593,10 +590,9 @@ var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _diff = _interopRequireDefault(require("./vdom/diff"));
-var _routing = require("./vdom/routing");
 var _updateURLWithCount = require("./vdom/updateURLWithCount");
-var _registerEvent = _interopRequireDefault(require("./vdom/components/registerEvent"));
-var _triggerEvent = _interopRequireDefault(require("./vdom/components/triggerEvent"));
+var _registerEvent = _interopRequireDefault(require("./vdom/registerEvent"));
+var _triggerEvent = _interopRequireDefault(require("./vdom/triggerEvent"));
 var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
@@ -605,46 +601,33 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 
 // elements
 
-var count = 1;
-var createVApp = function createVApp(count) {
+var toDoList = [];
+var createVApp = function createVApp(toDoList) {
   return (0, _createElement.default)('div', {
     attrs: {
       id: 'root',
       class: 'todoapp',
-      dataCount: count // we use the count here
+      dataCount: toDoList.length // we use the count here
     },
-    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(count)]
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(toDoList.length)]
   });
 };
-var vApp = createVApp(count);
+var vApp = createVApp(toDoList);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 
 // Example of a specific event handler
 function handleImageClick() {
-  count++;
-  var vNewApp = createVApp(count);
+  var vNewApp = createVApp(toDoList);
   var patch = (0, _diff.default)(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
-  (0, _updateURLWithCount.updateURLWithCount)(count);
-  (0, _routing.routing)();
+  (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
 }
 $rootEl.addEventListener('click', handleImageClick);
-// let $rootEl = mount($app, document.getElementById('app'));
-
-// setInterval(() => {
-//   const n = Math.floor(Math.random() * 10);
-//   const vNewApp = createVApp(n);
-//   const patch = diff(vApp, vNewApp);
-
-//   // we might replace the whole $rootEl,
-//   // so we want the patch will return the new $rootEl
-//   $rootEl = patch($rootEl);
-
-//   vApp = vNewApp;
-// }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/registerEvent":"vdom/components/registerEvent.js","./vdom/components/triggerEvent":"vdom/components/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var toDoListElement = document.getElementsByClassName("todo-list");
+console.log(toDoListElement);
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -669,7 +652,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42085" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38219" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

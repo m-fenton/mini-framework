@@ -3,10 +3,9 @@ import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
 import diff from './vdom/diff';
-import { routing } from './vdom/routing';
 import { updateURLWithCount } from './vdom/updateURLWithCount';
-import registerEvent from './vdom/components/registerEvent';
-import triggerEvent from './vdom/components/triggerEvent';
+import registerEvent from './vdom/registerEvent';
+import triggerEvent from './vdom/triggerEvent';
 
 // elements
 import { createHeader } from './vdom/components/createHeader';
@@ -14,50 +13,38 @@ import { createMain } from './vdom/components/createMain';
 import { createFooter } from './vdom/components/createFooter';
 
 
-let count = 1
+let toDoList = []
 
-const createVApp = count => createElement('div', {
+const createVApp = (toDoList) => createElement('div', {
   attrs: {
     id: 'root',
     class: 'todoapp',
-    dataCount: count, // we use the count here
+    dataCount: toDoList.length, // we use the count here
   },
   children: [
     createHeader(),
     createMain(),
-    createFooter(count),
+    createFooter(toDoList.length),
   ],
 
 });
 
 
 
-let vApp = createVApp(count);
+let vApp = createVApp(toDoList);
 const $app = render(vApp);
 let $rootEl = mount($app, document.getElementById('root'));
 
 // Example of a specific event handler
 function handleImageClick() {
-  count++;
-  const vNewApp = createVApp(count);
+  const vNewApp = createVApp(toDoList);
   const patch = diff(vApp, vNewApp);
   $rootEl = patch($rootEl);
   vApp = vNewApp;
-  updateURLWithCount(count);
-  routing()
+  updateURLWithCount(toDoList.length);
 }
-
 $rootEl.addEventListener('click', handleImageClick);
-// let $rootEl = mount($app, document.getElementById('app'));
 
-// setInterval(() => {
-//   const n = Math.floor(Math.random() * 10);
-//   const vNewApp = createVApp(n);
-//   const patch = diff(vApp, vNewApp);
 
-//   // we might replace the whole $rootEl,
-//   // so we want the patch will return the new $rootEl
-//   $rootEl = patch($rootEl);
-
-//   vApp = vNewApp;
-// }, 1000);
+let toDoListElement = document.getElementsByClassName("todo-list")
+console.log(toDoListElement)

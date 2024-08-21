@@ -1,4 +1,5 @@
 import createElement from "../createElement";
+// import addListItem from "../addListItem";
 
 // Function to create the footer element
 export const createHeader = () => createElement("header", {
@@ -20,7 +21,13 @@ export const createHeader = () => createElement("header", {
                         class: "new-todo",
                         type: "text",
                         placeholder: "What needs to be done?",
-                        value: ""
+                        value: "",
+                        onkeydown: function(event) {
+                            if (event.key === 'Enter') {
+                                console.log("Entered value:", this.value); // Logs the value when Enter is pressed
+                            }
+                        }
+                
                     }
                 }),
                 createElement("label", {
@@ -36,3 +43,7 @@ export const createHeader = () => createElement("header", {
 
 }
 )
+
+ function addListItem(toDoString) {
+    console.log(createListItem(toDoString))
+}

@@ -1,6 +1,6 @@
 import createElement from "../createElement";
 
-export const createListItem = () =>
+export const createListItem = (toDoString) =>
 
     createElement("li", {
         children: [
@@ -15,11 +15,14 @@ export const createListItem = () =>
                             type: "checkbox",
                         },
                     }),
+                    
                     createElement("label", {
                         attrs: {
                             class: "label",
                         },
+                        children: [toDoString],
                     }),
+                   
                     createElement("button", {
                         attrs: {
                             class: "destroy",

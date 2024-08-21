@@ -33,7 +33,7 @@ export const createMain = () =>
           class: "todo-list",
         },
         children: [
-          createListItem()
+          createListItem("hello")
         ],
       }),
     ],
