@@ -49,24 +49,27 @@ function handleEnterPress() {
   // Get the current value from the input field
   let todoInput = document.getElementById("todo-input");
   let todoInputValue = todoInput.value;
+  if (todoInputValue != "") {
+    // Create a new to-do element using the current input value
+    let newToDoElement = render(createListItem(todoInputValue));
 
-  // Create a new to-do element using the current input value
-  let newToDoElement = render(createListItem(todoInputValue));
+    // Find the to-do list element in the DOM
+    let toDoListElement = document.getElementsByClassName("todo-list")[0];
 
-  // Find the to-do list element in the DOM
-  let toDoListElement = document.getElementsByClassName("todo-list")[0];
+    // Append the new to-do element to the list
+    toDoListElement.appendChild(newToDoElement);
 
-  // Append the new to-do element to the list
-  toDoListElement.appendChild(newToDoElement);
+    // Clear the input field by setting its value to an empty string
+    todoInput.value = "";
+    // const vNewApp = createVApp(toDoList);
+    // const patch = diff(vApp, vNewApp);
+    // $rootEl = patch($rootEl);
+    // vApp = vNewApp;
 
-  // Clear the input field by setting its value to an empty string
-  todoInput.value = "";
-  // const vNewApp = createVApp(toDoList);
-  // const patch = diff(vApp, vNewApp);
-  // $rootEl = patch($rootEl);
-  // vApp = vNewApp;
-  updateURLWithCount(toDoList.length);
-  console.log("todoList", toDoList)
+    updateURLWithCount(toDoListElement.childElementCount);
+    console.log("todoList", toDoList)
+  }
+
 }
 
 // let eventRegistryTest = []
