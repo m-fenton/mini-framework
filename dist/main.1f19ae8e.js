@@ -590,11 +590,21 @@ var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 // $rootEl.addEventListener('click', handleImageClick);
 
 function handleEnterPress() {
-  // toDoList.push(createListItem("New String"))
-  var todoInputValue = document.getElementById("todo-input").value;
+  // Get the current value from the input field
+  var todoInput = document.getElementById("todo-input");
+  var todoInputValue = todoInput.value;
+
+  // Create a new to-do element using the current input value
   var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
+
+  // Find the to-do list element in the DOM
   var toDoListElement = document.getElementsByClassName("todo-list")[0];
+
+  // Append the new to-do element to the list
   toDoListElement.appendChild(newToDoElement);
+
+  // Clear the input field by setting its value to an empty string
+  todoInput.value = "";
   // const vNewApp = createVApp(toDoList);
   // const patch = diff(vApp, vNewApp);
   // $rootEl = patch($rootEl);
@@ -639,7 +649,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40401" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32933" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

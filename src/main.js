@@ -46,11 +46,21 @@ let $rootEl = mount($app, document.getElementById('root'));
 
 function handleEnterPress() {
 
-  // toDoList.push(createListItem("New String"))
-  let todoInputValue = document.getElementById("todo-input").value
-  let newToDoElement = render(createListItem(todoInputValue))
-  let toDoListElement = document.getElementsByClassName("todo-list")[0]
-  toDoListElement.appendChild(newToDoElement)
+  // Get the current value from the input field
+  let todoInput = document.getElementById("todo-input");
+  let todoInputValue = todoInput.value;
+
+  // Create a new to-do element using the current input value
+  let newToDoElement = render(createListItem(todoInputValue));
+
+  // Find the to-do list element in the DOM
+  let toDoListElement = document.getElementsByClassName("todo-list")[0];
+
+  // Append the new to-do element to the list
+  toDoListElement.appendChild(newToDoElement);
+
+  // Clear the input field by setting its value to an empty string
+  todoInput.value = "";
   // const vNewApp = createVApp(toDoList);
   // const patch = diff(vApp, vNewApp);
   // $rootEl = patch($rootEl);
