@@ -590,11 +590,15 @@ var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 // $rootEl.addEventListener('click', handleImageClick);
 
 function handleEnterPress() {
-  toDoList.push((0, _createListItem.createListItem)("New String"));
-  var vNewApp = createVApp(toDoList);
-  var patch = (0, _diff.default)(vApp, vNewApp);
-  $rootEl = patch($rootEl);
-  vApp = vNewApp;
+  // toDoList.push(createListItem("New String"))
+  var todoInputValue = document.getElementById("todo-input").value;
+  var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
+  var toDoListElement = document.getElementsByClassName("todo-list")[0];
+  toDoListElement.appendChild(newToDoElement);
+  // const vNewApp = createVApp(toDoList);
+  // const patch = diff(vApp, vNewApp);
+  // $rootEl = patch($rootEl);
+  // vApp = vNewApp;
   (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
   console.log("todoList", toDoList);
 }
@@ -635,7 +639,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43279" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40401" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

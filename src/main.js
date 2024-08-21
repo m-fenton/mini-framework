@@ -45,13 +45,16 @@ let $rootEl = mount($app, document.getElementById('root'));
 
 
 function handleEnterPress() {
-  
-  toDoList.push(createListItem("New String"))
 
-  const vNewApp = createVApp(toDoList);
-  const patch = diff(vApp, vNewApp);
-  $rootEl = patch($rootEl);
-  vApp = vNewApp;
+  // toDoList.push(createListItem("New String"))
+  let todoInputValue = document.getElementById("todo-input").value
+  let newToDoElement = render(createListItem(todoInputValue))
+  let toDoListElement = document.getElementsByClassName("todo-list")[0]
+  toDoListElement.appendChild(newToDoElement)
+  // const vNewApp = createVApp(toDoList);
+  // const patch = diff(vApp, vNewApp);
+  // $rootEl = patch($rootEl);
+  // vApp = vNewApp;
   updateURLWithCount(toDoList.length);
   console.log("todoList", toDoList)
 }
