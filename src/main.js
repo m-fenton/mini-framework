@@ -1,10 +1,10 @@
 import render from './vdom/render';
 import mount from './vdom/mount';
 import { createVApp } from './vdom/createVApp';
-import { handleEvent } from './vdom/events/eventHandling/handleEvent';
-import { registerEvent } from './vdom/events/eventHandling/registerEvent';
-import { enterPress } from './vdom/events/enterPress';
-import { removeElementHandler } from './dom/removeElementHandler';
+import { handleEvent } from './vdom/events/eventHelpers/handleEvent';
+import { registerEvent } from './vdom/events/eventHelpers/registerEvent';
+import { handleEnterKeySubmit } from './vdom/events/handleEnterKeySubmit';
+import { removeElementHandler } from './dom/removeElementHandler'; // Probably to be removed, uses DOM manipulation, not vDOM
 
 // Application State
 export let toDoList = [];
@@ -23,9 +23,10 @@ const initializeApp = () => {
   $rootEl = mount(render(vApp), document.getElementById('root')); // Mount the initial app
 
   // Register events
-  registerEvent('keydown', enterPress); // Keydown for Enter key to add items
+  registerEvent('keydown', handleEnterKeySubmit); // Keydown for Enter key to add items
   window.onkeydown = handleEvent; // Global event handler
   window.onclick = (event) => removeElementHandler(event, "destroy", "li"); // Click event to remove items
+  window.ondblclick = function (event) { console.log('Window was double-clicked!', event) };
 };
 
 // Update the root element in the DOM

@@ -117,52 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-<<<<<<< HEAD
-})({"vdom/createElement.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = exports.default = function _default(tagName) {
-  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-    _ref$attrs = _ref.attrs,
-    attrs = _ref$attrs === void 0 ? {} : _ref$attrs,
-    _ref$children = _ref.children,
-    children = _ref$children === void 0 ? [] : _ref$children;
-  var vElem = Object.create(null);
-  Object.assign(vElem, {
-    tagName: tagName,
-    attrs: attrs,
-    children: children
-  });
-  return vElem;
-}; // import { registerEvent } from './registerEvent';
-// const createElement = (tagName, { attrs = {}, children = [] } = {}) => {
-//     // Create a virtual element object
-//     const vElem = {
-//         tagName,
-//         attrs: { ...attrs },
-//         children: children.map(child => 
-//             typeof child === 'string' ? child : createElement(child.tagName, child)
-//         ),
-//     };
-//     // Register events in the event registry
-//     for (let attr in attrs) {
-//         if (attr.startsWith('on')) {
-//             const eventType = attr.slice(2).toLowerCase();
-//             registerEvent(eventType, `#${attrs.id}`, attrs[attr]);
-//             delete vElem.attrs[attr]; // Remove the event handler from attributes
-//         }
-//     }
-//     return vElem;
-// };
-// export default createElement;
-},{}],"vdom/render.js":[function(require,module,exports) {
-=======
 })({"vdom/render.js":[function(require,module,exports) {
->>>>>>> Rupert
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -261,189 +216,8 @@ var _default = exports.default = function _default(tagName) {
     attrs: attrs,
     children: children
   });
-<<<<<<< HEAD
-  var additionalPatches = [];
-  var _iterator = _createForOfIteratorHelper(newVChildren.slice(oldVChildren.length)),
-    _step;
-  try {
-    var _loop3 = function _loop3() {
-      var additionalVChild = _step.value;
-      additionalPatches.push(function ($node) {
-        $node.appendChild((0, _render.default)(additionalVChild));
-        return $node;
-      });
-    };
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      _loop3();
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-  return function ($parent) {
-    // since childPatches are expecting the $child, not $parent,
-    // we cannot just loop through them and call patch($parent)
-    var _iterator2 = _createForOfIteratorHelper(zip(childPatches, $parent.childNodes)),
-      _step2;
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var _step2$value = _slicedToArray(_step2.value, 2),
-          _patch = _step2$value[0],
-          $child = _step2$value[1];
-        _patch($child);
-      }
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
-    }
-    for (var _i3 = 0, _additionalPatches = additionalPatches; _i3 < _additionalPatches.length; _i3++) {
-      var patch = _additionalPatches[_i3];
-      patch($parent);
-    }
-    return $parent;
-  };
-};
-var diff = function diff(oldVTree, newVTree) {
-  // let's assume oldVTree is not undefined!
-  if (newVTree === undefined) {
-    return function ($node) {
-      $node.remove();
-      // the patch should return the new root node.
-      // since there is none in this case,
-      // we will just return undefined.
-      return undefined;
-    };
-  }
-  if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
-    if (oldVTree !== newVTree) {
-      // could be 2 cases:
-      // 1. both trees are string and they have different values
-      // 2. one of the trees is text node and
-      //    the other one is elem node
-      // Either case, we will just render(newVTree)!
-      return function ($node) {
-        var $newNode = (0, _render.default)(newVTree);
-        $node.replaceWith($newNode);
-        return $newNode;
-      };
-    } else {
-      // this means that both trees are string
-      // and they have the same values
-      return function ($node) {
-        return $node;
-      };
-    }
-  }
-  if (oldVTree.tagName !== newVTree.tagName) {
-    // we assume that they are totally different and 
-    // will not attempt to find the differences.
-    // simply render the newVTree and mount it.
-    return function ($node) {
-      var $newNode = (0, _render.default)(newVTree);
-      $node.replaceWith($newNode);
-      return $newNode;
-    };
-  }
-  var patchAttrs = diffAttrs(oldVTree.attrs, newVTree.attrs);
-  var patchChildren = diffChildren(oldVTree.children, newVTree.children);
-  return function ($node) {
-    patchAttrs($node);
-    patchChildren($node);
-    return $node;
-  };
-};
-var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/routing.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.routing = routing;
-function routing() {
-  // Remove any existing count from the pathname
-  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
-  // const newUrl = `${basePath}/${count}`;
-  // history.replaceState({ count }, '', newUrl);
-  console.log("basePath:", basePath);
-}
-},{}],"vdom/updateURLWithCount.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.updateURLWithCount = updateURLWithCount;
-function updateURLWithCount(count) {
-  // Remove any existing count from the pathname
-  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
-  var newUrl = "".concat(basePath, "/").concat(count);
-  history.replaceState({
-    count: count
-  }, '', newUrl);
-}
-},{}],"vdom/registerEvent.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var eventRegistry = {};
-var _default = exports.default = function _default(type, selector, handler) {
-  if (!eventRegistry[type]) {
-    eventRegistry[type] = [];
-  }
-  eventRegistry[type].push({
-    selector: selector,
-    handler: handler
-  });
-}; // Centralized event registry
-// const eventRegistry = {};
-// export const registerEvent = (type, selector, handler) => {
-//     if (!eventRegistry[type]) {
-//         eventRegistry[type] = [];
-//     }
-//     eventRegistry[type].push({ selector, handler });
-// };
-// export default eventRegistry; // Export the registry for use in other modules
-},{}],"vdom/triggerEvent.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = exports.default = function _default(elementId, eventType, event) {
-  if (eventRegistry[elementId] && eventRegistry[elementId][eventType]) {
-    eventRegistry[elementId][eventType].forEach(function (handler) {
-      return handler(event);
-    });
-  }
-}; // import eventRegistry from './registerEvent';
-// export const triggerEvent = (element, eventType, event) => {
-//     const { id, className, tagName } = element;
-//     const matchesSelector = (selector) => {
-//         return (
-//             (id && selector === `#${id}`) ||
-//             (className && selector === `.${className}`) ||
-//             selector.toLowerCase() === tagName.toLowerCase()
-//         );
-//     };
-//     if (eventRegistry[eventType]) {
-//         eventRegistry[eventType].forEach(({ selector, handler }) => {
-//             if (matchesSelector(selector)) {
-//                 handler.call(element, event);
-//             }
-//         });
-//     }
-// };
-=======
   return vElem;
 };
->>>>>>> Rupert
 },{}],"vdom/components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
@@ -581,27 +355,6 @@ var createFooter = exports.createFooter = function createFooter(count) {
 },{"../createElement":"vdom/createElement.js"}],"vdom/createVApp.js":[function(require,module,exports) {
 "use strict";
 
-<<<<<<< HEAD
-var _createElement = _interopRequireDefault(require("./vdom/createElement"));
-var _render = _interopRequireDefault(require("./vdom/render"));
-var _mount = _interopRequireDefault(require("./vdom/mount"));
-var _diff = _interopRequireDefault(require("./vdom/diff"));
-var _routing = require("./vdom/routing");
-var _updateURLWithCount = require("./vdom/updateURLWithCount");
-var _registerEvent = _interopRequireDefault(require("./vdom/registerEvent"));
-var _triggerEvent = _interopRequireDefault(require("./vdom/triggerEvent"));
-var _createHeader = require("./vdom/components/createHeader");
-var _createMain = require("./vdom/components/createMain");
-var _createFooter = require("./vdom/components/createFooter");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-// functionality
-
-// elements
-
-var count = 1;
-var createVApp = function createVApp(count) {
-  return (0, _createElement.default)('div', {
-=======
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -618,7 +371,6 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 var createVApp = exports.createVApp = function createVApp(toDoList) {
   return {
     tagName: 'div',
->>>>>>> Rupert
     attrs: {
       id: 'root',
       class: 'todoapp'
@@ -626,7 +378,7 @@ var createVApp = exports.createVApp = function createVApp(toDoList) {
     children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(_toConsumableArray(toDoList))].concat(_toConsumableArray(toDoList.length > 0 ? [(0, _createFooter.createFooter)(toDoList.length)] : [])) //Only runs createFooter if toDoList has a length, this acts to hide the footer unless it's needed
   };
 };
-},{"./components/createHeader":"vdom/components/createHeader.js","./components/createMain":"vdom/components/createMain.js","./components/createFooter":"vdom/components/createFooter.js"}],"vdom/events/eventHandling/registerEvent.js":[function(require,module,exports) {
+},{"./components/createHeader":"vdom/components/createHeader.js","./components/createMain":"vdom/components/createMain.js","./components/createFooter":"vdom/components/createFooter.js"}],"vdom/events/eventHelpers/registerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -642,7 +394,7 @@ var registerEvent = exports.registerEvent = function registerEvent(eventType, ha
   }
   eventRegistry[eventType].push(handler); // Store handler for the event type
 };
-},{}],"vdom/events/eventHandling/triggerEvent.js":[function(require,module,exports) {
+},{}],"vdom/events/eventHelpers/triggerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -659,7 +411,7 @@ function triggerEvent(eventType, event) {
   }
 }
 ;
-},{"./registerEvent":"vdom/events/eventHandling/registerEvent.js"}],"vdom/events/eventHandling/handleEvent.js":[function(require,module,exports) {
+},{"./registerEvent":"vdom/events/eventHelpers/registerEvent.js"}],"vdom/events/eventHelpers/handleEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -672,7 +424,7 @@ var handleEvent = exports.handleEvent = function handleEvent(event) {
   var eventType = event.type; // Get event type (e.g., 'keydown')
   (0, _triggerEvent.triggerEvent)(eventType, event); // Trigger the event from our custom event system
 };
-},{"./triggerEvent":"vdom/events/eventHandling/triggerEvent.js"}],"vdom/diff.js":[function(require,module,exports) {
+},{"./triggerEvent":"vdom/events/eventHelpers/triggerEvent.js"}],"vdom/diff.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -889,13 +641,13 @@ var createListItem = exports.createListItem = function createListItem(toDoString
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"vdom/events/enterPress.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.enterPress = void 0;
+exports.handleEnterKeySubmit = void 0;
 var _main = require("../../main");
 var _createVApp = require("../createVApp");
 var _diff = _interopRequireDefault(require("../diff"));
@@ -908,7 +660,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-var enterPress = exports.enterPress = function enterPress(event) {
+var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKeySubmit(event) {
   // Early return if the key pressed is not "Enter"
   if (event.key !== "Enter") return;
   var todoInput = document.getElementById("todo-input");
@@ -966,11 +718,13 @@ exports.updateRootEl = updateRootEl;
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _createVApp = require("./vdom/createVApp");
-var _handleEvent = require("./vdom/events/eventHandling/handleEvent");
-var _registerEvent = require("./vdom/events/eventHandling/registerEvent");
-var _enterPress = require("./vdom/events/enterPress");
+var _handleEvent = require("./vdom/events/eventHelpers/handleEvent");
+var _registerEvent = require("./vdom/events/eventHelpers/registerEvent");
+var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 var _removeElementHandler = require("./dom/removeElementHandler");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Probably to be removed, uses DOM manipulation, not vDOM
+
 // Application State
 var toDoList = exports.toDoList = [];
 var $rootEl;
@@ -984,22 +738,20 @@ var setVApp = exports.setVApp = function setVApp(newVApp) {
   vApp = newVApp;
 };
 
-<<<<<<< HEAD
-//   vApp = vNewApp;
-// }, 1000);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
-=======
 // Initialize Application
 var initializeApp = function initializeApp() {
   setVApp((0, _createVApp.createVApp)(toDoList)); // Create initial VApp
   exports.$rootEl = $rootEl = (0, _mount.default)((0, _render.default)(vApp), document.getElementById('root')); // Mount the initial app
 
   // Register events
-  (0, _registerEvent.registerEvent)('keydown', _enterPress.enterPress); // Keydown for Enter key to add items
+  (0, _registerEvent.registerEvent)('keydown', _handleEnterKeySubmit.handleEnterKeySubmit); // Keydown for Enter key to add items
   window.onkeydown = _handleEvent.handleEvent; // Global event handler
   window.onclick = function (event) {
     return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
   }; // Click event to remove items
+  window.ondblclick = function (event) {
+    console.log('Window was double-clicked!', event);
+  };
 };
 
 // Update the root element in the DOM
@@ -1015,8 +767,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHandling/handleEvent":"vdom/events/eventHandling/handleEvent.js","./vdom/events/eventHandling/registerEvent":"vdom/events/eventHandling/registerEvent.js","./vdom/events/enterPress":"vdom/events/enterPress.js","./dom/removeElementHandler":"dom/removeElementHandler.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
->>>>>>> Rupert
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./dom/removeElementHandler":"dom/removeElementHandler.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1041,19 +792,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65193" + '/');
-=======
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42085" + '/');
->>>>>>> Rupert
-=======
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56233" + '/');
->>>>>>> Martin
-=======
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44725" + '/');
->>>>>>> Rupert
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37709" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
