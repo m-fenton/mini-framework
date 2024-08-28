@@ -190,7 +190,7 @@ var renderElem = function renderElem() {
   return $el;
 };
 var render = function render(vNode) {
-  console.log("vNode", vNode);
+  // console.log("vNode", vNode)
   if (vNode == null) {
     return;
   }
@@ -229,6 +229,7 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+// Helper function to zip two arrays together
 var zip = function zip(xs, ys) {
   var zipped = [];
   for (var i = 0; i < Math.min(xs.length, ys.length); i++) {
@@ -236,24 +237,28 @@ var zip = function zip(xs, ys) {
   }
   return zipped;
 };
+
+// Diffing attributes between two virtual DOM nodes
 var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
   var patches = [];
 
-  // setting newAttrs
+  // Setting new or updated attributes
   var _loop = function _loop() {
     var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
       k = _Object$entries$_i[0],
       v = _Object$entries$_i[1];
-    patches.push(function ($node) {
-      $node.setAttribute(k, v);
-      return $node;
-    });
+    if (oldAttrs[k] !== v) {
+      patches.push(function ($node) {
+        $node.setAttribute(k, v);
+        return $node;
+      });
+    }
   };
   for (var _i = 0, _Object$entries = Object.entries(newAttrs); _i < _Object$entries.length; _i++) {
     _loop();
   }
 
-  // removing attrs
+  // Removing old attributes that are not present in the new node
   var _loop2 = function _loop2(k) {
     if (!(k in newAttrs)) {
       patches.push(function ($node) {
@@ -273,6 +278,8 @@ var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
     return $node;
   };
 };
+
+// Diffing children between two virtual DOM nodes
 var diffChildren = function diffChildren(oldVChildren, newVChildren) {
   var childPatches = [];
   oldVChildren.forEach(function (oldVChild, i) {
@@ -298,8 +305,7 @@ var diffChildren = function diffChildren(oldVChildren, newVChildren) {
     _iterator.f();
   }
   return function ($parent) {
-    // since childPatches are expecting the $child, not $parent,
-    // we cannot just loop through them and call patch($parent)
+    // Applying child patches
     var _iterator2 = _createForOfIteratorHelper(zip(childPatches, $parent.childNodes)),
       _step2;
     try {
@@ -307,8 +313,12 @@ var diffChildren = function diffChildren(oldVChildren, newVChildren) {
         var _step2$value = _slicedToArray(_step2.value, 2),
           _patch = _step2$value[0],
           $child = _step2$value[1];
-        _patch($child);
+        if (_patch) {
+          _patch($child);
+        }
       }
+
+      // Adding additional patches (new children)
     } catch (err) {
       _iterator2.e(err);
     } finally {
@@ -321,42 +331,30 @@ var diffChildren = function diffChildren(oldVChildren, newVChildren) {
     return $parent;
   };
 };
+
+// Main diff function to compute differences between old and new virtual DOM
 var diff = function diff(oldVTree, newVTree) {
-  // let's assume oldVTree is not undefined!
-  if (newVTree === undefined) {
+  if (!newVTree) {
+    // New tree is undefined; remove the node
     return function ($node) {
       $node.remove();
-      // the patch should return the new root node.
-      // since there is none in this case,
-      // we will just return undefined.
       return undefined;
     };
   }
   if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
     if (oldVTree !== newVTree) {
-      // could be 2 cases:
-      // 1. both trees are string and they have different values
-      // 2. one of the trees is text node and
-      //    the other one is elem node
-      // Either case, we will just render(newVTree)!
       return function ($node) {
         var $newNode = (0, _render.default)(newVTree);
         $node.replaceWith($newNode);
         return $newNode;
       };
     } else {
-      // this means that both trees are string
-      // and they have the same values
       return function ($node) {
         return $node;
       };
     }
   }
-  if (oldVTree == null || oldVTree.tagName !== newVTree.tagName) {
-    // we assume that they are totally different and 
-    // will not attempt to find the differences.
-    // simply render the newVTree and mount it.
-
+  if (oldVTree != null || oldVTree.tagName !== newVTree.tagName) {
     return function ($node) {
       var $newNode = (0, _render.default)(newVTree);
       $node.replaceWith($newNode);
@@ -655,27 +653,43 @@ var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 // }, 1000);
 
 // Example of a specific event handler
-function handleImageClick(toDoList, event) {
-  console.log("Before update:", toDoList);
-  if (event.target.value != "") {
-    var toDoItem = (0, _createListItem.createListItem)(event.target.value);
-    toDoList.unshift(toDoItem);
-    // const vNewApp = createVApp(toDoList);
-    var vNewApp = createVApp(toDoList);
-    var patch = (0, _diff.default)(vApp, vNewApp);
-    $rootEl = patch($rootEl);
-    console.log("After update:", toDoList);
-    console.log('Actual DOM after patch:', $rootEl.innerHTML);
-    vApp = vNewApp;
-    console.log('vNewApp after patch:', vNewApp);
-    (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
-  }
-}
-$rootEl.addEventListener('click', function (event) {
-  return handleImageClick(toDoList, event);
-});
+// function handleImageClick(toDoList, event) {
+//   if (event.target.value != "") {
+//     let toDoItem = createListItem(event.target.value)
+//     toDoList.unshift(toDoItem)
+//     // const vNewApp = createVApp(toDoList);
+//     const vNewApp = createVApp(toDoList);
+//     // console.log('vNewApp before patch:', vNewApp);
 
-// window.onkeydown = (event) => {
+//     const patch = diff(vApp, vNewApp);
+//     $rootEl = patch($rootEl);
+//     // console.log('Actual DOM after patch:', $rootEl.innerHTML);
+//     vApp = vNewApp;
+
+//     updateURLWithCount(toDoList.length);
+//   }
+// }
+// $rootEl.addEventListener('click', (event) => handleImageClick(toDoList, event));
+window.onkeydown = function (event) {
+  if (event.key == "Enter") {
+    var todoInput = document.getElementById("todo-input");
+    var todoInputValue = todoInput.value;
+    var toDoItem = (0, _createListItem.createListItem)(todoInputValue);
+    if (todoInputValue != "") {
+      toDoList.unshift(toDoItem);
+      // const vNewApp = createVApp(toDoList);
+      var vNewApp = createVApp(toDoList);
+      // console.log('vNewApp before patch:', vNewApp);
+
+      var patch = (0, _diff.default)(vApp, vNewApp);
+      $rootEl = patch($rootEl);
+      // console.log('Actual DOM after patch:', $rootEl.innerHTML);
+      vApp = vNewApp;
+      (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
+    }
+  }
+};
+// window.onkeydown =  (event, toDoList) => {
 //   if (event.key == "Enter") {
 //     let todoInput = document.getElementById("todo-input");
 //     let todoInputValue = todoInput.value;
@@ -692,7 +706,9 @@ $rootEl.addEventListener('click', function (event) {
 //   }
 // }
 
-// window.onclick = (event) => removeElementHandler(event, "destroy", "li")
+window.onclick = function (event) {
+  return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
+};
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js","./dom/addElementHandler":"dom/addElementHandler.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./dom/obtainNumberOfToDOItems":"dom/obtainNumberOfToDOItems.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -718,7 +734,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44551" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "32819" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

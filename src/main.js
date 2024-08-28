@@ -51,28 +51,47 @@ let $rootEl = mount($app, document.getElementById('root'));
 // }, 1000);
 
 // Example of a specific event handler
-function handleImageClick(toDoList, event) {
-  console.log("Before update:", toDoList);
-  if (event.target.value != "") {
-    let toDoItem = createListItem(event.target.value)
-    toDoList.unshift(toDoItem)
-    // const vNewApp = createVApp(toDoList);
-    const vNewApp = createVApp(toDoList);
-    const patch = diff(vApp, vNewApp);
-    $rootEl = patch($rootEl);
-    console.log("After update:", toDoList);
-    console.log('Actual DOM after patch:', $rootEl.innerHTML);
-    vApp = vNewApp;
+// function handleImageClick(toDoList, event) {
+//   if (event.target.value != "") {
+//     let toDoItem = createListItem(event.target.value)
+//     toDoList.unshift(toDoItem)
+//     // const vNewApp = createVApp(toDoList);
+//     const vNewApp = createVApp(toDoList);
+//     // console.log('vNewApp before patch:', vNewApp);
 
-    console.log('vNewApp after patch:', vNewApp);
+//     const patch = diff(vApp, vNewApp);
+//     $rootEl = patch($rootEl);
+//     // console.log('Actual DOM after patch:', $rootEl.innerHTML);
+//     vApp = vNewApp;
 
-    updateURLWithCount(toDoList.length);
+
+//     updateURLWithCount(toDoList.length);
+//   }
+// }
+// $rootEl.addEventListener('click', (event) => handleImageClick(toDoList, event));
+window.onkeydown = (event) => {
+  if (event.key == "Enter") {
+    let todoInput = document.getElementById("todo-input");
+    let todoInputValue = todoInput.value;
+    let toDoItem = createListItem(todoInputValue)
+
+    if (todoInputValue != "") {
+      toDoList.unshift(toDoItem)
+      // const vNewApp = createVApp(toDoList);
+      const vNewApp = createVApp(toDoList);
+      // console.log('vNewApp before patch:', vNewApp);
+
+      const patch = diff(vApp, vNewApp);
+      $rootEl = patch($rootEl);
+      // console.log('Actual DOM after patch:', $rootEl.innerHTML);
+      vApp = vNewApp;
+
+
+      updateURLWithCount(toDoList.length);
+    }
   }
 }
-$rootEl.addEventListener('click', (event) => handleImageClick(toDoList, event));
-
-
-// window.onkeydown = (event) => {
+// window.onkeydown =  (event, toDoList) => {
 //   if (event.key == "Enter") {
 //     let todoInput = document.getElementById("todo-input");
 //     let todoInputValue = todoInput.value;
@@ -89,7 +108,7 @@ $rootEl.addEventListener('click', (event) => handleImageClick(toDoList, event));
 //   }
 // }
 
-// window.onclick = (event) => removeElementHandler(event, "destroy", "li")
+window.onclick = (event) => removeElementHandler(event, "destroy", "li")
 
 
 

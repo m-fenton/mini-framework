@@ -23,7 +23,7 @@ const renderElem = ({ tagName, attrs, children} = null) => {
   };
   
   const render = vNode => {
-    console.log("vNode", vNode)
+    // console.log("vNode", vNode)
     if (vNode == null){
       return
     }
