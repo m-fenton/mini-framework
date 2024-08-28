@@ -745,6 +745,10 @@ var initializeApp = function initializeApp() {
 
   // Register events
   (0, _registerEvent.registerEvent)('keydown', _handleEnterKeySubmit.handleEnterKeySubmit); // Keydown for Enter key to add items
+  (0, _registerEvent.registerEvent)('keydown', function (event) {
+    if (event.key !== "Enter") console.log(event.key);
+  }); // Keydown for Enter key to add items
+
   window.onkeydown = _handleEvent.handleEvent; // Global event handler
   window.onclick = function (event) {
     return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
@@ -792,7 +796,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37709" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44895" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -24,6 +24,8 @@ const initializeApp = () => {
 
   // Register events
   registerEvent('keydown', handleEnterKeySubmit); // Keydown for Enter key to add items
+  registerEvent('keydown', function(event){  if (event.key !== "Enter") console.log(event.key);}); // Keydown for Enter key to add items
+
   window.onkeydown = handleEvent; // Global event handler
   window.onclick = (event) => removeElementHandler(event, "destroy", "li"); // Click event to remove items
   window.ondblclick = function (event) { console.log('Window was double-clicked!', event) };
