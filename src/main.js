@@ -15,21 +15,22 @@ import { removeElementHandler } from './dom/removeElementHandler';
 import { obtainNumberOfToDoItems } from './dom/obtainNumberOfToDOItems';
 
 let number = 0
+let toDoList = []
 
-const createVApp = (number) => createElement('div', {
+const createVApp = (toDoList) => createElement('div', {
   attrs: {
     id: 'root',
     class: 'todoapp',
   },
   children: [
     createHeader(),
-    createMain(),
-    createFooter(number),
+    createMain(toDoList),
+    createFooter(toDoList.length),
   ],
 
 });
 
-let vApp = createVApp(number);
+let vApp = createVApp(toDoList);
 const $app = render(vApp);
 let $rootEl = mount($app, document.getElementById('root'));
 
@@ -50,15 +51,23 @@ window.onkeydown = (event) => {
   }
 }
 
-window.onclick = (event) => removeElementHandler(event, "destroy", "li")
+// window.onclick = (event) => removeElementHandler(event, "destroy", "li")
 
 
 // Example of a specific event handler
-// function handleImageClick() {
-//   const vNewApp = createVApp(toDoList);
-//   const patch = diff(vApp, vNewApp);
-//   $rootEl = patch($rootEl);
-//   vApp = vNewApp;
-//   updateURLWithCount(toDoList.length);
-// }
-// $rootEl.addEventListener('click', handleImageClick);
+function handleImageClick(toDoList, event) {
+console.log("toDoList", toDoList)
+  if (event.target.value != "") {
+    let toDoItem = createListItem(event.target.value)
+    toDoList.unshift(toDoItem) 
+    // const vNewApp = createVApp(toDoList);
+    const vNewApp = createVApp(toDoList);
+    console.log("vNewApp", vNewApp)
+    const patch = diff(vApp, vNewApp);
+    $rootEl = patch($rootEl);
+    vApp = vNewApp;
+    updateURLWithCount(number);
+    event.target.value 
+  }
+}
+$rootEl.addEventListener('click', (event) => handleImageClick(toDoList, event));

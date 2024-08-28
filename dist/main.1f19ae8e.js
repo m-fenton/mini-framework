@@ -465,7 +465,7 @@ exports.createMain = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
 var _createListItem = require("./createListItem");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var createMain = exports.createMain = function createMain() {
+var createMain = exports.createMain = function createMain(toDoList) {
   return (0, _createElement.default)("main", {
     attrs: {
       class: "main"
@@ -489,7 +489,7 @@ var createMain = exports.createMain = function createMain() {
       attrs: {
         class: "todo-list"
       },
-      children: []
+      children: toDoList
     })]
   });
 };
@@ -614,16 +614,17 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 // elements
 
 var number = 0;
-var createVApp = function createVApp(number) {
+var toDoList = [];
+var createVApp = function createVApp(toDoList) {
   return (0, _createElement.default)('div', {
     attrs: {
       id: 'root',
       class: 'todoapp'
     },
-    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(number)]
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(toDoList), (0, _createFooter.createFooter)(toDoList.length)]
   });
 };
-var vApp = createVApp(number);
+var vApp = createVApp(toDoList);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 window.onkeydown = function (event) {
@@ -642,19 +643,28 @@ window.onkeydown = function (event) {
     }
   }
 };
-window.onclick = function (event) {
-  return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
-};
+
+// window.onclick = (event) => removeElementHandler(event, "destroy", "li")
 
 // Example of a specific event handler
-// function handleImageClick() {
-//   const vNewApp = createVApp(toDoList);
-//   const patch = diff(vApp, vNewApp);
-//   $rootEl = patch($rootEl);
-//   vApp = vNewApp;
-//   updateURLWithCount(toDoList.length);
-// }
-// $rootEl.addEventListener('click', handleImageClick);
+function handleImageClick(toDoList, event) {
+  console.log("toDoList", toDoList);
+  if (event.target.value != "") {
+    var toDoItem = (0, _createListItem.createListItem)(event.target.value);
+    toDoList.unshift(toDoItem);
+    // const vNewApp = createVApp(toDoList);
+    var vNewApp = createVApp(toDoList);
+    console.log("vNewApp", vNewApp);
+    var patch = (0, _diff.default)(vApp, vNewApp);
+    $rootEl = patch($rootEl);
+    vApp = vNewApp;
+    (0, _updateURLWithCount.updateURLWithCount)(number);
+    event.target.value;
+  }
+}
+$rootEl.addEventListener('click', function (event) {
+  return handleImageClick(toDoList, event);
+});
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js","./dom/addElementHandler":"dom/addElementHandler.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./dom/obtainNumberOfToDOItems":"dom/obtainNumberOfToDOItems.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -680,7 +690,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33057" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36889" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
