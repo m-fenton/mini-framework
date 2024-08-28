@@ -6,22 +6,19 @@ import mount from './vdom/mount';
 import { createHeader } from './vdom/components/createHeader';
 import { createMain } from './vdom/components/createMain';
 import { createFooter } from './vdom/components/createFooter';
-// DOM manipulation; to be removed?
-import { removeElementHandler } from './dom/removeElementHandler';
+
 
 // events
 import { handleEvent } from './vdom/events/eventHandling/handleEvent';
 import { registerEvent } from './vdom/events/eventHandling/registerEvent';
-
 import { enterPress } from './vdom/events/enterPress';
-registerEvent('keydown', enterPress);
+// DOM manipulation event; to be removed?
+import { removeElementHandler } from './dom/removeElementHandler';
 
 export let toDoList = []
-export let vApp;
 export let $rootEl;
 
 export const createVApp = (toDoList) => {
-  console.log("Creating vApp with toDoList:", toDoList);
   return {
     tagName: 'div',
     attrs: {
@@ -45,21 +42,20 @@ export const setVApp = (newVApp) => {
 setVApp(createVApp(toDoList));
 $rootEl = mount(render(_vApp), document.getElementById('root'));
 
+// Add events to eventRegistry
+registerEvent('keydown', enterPress);
+
+// updates the $rootEl since $rootEl is read-only when exported.  Was much easier when I didn't have to export
 export function updateRootEl(newRootEl) {
-  console.log("Updating root element:", newRootEl);
+ // console.log("Updating root element:", newRootEl);
   $rootEl = newRootEl;
   const oldRoot = document.getElementById('root');
   if (oldRoot && oldRoot.parentNode) {
-    console.log("Replacing old root with new root");
+ //   console.log("Replacing old root with new root");
     oldRoot.parentNode.replaceChild($rootEl, oldRoot);
   } else {
     console.warn("Could not find old root element to replace");
   }
-}
-
-export function updateVApp(newVApp) {
-  console.log("originalVApp", vApp)
-  vApp = newVApp;
 }
 
 window.onkeydown = handleEvent

@@ -78,7 +78,7 @@ const diffChildren = (oldVChildren, newVChildren) => {
 
 // Main diff function to compute differences between old and new virtual DOM
 const diff = (oldVTree, newVTree) => {
-    console.log("Diffing:", oldVTree, newVTree);
+    // console.log("Diffing:", oldVTree, newVTree);
     if (oldVTree == null) {
         // Old tree is null or undefined; create a new node
         return () => render(newVTree);

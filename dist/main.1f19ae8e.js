@@ -136,7 +136,7 @@ var renderElem = function renderElem() {
     tagName = _ref.tagName,
     attrs = _ref.attrs,
     children = _ref.children;
-  console.log("Rendering element:", tagName, attrs, children);
+  // console.log("Rendering element:", tagName, attrs, children);
   // create the element
   //   e.g. <div></div>
   var $el = document.createElement(tagName);
@@ -157,9 +157,9 @@ var renderElem = function renderElem() {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var child = _step.value;
-      console.log("Rendering child:", child);
+      // console.log("Rendering child:", child);
       if (render(child) == null) {
-        console.log("Skipping null child");
+        // console.log("Skipping null child");
         continue;
       }
       $el.appendChild(render(child));
@@ -172,17 +172,17 @@ var renderElem = function renderElem() {
   return $el;
 };
 var render = function render(vNode) {
-  console.log("Rendering vNode:", vNode);
+  // console.log("Rendering vNode:", vNode);
   if (vNode == null) {
     return;
   }
   if (typeof vNode === 'string') {
-    console.log("Rendering text node:", vNode);
+    // console.log("Rendering text node:", vNode);
     return document.createTextNode(vNode);
   }
 
   // we assume everything else to be a virtual element
-  console.log("Rendering element:", vNode);
+  // console.log("Rendering element:", vNode);
   return renderElem(vNode);
 };
 var _default = exports.default = render;
@@ -310,7 +310,6 @@ var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createFooter = exports.createFooter = function createFooter(count) {
-  console.log("count", count);
   if (count < 1) {
     return null;
   }
@@ -357,23 +356,7 @@ var createFooter = exports.createFooter = function createFooter(count) {
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"dom/removeElementHandler.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.removeElementHandler = removeElementHandler;
-function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
-  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
-    // Remove the parent element of the target (usually a list item)
-    var listItem = event.target.closest(elementToRemove);
-    if (listItem) {
-      listItem.remove();
-    }
-  }
-}
-},{}],"vdom/events/eventHandling/registerEvent.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/events/eventHandling/registerEvent.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -543,7 +526,7 @@ var diffChildren = function diffChildren(oldVChildren, newVChildren) {
 
 // Main diff function to compute differences between old and new virtual DOM
 var diff = function diff(oldVTree, newVTree) {
-  console.log("Diffing:", oldVTree, newVTree);
+  // console.log("Diffing:", oldVTree, newVTree);
   if (oldVTree == null) {
     // Old tree is null or undefined; create a new node
     return function () {
@@ -661,20 +644,40 @@ var enterPress = exports.enterPress = function enterPress(event) {
       _main.toDoList.push(toDoItem); // or unshift, depending on your preference
 
       var currentVApp = (0, _main.getVApp)();
-      console.log("Current vApp:", currentVApp);
+      // console.log("Current vApp:", currentVApp);
+
       var vNewApp = (0, _main.createVApp)(_toConsumableArray(_main.toDoList)); // Create a new array to ensure immutability
-      console.log("New vApp:", vNewApp);
+      // console.log("New vApp:", vNewApp);
+
       var patch = (0, _diff.default)(currentVApp, vNewApp);
       var newRootEl = patch(_main.$rootEl);
       (0, _main.updateRootEl)(newRootEl);
       (0, _main.setVApp)(vNewApp);
-      console.log("Updated vApp:", (0, _main.getVApp)());
+
+      // console.log("Updated vApp:", getVApp());
+
       (0, _updateURLWithCount.updateURLWithCount)(_main.toDoList.length);
       todoInput.value = ""; // Clear input field after adding item
     }
   }
 };
-},{"../../main":"main.js","../diff":"vdom/diff.js","../routing/updateURLWithCount":"vdom/routing/updateURLWithCount.js","../components/createListItem":"vdom/components/createListItem.js"}],"main.js":[function(require,module,exports) {
+},{"../../main":"main.js","../diff":"vdom/diff.js","../routing/updateURLWithCount":"vdom/routing/updateURLWithCount.js","../components/createListItem":"vdom/components/createListItem.js"}],"dom/removeElementHandler.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.removeElementHandler = removeElementHandler;
+function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
+  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
+    // Remove the parent element of the target (usually a list item)
+    var listItem = event.target.closest(elementToRemove);
+    if (listItem) {
+      listItem.remove();
+    }
+  }
+}
+},{}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -682,17 +685,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.toDoList = exports.setVApp = exports.getVApp = exports.createVApp = exports.$rootEl = void 0;
 exports.updateRootEl = updateRootEl;
-exports.updateVApp = updateVApp;
-exports.vApp = void 0;
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
 var _createHeader = require("./vdom/components/createHeader");
 var _createMain = require("./vdom/components/createMain");
 var _createFooter = require("./vdom/components/createFooter");
-var _removeElementHandler = require("./dom/removeElementHandler");
 var _handleEvent = require("./vdom/events/eventHandling/handleEvent");
 var _registerEvent = require("./vdom/events/eventHandling/registerEvent");
 var _enterPress = require("./vdom/events/enterPress");
+var _removeElementHandler = require("./dom/removeElementHandler");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -701,14 +702,11 @@ function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Sym
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; } // functionality
 // components
-// DOM manipulation; to be removed?
 // events
-(0, _registerEvent.registerEvent)('keydown', _enterPress.enterPress);
+// DOM manipulation event; to be removed?
 var toDoList = exports.toDoList = [];
-var vApp;
 var $rootEl;
 var createVApp = exports.createVApp = function createVApp(toDoList) {
-  console.log("Creating vApp with toDoList:", toDoList);
   return {
     tagName: 'div',
     attrs: {
@@ -729,26 +727,27 @@ var setVApp = exports.setVApp = function setVApp(newVApp) {
 // Initial setup
 setVApp(createVApp(toDoList));
 exports.$rootEl = $rootEl = (0, _mount.default)((0, _render.default)(_vApp), document.getElementById('root'));
+
+// Add events to eventRegistry
+(0, _registerEvent.registerEvent)('keydown', _enterPress.enterPress);
+
+// updates the $rootEl since $rootEl is read-only when exported.  Was much easier when I didn't have to export
 function updateRootEl(newRootEl) {
-  console.log("Updating root element:", newRootEl);
+  // console.log("Updating root element:", newRootEl);
   exports.$rootEl = $rootEl = newRootEl;
   var oldRoot = document.getElementById('root');
   if (oldRoot && oldRoot.parentNode) {
-    console.log("Replacing old root with new root");
+    //   console.log("Replacing old root with new root");
     oldRoot.parentNode.replaceChild($rootEl, oldRoot);
   } else {
     console.warn("Could not find old root element to replace");
   }
 }
-function updateVApp(newVApp) {
-  console.log("originalVApp", vApp);
-  exports.vApp = vApp = newVApp;
-}
 window.onkeydown = _handleEvent.handleEvent;
 window.onclick = function (event) {
   return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
 };
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./vdom/events/eventHandling/handleEvent":"vdom/events/eventHandling/handleEvent.js","./vdom/events/eventHandling/registerEvent":"vdom/events/eventHandling/registerEvent.js","./vdom/events/enterPress":"vdom/events/enterPress.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/events/eventHandling/handleEvent":"vdom/events/eventHandling/handleEvent.js","./vdom/events/eventHandling/registerEvent":"vdom/events/eventHandling/registerEvent.js","./vdom/events/enterPress":"vdom/events/enterPress.js","./dom/removeElementHandler":"dom/removeElementHandler.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -773,7 +772,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34069" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42401" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

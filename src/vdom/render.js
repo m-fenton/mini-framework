@@ -1,5 +1,5 @@
 const renderElem = ({ tagName, attrs, children } = null) => {
-  console.log("Rendering element:", tagName, attrs, children);
+  // console.log("Rendering element:", tagName, attrs, children);
   // create the element
   //   e.g. <div></div>
   const $el = document.createElement(tagName);
@@ -13,9 +13,9 @@ const renderElem = ({ tagName, attrs, children } = null) => {
   // append all children as specified in vNode.children
   //   e.g. <div id="app"><img></div>
   for (const child of children) {
-    console.log("Rendering child:", child);
+    // console.log("Rendering child:", child);
     if (render(child) == null) {
-      console.log("Skipping null child");
+      // console.log("Skipping null child");
       continue
     }
     $el.appendChild(render(child));
@@ -25,18 +25,18 @@ const renderElem = ({ tagName, attrs, children } = null) => {
 };
 
 const render = vNode => {
-  console.log("Rendering vNode:", vNode);
+  // console.log("Rendering vNode:", vNode);
   if (vNode == null) {
     return
   }
 
   if (typeof vNode === 'string') {
-    console.log("Rendering text node:", vNode);
+    // console.log("Rendering text node:", vNode);
     return document.createTextNode(vNode);
   }
 
   // we assume everything else to be a virtual element
-  console.log("Rendering element:", vNode);
+  // console.log("Rendering element:", vNode);
   return renderElem(vNode);
 };
 
