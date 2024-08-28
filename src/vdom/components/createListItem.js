@@ -1,5 +1,6 @@
 import createElement from "../createElement";
 
+// creates an item for the toDoList
 export const createListItem = (toDoString) =>
 
     createElement("li", {

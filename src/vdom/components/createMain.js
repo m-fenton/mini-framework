@@ -1,5 +1,6 @@
 import createElement from "../createElement";
 
+// creates the main section of the todo page; where the list goes
 export const createMain = (toDoList) =>
   
   createElement("main", {

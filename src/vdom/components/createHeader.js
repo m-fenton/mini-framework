@@ -1,5 +1,4 @@
 import createElement from "../createElement";
-// import addListItem from "../addListItem";
 
 // Function to create the footer element
 export const createHeader = () => createElement("header", {
@@ -37,7 +36,3 @@ export const createHeader = () => createElement("header", {
 
 }
 )
-
-function addListItem(toDoString) {
-    console.log(createListItem(toDoString))
-}

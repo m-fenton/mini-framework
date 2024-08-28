@@ -1,65 +1,44 @@
-// functionality
 import render from './vdom/render';
 import mount from './vdom/mount';
-
-// components
-import { createHeader } from './vdom/components/createHeader';
-import { createMain } from './vdom/components/createMain';
-import { createFooter } from './vdom/components/createFooter';
-
-
-// events
+import { createVApp } from './vdom/createVApp';
 import { handleEvent } from './vdom/events/eventHandling/handleEvent';
 import { registerEvent } from './vdom/events/eventHandling/registerEvent';
 import { enterPress } from './vdom/events/enterPress';
-// DOM manipulation event; to be removed?
 import { removeElementHandler } from './dom/removeElementHandler';
 
-export let toDoList = []
+// Application State
+export let toDoList = [];
 export let $rootEl;
+let vApp;
 
-export const createVApp = (toDoList) => {
-  return {
-    tagName: 'div',
-    attrs: {
-      id: 'root',
-      class: 'todoapp',
-    },
-    children: [
-      createHeader(),
-      createMain([...toDoList]),  // Create a new array to ensure immutability
-      ...(toDoList.length > 0 ? [createFooter(toDoList.length)] : [])],
-  };
-};
-
-let _vApp;
-export const getVApp = () => _vApp;
+// Getters and Setters for Virtual DOM
+export const getVApp = () => vApp;
 export const setVApp = (newVApp) => {
-  _vApp = newVApp;
+  vApp = newVApp;
 };
 
-// Initial setup
-setVApp(createVApp(toDoList));
-$rootEl = mount(render(_vApp), document.getElementById('root'));
+// Initialize Application
+const initializeApp = () => {
+  setVApp(createVApp(toDoList)); // Create initial VApp
+  $rootEl = mount(render(vApp), document.getElementById('root')); // Mount the initial app
 
-// Add events to eventRegistry
-registerEvent('keydown', enterPress);
+  // Register events
+  registerEvent('keydown', enterPress); // Keydown for Enter key to add items
+  window.onkeydown = handleEvent; // Global event handler
+  window.onclick = (event) => removeElementHandler(event, "destroy", "li"); // Click event to remove items
+};
 
-// updates the $rootEl since $rootEl is read-only when exported.  Was much easier when I didn't have to export
+// Update the root element in the DOM
 export function updateRootEl(newRootEl) {
- // console.log("Updating root element:", newRootEl);
-  $rootEl = newRootEl;
+  $rootEl = newRootEl; // Update the reference
   const oldRoot = document.getElementById('root');
+
   if (oldRoot && oldRoot.parentNode) {
- //   console.log("Replacing old root with new root");
-    oldRoot.parentNode.replaceChild($rootEl, oldRoot);
+    oldRoot.parentNode.replaceChild($rootEl, oldRoot); // Replace the old root element with the new one
   } else {
     console.warn("Could not find old root element to replace");
   }
 }
 
-window.onkeydown = handleEvent
-window.onclick = (event) => removeElementHandler(event, "destroy", "li")
-
-
-
+// Initialize the application
+initializeApp();

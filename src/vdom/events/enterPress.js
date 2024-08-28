@@ -1,35 +1,39 @@
-import { getVApp, setVApp, createVApp, $rootEl, toDoList } from "../../main";
-import { updateRootEl } from "../../main";
+import { getVApp, setVApp, updateRootEl, $rootEl, toDoList } from "../../main";
+import { createVApp } from "../createVApp";
 import diff from "../diff";
 import { updateURLWithCount } from "../routing/updateURLWithCount";
 import { createListItem } from "../components/createListItem";
 
 export const enterPress = (event) => {
-  if (event.key === "Enter") {
-    let todoInput = document.getElementById("todo-input");
-    let todoInputValue = todoInput.value;
+  // Early return if the key pressed is not "Enter"
+  if (event.key !== "Enter") return;
 
-    if (todoInputValue !== "") {
-      let toDoItem = createListItem(todoInputValue);
-      toDoList.push(toDoItem);  // or unshift, depending on your preference
+  const todoInput = document.getElementById("todo-input");
+  const todoInputValue = todoInput?.value.trim();  // Use optional chaining and trim for extra safety
 
-      const currentVApp = getVApp();
-      // console.log("Current vApp:", currentVApp);
+  // Early return if the input value is empty
+  if (!todoInputValue) return;
 
-      const vNewApp = createVApp([...toDoList]);  // Create a new array to ensure immutability
-      // console.log("New vApp:", vNewApp);
+  // Create a new to-do item and add it to the list
+  const toDoItem = createListItem(todoInputValue);
+  toDoList.push(toDoItem);
 
-      const patch = diff(currentVApp, vNewApp);
-      const newRootEl = patch($rootEl);
-      
-      updateRootEl(newRootEl);
-      setVApp(vNewApp);
-      
-      // console.log("Updated vApp:", getVApp());
-      
-      updateURLWithCount(toDoList.length);
+  // Generate the new virtual DOM representation
+  const currentVApp = getVApp();
+  const vNewApp = createVApp([...toDoList]);
 
-      todoInput.value = ""; // Clear input field after adding item
-    }
-  }
+  // Calculate the difference and patch the DOM
+  const patch = diff(currentVApp, vNewApp);
+  const newRootEl = patch($rootEl);
+
+  // Update the root element and the virtual app state
+  updateRootEl(newRootEl);
+  setVApp(vNewApp);
+
+  // Update the URL with the current count of to-do items
+  updateURLWithCount(toDoList.length);
+
+  // Clear the input field after processing the entry
+  todoInput.value = "";
+
 };

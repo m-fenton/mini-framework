@@ -14,7 +14,7 @@ export const createFooter = (count) => {
         attrs: {
           class: "todo-count",
         },
-        children: [`${count} Items Left`], // Show the current count
+        children: [`${count} Items Left`], // Show the current count of toDoList items
       }),
       createElement("ul", {
         attrs: {
