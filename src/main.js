@@ -17,19 +17,22 @@ import { obtainNumberOfToDoItems } from './dom/obtainNumberOfToDOItems';
 let number = 0
 let toDoList = []
 
-const createVApp = (toDoList) => createElement('div', {
-  attrs: {
-    id: 'root',
-    class: 'todoapp',
-  },
-  children: [
-    createHeader(),
-    createMain(toDoList),
-    createFooter(toDoList.length),
-  ],
+const createVApp = (toDoList) => {
+  console.log("Creating vApp with toDoList:", toDoList);
+  return createElement('div', {
+    attrs: {
+      id: 'root',
+      class: 'todoapp',
+    },
+    children: [
+      createHeader(),
+      createMain(toDoList),
+      createFooter(toDoList.length)
+    ],
 
-});
+  });
 
+}
 let vApp = createVApp(toDoList);
 const $app = render(vApp);
 let $rootEl = mount($app, document.getElementById('root'));
@@ -49,17 +52,20 @@ let $rootEl = mount($app, document.getElementById('root'));
 
 // Example of a specific event handler
 function handleImageClick(toDoList, event) {
-  console.log("toDoList", toDoList)
+  console.log("Before update:", toDoList);
   if (event.target.value != "") {
     let toDoItem = createListItem(event.target.value)
     toDoList.unshift(toDoItem)
     // const vNewApp = createVApp(toDoList);
     const vNewApp = createVApp(toDoList);
     const patch = diff(vApp, vNewApp);
-    console.log("patch:", patch)
     $rootEl = patch($rootEl);
+    console.log("After update:", toDoList);
+    console.log('Actual DOM after patch:', $rootEl.innerHTML);
     vApp = vNewApp;
-    console.log("vApp", vApp)
+
+    console.log('vNewApp after patch:', vNewApp);
+
     updateURLWithCount(toDoList.length);
   }
 }

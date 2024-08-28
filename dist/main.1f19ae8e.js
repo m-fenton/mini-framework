@@ -152,8 +152,9 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-var renderElem = function renderElem(_ref) {
-  var tagName = _ref.tagName,
+var renderElem = function renderElem() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null,
+    tagName = _ref.tagName,
     attrs = _ref.attrs,
     children = _ref.children;
   // create the element
@@ -176,6 +177,9 @@ var renderElem = function renderElem(_ref) {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var child = _step.value;
+      if (render(child) == null) {
+        continue;
+      }
       $el.appendChild(render(child));
     }
   } catch (err) {
@@ -186,6 +190,10 @@ var renderElem = function renderElem(_ref) {
   return $el;
 };
 var render = function render(vNode) {
+  console.log("vNode", vNode);
+  if (vNode == null) {
+    return;
+  }
   if (typeof vNode === 'string') {
     return document.createTextNode(vNode);
   }
@@ -344,10 +352,11 @@ var diff = function diff(oldVTree, newVTree) {
       };
     }
   }
-  if (oldVTree.tagName !== newVTree.tagName) {
+  if (oldVTree == null || oldVTree.tagName !== newVTree.tagName) {
     // we assume that they are totally different and 
     // will not attempt to find the differences.
     // simply render the newVTree and mount it.
+
     return function ($node) {
       var $newNode = (0, _render.default)(newVTree);
       $node.replaceWith($newNode);
@@ -422,39 +431,6 @@ var createHeader = exports.createHeader = function createHeader() {
 function addListItem(toDoString) {
   console.log(createListItem(toDoString));
 }
-},{"../createElement":"vdom/createElement.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createListItem = void 0;
-var _createElement = _interopRequireDefault(require("../createElement"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var createListItem = exports.createListItem = function createListItem(toDoString) {
-  return (0, _createElement.default)("li", {
-    children: [(0, _createElement.default)("div", {
-      attrs: {
-        class: "view"
-      },
-      children: [(0, _createElement.default)("input", {
-        attrs: {
-          class: "toggle",
-          type: "checkbox"
-        }
-      }), (0, _createElement.default)("label", {
-        attrs: {
-          class: "label"
-        },
-        children: [toDoString]
-      }), (0, _createElement.default)("button", {
-        attrs: {
-          class: "destroy"
-        }
-      })]
-    })]
-  });
-};
 },{"../createElement":"vdom/createElement.js"}],"vdom/components/createMain.js":[function(require,module,exports) {
 "use strict";
 
@@ -463,11 +439,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createMain = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
-var _createListItem = require("./createListItem");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 var createMain = exports.createMain = function createMain(toDoList) {
   return (0, _createElement.default)("main", {
     attrs: {
+      func: console.log(toDoList),
       class: "main"
     },
     children: [(0, _createElement.default)("div", {
@@ -493,7 +469,7 @@ var createMain = exports.createMain = function createMain(toDoList) {
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js","./createListItem":"vdom/components/createListItem.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -504,6 +480,9 @@ var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createFooter = exports.createFooter = function createFooter(count) {
+  if (count < 1) {
+    return null;
+  }
   return (0, _createElement.default)("footer", {
     attrs: {
       class: "footer"
@@ -544,6 +523,39 @@ var createFooter = exports.createFooter = function createFooter(count) {
         disabled: "" // or remove this line if you want the button to be enabled
       },
       children: ["Clear completed"]
+    })]
+  });
+};
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createListItem = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var createListItem = exports.createListItem = function createListItem(toDoString) {
+  return (0, _createElement.default)("li", {
+    children: [(0, _createElement.default)("div", {
+      attrs: {
+        class: "view"
+      },
+      children: [(0, _createElement.default)("input", {
+        attrs: {
+          class: "toggle",
+          type: "checkbox"
+        }
+      }), (0, _createElement.default)("label", {
+        attrs: {
+          class: "label"
+        },
+        children: [toDoString]
+      }), (0, _createElement.default)("button", {
+        attrs: {
+          class: "destroy"
+        }
+      })]
     })]
   });
 };
@@ -616,6 +628,7 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 var number = 0;
 var toDoList = [];
 var createVApp = function createVApp(toDoList) {
+  console.log("Creating vApp with toDoList:", toDoList);
   return (0, _createElement.default)('div', {
     attrs: {
       id: 'root',
@@ -643,17 +656,18 @@ var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
 
 // Example of a specific event handler
 function handleImageClick(toDoList, event) {
-  console.log("toDoList", toDoList);
+  console.log("Before update:", toDoList);
   if (event.target.value != "") {
     var toDoItem = (0, _createListItem.createListItem)(event.target.value);
     toDoList.unshift(toDoItem);
     // const vNewApp = createVApp(toDoList);
     var vNewApp = createVApp(toDoList);
     var patch = (0, _diff.default)(vApp, vNewApp);
-    console.log("patch:", patch);
     $rootEl = patch($rootEl);
+    console.log("After update:", toDoList);
+    console.log('Actual DOM after patch:', $rootEl.innerHTML);
     vApp = vNewApp;
-    console.log("vApp", vApp);
+    console.log('vNewApp after patch:', vNewApp);
     (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
   }
 }
@@ -704,7 +718,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39747" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44551" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

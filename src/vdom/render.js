@@ -1,4 +1,5 @@
-const renderElem = ({ tagName, attrs, children}) => {
+const renderElem = ({ tagName, attrs, children} = null) => {
+ 
     // create the element
     //   e.g. <div></div>
     const $el = document.createElement(tagName);
@@ -12,6 +13,9 @@ const renderElem = ({ tagName, attrs, children}) => {
     // append all children as specified in vNode.children
     //   e.g. <div id="app"><img></div>
     for (const child of children) {
+      if (render(child) == null) {
+        continue
+      }
       $el.appendChild(render(child));
     }
   
@@ -19,6 +23,11 @@ const renderElem = ({ tagName, attrs, children}) => {
   };
   
   const render = vNode => {
+    console.log("vNode", vNode)
+    if (vNode == null){
+      return
+    }
+       
     if (typeof vNode === 'string') {
       return document.createTextNode(vNode);
     }

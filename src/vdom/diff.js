@@ -97,10 +97,11 @@ const diff = (oldVTree, newVTree) => {
         }
     }
 
-    if (oldVTree.tagName !== newVTree.tagName) {
+    if (oldVTree == null  || oldVTree.tagName !== newVTree.tagName) {
         // we assume that they are totally different and 
         // will not attempt to find the differences.
         // simply render the newVTree and mount it.
+
         return $node => {
             const $newNode = render(newVTree);
             $node.replaceWith($newNode);
