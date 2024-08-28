@@ -627,24 +627,19 @@ var createVApp = function createVApp(toDoList) {
 var vApp = createVApp(toDoList);
 var $app = (0, _render.default)(vApp);
 var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
-window.onkeydown = function (event) {
-  if (event.key == "Enter") {
-    var todoInput = document.getElementById("todo-input");
-    var todoInputValue = todoInput.value;
-    if (todoInputValue != "") {
-      // Create a new to-do element using the current input value
-      var newToDoElement = (0, _render.default)((0, _createListItem.createListItem)(todoInputValue));
+// let $rootEl = mount($app, document.getElementById('app'));
 
-      // Clear the input field by setting its value to an empty string
-      todoInput.value = "";
-      (0, _addElementHandler.addElementHandler)(event, "todo-list", newToDoElement);
-      number = (0, _obtainNumberOfToDOItems.obtainNumberOfToDoItems)();
-      console.log(number);
-    }
-  }
-};
+// setInterval(() => {
+//   const n = Math.floor(Math.random() * 10);
+//   const vNewApp = createVApp(n);
+//   const patch = diff(vApp, vNewApp);
 
-// window.onclick = (event) => removeElementHandler(event, "destroy", "li")
+//   // we might replace the whole $rootEl,
+//   // so we want the patch will return the new $rootEl
+//   $rootEl = patch($rootEl);
+
+//   vApp = vNewApp;
+// }, 1000);
 
 // Example of a specific event handler
 function handleImageClick(toDoList, event) {
@@ -654,17 +649,36 @@ function handleImageClick(toDoList, event) {
     toDoList.unshift(toDoItem);
     // const vNewApp = createVApp(toDoList);
     var vNewApp = createVApp(toDoList);
-    console.log("vNewApp", vNewApp);
     var patch = (0, _diff.default)(vApp, vNewApp);
+    console.log("patch:", patch);
     $rootEl = patch($rootEl);
     vApp = vNewApp;
-    (0, _updateURLWithCount.updateURLWithCount)(number);
-    event.target.value;
+    console.log("vApp", vApp);
+    (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
   }
 }
 $rootEl.addEventListener('click', function (event) {
   return handleImageClick(toDoList, event);
 });
+
+// window.onkeydown = (event) => {
+//   if (event.key == "Enter") {
+//     let todoInput = document.getElementById("todo-input");
+//     let todoInputValue = todoInput.value;
+//     if (todoInputValue != "") {
+//       // Create a new to-do element using the current input value
+//       let newToDoElement = render(createListItem(todoInputValue));
+
+//       // Clear the input field by setting its value to an empty string
+//       todoInput.value = "";
+//       addElementHandler(event, "todo-list", newToDoElement)
+//       number = obtainNumberOfToDoItems()
+//       console.log(number)
+//     }
+//   }
+// }
+
+// window.onclick = (event) => removeElementHandler(event, "destroy", "li")
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js","./vdom/components/createListItem":"vdom/components/createListItem.js","./dom/addElementHandler":"dom/addElementHandler.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./dom/obtainNumberOfToDOItems":"dom/obtainNumberOfToDOItems.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -690,7 +704,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36889" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39747" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
