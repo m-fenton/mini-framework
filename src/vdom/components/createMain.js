@@ -1,7 +1,8 @@
 import createElement from "../createElement";
-import { createListItem } from "./createListItem";
 
-export const createMain = () =>
+// creates the main section of the todo page; where the list goes
+export const createMain = (toDoList) =>
+  
   createElement("main", {
     attrs: {
       class: "main",
@@ -32,9 +33,9 @@ export const createMain = () =>
         attrs: {
           class: "todo-list",
         },
-        children: [
-          createListItem()
-        ],
+        children:
+          toDoList
+        ,
       }),
     ],
-  });
+  }); 

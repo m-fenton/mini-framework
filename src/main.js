@@ -1,63 +1,44 @@
-// functionality
-import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
-import diff from './vdom/diff';
-import { routing } from './vdom/routing';
-import { updateURLWithCount } from './vdom/updateURLWithCount';
-import registerEvent from './vdom/registerEvent';
-import triggerEvent from './vdom/triggerEvent';
+import { createVApp } from './vdom/createVApp';
+import { handleEvent } from './vdom/events/eventHandling/handleEvent';
+import { registerEvent } from './vdom/events/eventHandling/registerEvent';
+import { enterPress } from './vdom/events/enterPress';
+import { removeElementHandler } from './dom/removeElementHandler';
 
-// elements
-import { createHeader } from './vdom/components/createHeader';
-import { createMain } from './vdom/components/createMain';
-import { createFooter } from './vdom/components/createFooter';
+// Application State
+export let toDoList = [];
+export let $rootEl;
+let vApp;
 
+// Getters and Setters for Virtual DOM
+export const getVApp = () => vApp;
+export const setVApp = (newVApp) => {
+  vApp = newVApp;
+};
 
-let count = 1
+// Initialize Application
+const initializeApp = () => {
+  setVApp(createVApp(toDoList)); // Create initial VApp
+  $rootEl = mount(render(vApp), document.getElementById('root')); // Mount the initial app
 
-const createVApp = count => createElement('div', {
-  attrs: {
-    id: 'root',
-    class: 'todoapp',
-    dataCount: count, // we use the count here
-  },
-  children: [
-    createHeader(),
-    createMain(),
-    createFooter(count),
-  ],
+  // Register events
+  registerEvent('keydown', enterPress); // Keydown for Enter key to add items
+  window.onkeydown = handleEvent; // Global event handler
+  window.onclick = (event) => removeElementHandler(event, "destroy", "li"); // Click event to remove items
+};
 
-});
+// Update the root element in the DOM
+export function updateRootEl(newRootEl) {
+  $rootEl = newRootEl; // Update the reference
+  const oldRoot = document.getElementById('root');
 
-
-
-let vApp = createVApp(count);
-const $app = render(vApp);
-let $rootEl = mount($app, document.getElementById('root'));
-
-// Example of a specific event handler
-function handleImageClick() {
-  count++;
-  const vNewApp = createVApp(count);
-  const patch = diff(vApp, vNewApp);
-  $rootEl = patch($rootEl);
-  vApp = vNewApp;
-  updateURLWithCount(count);
-  routing()
+  if (oldRoot && oldRoot.parentNode) {
+    oldRoot.parentNode.replaceChild($rootEl, oldRoot); // Replace the old root element with the new one
+  } else {
+    console.warn("Could not find old root element to replace");
+  }
 }
 
-$rootEl.addEventListener('click', handleImageClick);
-// let $rootEl = mount($app, document.getElementById('app'));
-
-// setInterval(() => {
-//   const n = Math.floor(Math.random() * 10);
-//   const vNewApp = createVApp(n);
-//   const patch = diff(vApp, vNewApp);
-
-//   // we might replace the whole $rootEl,
-//   // so we want the patch will return the new $rootEl
-//   $rootEl = patch($rootEl);
-
-//   vApp = vNewApp;
-// }, 1000);
+// Initialize the application
+initializeApp();

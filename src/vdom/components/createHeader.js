@@ -20,7 +20,7 @@ export const createHeader = () => createElement("header", {
                         class: "new-todo",
                         type: "text",
                         placeholder: "What needs to be done?",
-                        value: ""
+                        value: "",
                     }
                 }),
                 createElement("label", {

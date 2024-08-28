@@ -117,6 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
+<<<<<<< HEAD
 })({"vdom/createElement.js":[function(require,module,exports) {
 "use strict";
 
@@ -159,6 +160,9 @@ var _default = exports.default = function _default(tagName) {
 // };
 // export default createElement;
 },{}],"vdom/render.js":[function(require,module,exports) {
+=======
+})({"vdom/render.js":[function(require,module,exports) {
+>>>>>>> Rupert
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -172,10 +176,12 @@ function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) 
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-var renderElem = function renderElem(_ref) {
-  var tagName = _ref.tagName,
+var renderElem = function renderElem() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null,
+    tagName = _ref.tagName,
     attrs = _ref.attrs,
     children = _ref.children;
+  // console.log("Rendering element:", tagName, attrs, children);
   // create the element
   //   e.g. <div></div>
   var $el = document.createElement(tagName);
@@ -196,6 +202,11 @@ var renderElem = function renderElem(_ref) {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var child = _step.value;
+      // console.log("Rendering child:", child);
+      if (render(child) == null) {
+        // console.log("Skipping null child");
+        continue;
+      }
       $el.appendChild(render(child));
     }
   } catch (err) {
@@ -206,11 +217,17 @@ var renderElem = function renderElem(_ref) {
   return $el;
 };
 var render = function render(vNode) {
+  // console.log("Rendering vNode:", vNode);
+  if (vNode == null) {
+    return;
+  }
   if (typeof vNode === 'string') {
+    // console.log("Rendering text node:", vNode);
     return document.createTextNode(vNode);
   }
 
   // we assume everything else to be a virtual element
+  // console.log("Rendering element:", vNode);
   return renderElem(vNode);
 };
 var _default = exports.default = render;
@@ -225,71 +242,26 @@ var _default = exports.default = function _default($node, $target) {
   $target.replaceWith($node);
   return $node;
 };
-},{}],"vdom/diff.js":[function(require,module,exports) {
+},{}],"vdom/createElement.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _render = _interopRequireDefault(require("./render"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
-function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
-function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
-var zip = function zip(xs, ys) {
-  var zipped = [];
-  for (var i = 0; i < Math.min(xs.length, ys.length); i++) {
-    zipped.push([xs[i], ys[i]]);
-  }
-  return zipped;
-};
-var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
-  var patches = [];
-
-  // setting newAttrs
-  var _loop = function _loop() {
-    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-      k = _Object$entries$_i[0],
-      v = _Object$entries$_i[1];
-    patches.push(function ($node) {
-      $node.setAttribute(k, v);
-      return $node;
-    });
-  };
-  for (var _i = 0, _Object$entries = Object.entries(newAttrs); _i < _Object$entries.length; _i++) {
-    _loop();
-  }
-
-  // removing attrs
-  var _loop2 = function _loop2(k) {
-    if (!(k in newAttrs)) {
-      patches.push(function ($node) {
-        $node.removeAttribute(k);
-        return $node;
-      });
-    }
-  };
-  for (var k in oldAttrs) {
-    _loop2(k);
-  }
-  return function ($node) {
-    for (var _i2 = 0, _patches = patches; _i2 < _patches.length; _i2++) {
-      var patch = _patches[_i2];
-      patch($node);
-    }
-    return $node;
-  };
-};
-var diffChildren = function diffChildren(oldVChildren, newVChildren) {
-  var childPatches = [];
-  oldVChildren.forEach(function (oldVChild, i) {
-    childPatches.push(diff(oldVChild, newVChildren[i]));
+var _default = exports.default = function _default(tagName) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+    _ref$attrs = _ref.attrs,
+    attrs = _ref$attrs === void 0 ? {} : _ref$attrs,
+    _ref$children = _ref.children,
+    children = _ref$children === void 0 ? [] : _ref$children;
+  var vElem = Object.create(null);
+  Object.assign(vElem, {
+    tagName: tagName,
+    attrs: attrs,
+    children: children
   });
+<<<<<<< HEAD
   var additionalPatches = [];
   var _iterator = _createForOfIteratorHelper(newVChildren.slice(oldVChildren.length)),
     _step;
@@ -468,6 +440,10 @@ var _default = exports.default = function _default(elementId, eventType, event) 
 //         });
 //     }
 // };
+=======
+  return vElem;
+};
+>>>>>>> Rupert
 },{}],"vdom/components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
@@ -507,38 +483,6 @@ var createHeader = exports.createHeader = function createHeader() {
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.createListItem = void 0;
-var _createElement = _interopRequireDefault(require("../createElement"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var createListItem = exports.createListItem = function createListItem() {
-  return (0, _createElement.default)("li", {
-    children: [(0, _createElement.default)("div", {
-      attrs: {
-        class: "view"
-      },
-      children: [(0, _createElement.default)("input", {
-        attrs: {
-          class: "toggle",
-          type: "checkbox"
-        }
-      }), (0, _createElement.default)("label", {
-        attrs: {
-          class: "label"
-        }
-      }), (0, _createElement.default)("button", {
-        attrs: {
-          class: "destroy"
-        }
-      })]
-    })]
-  });
-};
 },{"../createElement":"vdom/createElement.js"}],"vdom/components/createMain.js":[function(require,module,exports) {
 "use strict";
 
@@ -547,9 +491,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createMain = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
-var _createListItem = require("./createListItem");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var createMain = exports.createMain = function createMain() {
+// creates the main section of the todo page; where the list goes
+var createMain = exports.createMain = function createMain(toDoList) {
   return (0, _createElement.default)("main", {
     attrs: {
       class: "main"
@@ -573,11 +517,11 @@ var createMain = exports.createMain = function createMain() {
       attrs: {
         class: "todo-list"
       },
-      children: [(0, _createListItem.createListItem)()]
+      children: toDoList
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js","./createListItem":"vdom/components/createListItem.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createFooter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -588,6 +532,9 @@ var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createFooter = exports.createFooter = function createFooter(count) {
+  if (count < 1) {
+    return null;
+  }
   return (0, _createElement.default)("footer", {
     attrs: {
       class: "footer"
@@ -596,7 +543,7 @@ var createFooter = exports.createFooter = function createFooter(count) {
       attrs: {
         class: "todo-count"
       },
-      children: ["".concat(count, " Items Left")] // Show the current count
+      children: ["".concat(count, " Items Left")] // Show the current count of toDoList items
     }), (0, _createElement.default)("ul", {
       attrs: {
         class: "filters"
@@ -631,9 +578,10 @@ var createFooter = exports.createFooter = function createFooter(count) {
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"main.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/createVApp.js":[function(require,module,exports) {
 "use strict";
 
+<<<<<<< HEAD
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 var _render = _interopRequireDefault(require("./vdom/render"));
 var _mount = _interopRequireDefault(require("./vdom/mount"));
@@ -653,43 +601,422 @@ function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e
 var count = 1;
 var createVApp = function createVApp(count) {
   return (0, _createElement.default)('div', {
+=======
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createVApp = void 0;
+var _createHeader = require("./components/createHeader");
+var _createMain = require("./components/createMain");
+var _createFooter = require("./components/createFooter");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var createVApp = exports.createVApp = function createVApp(toDoList) {
+  return {
+    tagName: 'div',
+>>>>>>> Rupert
     attrs: {
       id: 'root',
-      class: 'todoapp',
-      dataCount: count // we use the count here
+      class: 'todoapp'
     },
-    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(), (0, _createFooter.createFooter)(count)]
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(_toConsumableArray(toDoList))].concat(_toConsumableArray(toDoList.length > 0 ? [(0, _createFooter.createFooter)(toDoList.length)] : [])) //Only runs createFooter if toDoList has a length, this acts to hide the footer unless it's needed
+  };
+};
+},{"./components/createHeader":"vdom/components/createHeader.js","./components/createMain":"vdom/components/createMain.js","./components/createFooter":"vdom/components/createFooter.js"}],"vdom/events/eventHandling/registerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.registerEvent = exports.eventRegistry = void 0;
+var eventRegistry = exports.eventRegistry = {}; // Object to store event listeners
+
+// Function to register events and their handlers
+var registerEvent = exports.registerEvent = function registerEvent(eventType, handler) {
+  if (!eventRegistry[eventType]) {
+    eventRegistry[eventType] = []; // Initialize if not already initialized
+  }
+  eventRegistry[eventType].push(handler); // Store handler for the event type
+};
+},{}],"vdom/events/eventHandling/triggerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.triggerEvent = triggerEvent;
+var _registerEvent = require("./registerEvent");
+// Function to trigger events and run all associated handlers
+function triggerEvent(eventType, event) {
+  if (_registerEvent.eventRegistry[eventType]) {
+    _registerEvent.eventRegistry[eventType].forEach(function (handler) {
+      return handler(event);
+    });
+  }
+}
+;
+},{"./registerEvent":"vdom/events/eventHandling/registerEvent.js"}],"vdom/events/eventHandling/handleEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleEvent = void 0;
+var _triggerEvent = require("./triggerEvent");
+var handleEvent = exports.handleEvent = function handleEvent(event) {
+  console.log("Event triggered: ".concat(event.type)); // Log the event type
+  var eventType = event.type; // Get event type (e.g., 'keydown')
+  (0, _triggerEvent.triggerEvent)(eventType, event); // Trigger the event from our custom event system
+};
+},{"./triggerEvent":"vdom/events/eventHandling/triggerEvent.js"}],"vdom/diff.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _render = _interopRequireDefault(require("./render"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+// Helper function to zip two arrays together
+var zip = function zip(xs, ys) {
+  var zipped = [];
+  for (var i = 0; i < Math.min(xs.length, ys.length); i++) {
+    zipped.push([xs[i], ys[i]]);
+  }
+  return zipped;
+};
+
+// Diffing attributes between two virtual DOM nodes
+var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
+  var patches = [];
+
+  // Setting new or updated attributes
+  var _loop = function _loop() {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+      k = _Object$entries$_i[0],
+      v = _Object$entries$_i[1];
+    if (oldAttrs[k] !== v) {
+      patches.push(function ($node) {
+        $node.setAttribute(k, v);
+        return $node;
+      });
+    }
+  };
+  for (var _i = 0, _Object$entries = Object.entries(newAttrs); _i < _Object$entries.length; _i++) {
+    _loop();
+  }
+
+  // Removing old attributes that are not present in the new node
+  var _loop2 = function _loop2(k) {
+    if (!(k in newAttrs)) {
+      patches.push(function ($node) {
+        $node.removeAttribute(k);
+        return $node;
+      });
+    }
+  };
+  for (var k in oldAttrs) {
+    _loop2(k);
+  }
+  return function ($node) {
+    for (var _i2 = 0, _patches = patches; _i2 < _patches.length; _i2++) {
+      var patch = _patches[_i2];
+      patch($node);
+    }
+    return $node;
+  };
+};
+
+// Diffing children between two virtual DOM nodes
+var diffChildren = function diffChildren(oldVChildren, newVChildren) {
+  var childPatches = [];
+  oldVChildren.forEach(function (oldVChild, i) {
+    childPatches.push(diff(oldVChild, newVChildren[i]));
+  });
+  var additionalPatches = [];
+  var _iterator = _createForOfIteratorHelper(newVChildren.slice(oldVChildren.length)),
+    _step;
+  try {
+    var _loop3 = function _loop3() {
+      var additionalVChild = _step.value;
+      additionalPatches.push(function ($node) {
+        $node.appendChild((0, _render.default)(additionalVChild));
+        return $node;
+      });
+    };
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      _loop3();
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  return function ($parent) {
+    if (!$parent) {
+      // If $parent is undefined, create a new element
+      $parent = (0, _render.default)(newVChildren[0]);
+    } else {
+      // Applying child patches
+      var _iterator2 = _createForOfIteratorHelper(zip(childPatches, $parent.childNodes)),
+        _step2;
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var _step2$value = _slicedToArray(_step2.value, 2),
+            _patch = _step2$value[0],
+            $child = _step2$value[1];
+          if (_patch) {
+            _patch($child);
+          }
+        }
+        // Adding additional patches (new children)
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+      for (var _i3 = 0, _additionalPatches = additionalPatches; _i3 < _additionalPatches.length; _i3++) {
+        var patch = _additionalPatches[_i3];
+        patch($parent);
+      }
+    }
+    return $parent;
+  };
+};
+
+// Main diff function to compute differences between old and new virtual DOM
+var diff = function diff(oldVTree, newVTree) {
+  // console.log("Diffing:", oldVTree, newVTree);
+  if (oldVTree == null) {
+    // Old tree is null or undefined; create a new node
+    return function () {
+      return (0, _render.default)(newVTree);
+    };
+  }
+  if (!newVTree) {
+    // New tree is undefined; remove the node
+    return function ($node) {
+      $node.remove();
+      return undefined;
+    };
+  }
+  if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
+    if (oldVTree !== newVTree) {
+      return function ($node) {
+        var $newNode = (0, _render.default)(newVTree);
+        $node.replaceWith($newNode);
+        return $newNode;
+      };
+    } else {
+      return function ($node) {
+        return $node;
+      };
+    }
+  }
+  if (oldVTree.tagName !== newVTree.tagName) {
+    return function ($node) {
+      var $newNode = (0, _render.default)(newVTree);
+      $node.replaceWith($newNode);
+      return $newNode;
+    };
+  }
+  var patchAttrs = diffAttrs(oldVTree.attrs, newVTree.attrs);
+  var patchChildren = diffChildren(oldVTree.children, newVTree.children);
+  return function ($node) {
+    patchAttrs($node);
+    patchChildren($node);
+    return $node;
+  };
+};
+var _default = exports.default = diff;
+},{"./render":"vdom/render.js"}],"vdom/routing/updateURLWithCount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateURLWithCount = updateURLWithCount;
+function updateURLWithCount(count) {
+  // Remove any existing count from the pathname
+  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
+  var newUrl = "".concat(basePath, "/").concat(count);
+  history.replaceState({
+    count: count
+  }, '', newUrl);
+}
+},{}],"vdom/components/createListItem.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createListItem = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// creates an item for the toDoList
+var createListItem = exports.createListItem = function createListItem(toDoString) {
+  return (0, _createElement.default)("li", {
+    children: [(0, _createElement.default)("div", {
+      attrs: {
+        class: "view"
+      },
+      children: [(0, _createElement.default)("input", {
+        attrs: {
+          class: "toggle",
+          type: "checkbox"
+        }
+      }), (0, _createElement.default)("label", {
+        attrs: {
+          class: "label"
+        },
+        children: [toDoString]
+      }), (0, _createElement.default)("button", {
+        attrs: {
+          class: "destroy"
+        }
+      })]
+    })]
   });
 };
-var vApp = createVApp(count);
-var $app = (0, _render.default)(vApp);
-var $rootEl = (0, _mount.default)($app, document.getElementById('root'));
+},{"../createElement":"vdom/createElement.js"}],"vdom/events/enterPress.js":[function(require,module,exports) {
+"use strict";
 
-// Example of a specific event handler
-function handleImageClick() {
-  count++;
-  var vNewApp = createVApp(count);
-  var patch = (0, _diff.default)(vApp, vNewApp);
-  $rootEl = patch($rootEl);
-  vApp = vNewApp;
-  (0, _updateURLWithCount.updateURLWithCount)(count);
-  (0, _routing.routing)();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.enterPress = void 0;
+var _main = require("../../main");
+var _createVApp = require("../createVApp");
+var _diff = _interopRequireDefault(require("../diff"));
+var _updateURLWithCount = require("../routing/updateURLWithCount");
+var _createListItem = require("../components/createListItem");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var enterPress = exports.enterPress = function enterPress(event) {
+  // Early return if the key pressed is not "Enter"
+  if (event.key !== "Enter") return;
+  var todoInput = document.getElementById("todo-input");
+  var todoInputValue = todoInput === null || todoInput === void 0 ? void 0 : todoInput.value.trim(); // Use optional chaining and trim for extra safety
+
+  // Early return if the input value is empty
+  if (!todoInputValue) return;
+
+  // Create a new to-do item and add it to the list
+  var toDoItem = (0, _createListItem.createListItem)(todoInputValue);
+  _main.toDoList.push(toDoItem);
+
+  // Generate the new virtual DOM representation
+  var currentVApp = (0, _main.getVApp)();
+  var vNewApp = (0, _createVApp.createVApp)(_toConsumableArray(_main.toDoList));
+
+  // Calculate the difference and patch the DOM
+  var patch = (0, _diff.default)(currentVApp, vNewApp);
+  var newRootEl = patch(_main.$rootEl);
+
+  // Update the root element and the virtual app state
+  (0, _main.updateRootEl)(newRootEl);
+  (0, _main.setVApp)(vNewApp);
+
+  // Update the URL with the current count of to-do items
+  (0, _updateURLWithCount.updateURLWithCount)(_main.toDoList.length);
+
+  // Clear the input field after processing the entry
+  todoInput.value = "";
+};
+},{"../../main":"main.js","../createVApp":"vdom/createVApp.js","../diff":"vdom/diff.js","../routing/updateURLWithCount":"vdom/routing/updateURLWithCount.js","../components/createListItem":"vdom/components/createListItem.js"}],"dom/removeElementHandler.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.removeElementHandler = removeElementHandler;
+function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
+  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
+    // Remove the parent element of the target (usually a list item)
+    var listItem = event.target.closest(elementToRemove);
+    if (listItem) {
+      listItem.remove();
+    }
+  }
 }
-$rootEl.addEventListener('click', handleImageClick);
-// let $rootEl = mount($app, document.getElementById('app'));
+},{}],"main.js":[function(require,module,exports) {
+"use strict";
 
-// setInterval(() => {
-//   const n = Math.floor(Math.random() * 10);
-//   const vNewApp = createVApp(n);
-//   const patch = diff(vApp, vNewApp);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toDoList = exports.setVApp = exports.getVApp = exports.$rootEl = void 0;
+exports.updateRootEl = updateRootEl;
+var _render = _interopRequireDefault(require("./vdom/render"));
+var _mount = _interopRequireDefault(require("./vdom/mount"));
+var _createVApp = require("./vdom/createVApp");
+var _handleEvent = require("./vdom/events/eventHandling/handleEvent");
+var _registerEvent = require("./vdom/events/eventHandling/registerEvent");
+var _enterPress = require("./vdom/events/enterPress");
+var _removeElementHandler = require("./dom/removeElementHandler");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Application State
+var toDoList = exports.toDoList = [];
+var $rootEl;
+var vApp;
 
-//   // we might replace the whole $rootEl,
-//   // so we want the patch will return the new $rootEl
-//   $rootEl = patch($rootEl);
+// Getters and Setters for Virtual DOM
+var getVApp = exports.getVApp = function getVApp() {
+  return vApp;
+};
+var setVApp = exports.setVApp = function setVApp(newVApp) {
+  vApp = newVApp;
+};
 
+<<<<<<< HEAD
 //   vApp = vNewApp;
 // }, 1000);
 },{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js","./vdom/routing":"vdom/routing.js","./vdom/updateURLWithCount":"vdom/updateURLWithCount.js","./vdom/registerEvent":"vdom/registerEvent.js","./vdom/triggerEvent":"vdom/triggerEvent.js","./vdom/components/createHeader":"vdom/components/createHeader.js","./vdom/components/createMain":"vdom/components/createMain.js","./vdom/components/createFooter":"vdom/components/createFooter.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+=======
+// Initialize Application
+var initializeApp = function initializeApp() {
+  setVApp((0, _createVApp.createVApp)(toDoList)); // Create initial VApp
+  exports.$rootEl = $rootEl = (0, _mount.default)((0, _render.default)(vApp), document.getElementById('root')); // Mount the initial app
+
+  // Register events
+  (0, _registerEvent.registerEvent)('keydown', _enterPress.enterPress); // Keydown for Enter key to add items
+  window.onkeydown = _handleEvent.handleEvent; // Global event handler
+  window.onclick = function (event) {
+    return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
+  }; // Click event to remove items
+};
+
+// Update the root element in the DOM
+function updateRootEl(newRootEl) {
+  exports.$rootEl = $rootEl = newRootEl; // Update the reference
+  var oldRoot = document.getElementById('root');
+  if (oldRoot && oldRoot.parentNode) {
+    oldRoot.parentNode.replaceChild($rootEl, oldRoot); // Replace the old root element with the new one
+  } else {
+    console.warn("Could not find old root element to replace");
+  }
+}
+
+// Initialize the application
+initializeApp();
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHandling/handleEvent":"vdom/events/eventHandling/handleEvent.js","./vdom/events/eventHandling/registerEvent":"vdom/events/eventHandling/registerEvent.js","./vdom/events/enterPress":"vdom/events/enterPress.js","./dom/removeElementHandler":"dom/removeElementHandler.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+>>>>>>> Rupert
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -716,6 +1043,7 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "65193" + '/');
 =======
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "42085" + '/');
@@ -723,6 +1051,9 @@ if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
 =======
   var ws = new WebSocket(protocol + '://' + hostname + ':' + "56233" + '/');
 >>>>>>> Martin
+=======
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44725" + '/');
+>>>>>>> Rupert
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
