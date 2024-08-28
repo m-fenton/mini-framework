@@ -44,7 +44,6 @@ const diffAttrs = (oldAttrs, newAttrs) => {
 // Diffing children between two virtual DOM nodes
 const diffChildren = (oldVChildren, newVChildren) => {
     const childPatches = [];
-    
     oldVChildren.forEach((oldVChild, i) => {
         childPatches.push(diff(oldVChild, newVChildren[i]));
     });
@@ -58,16 +57,20 @@ const diffChildren = (oldVChildren, newVChildren) => {
     }
 
     return $parent => {
-        // Applying child patches
-        for (const [patch, $child] of zip(childPatches, $parent.childNodes)) {
-            if (patch) {
-                patch($child);
+        if (!$parent) {
+            // If $parent is undefined, create a new element
+            $parent = render(newVChildren[0]);
+        } else {
+            // Applying child patches
+            for (const [patch, $child] of zip(childPatches, $parent.childNodes)) {
+                if (patch) {
+                    patch($child);
+                }
             }
-        }
-
-        // Adding additional patches (new children)
-        for (const patch of additionalPatches) {
-            patch($parent);
+            // Adding additional patches (new children)
+            for (const patch of additionalPatches) {
+                patch($parent);
+            }
         }
         return $parent;
     };
@@ -75,6 +78,12 @@ const diffChildren = (oldVChildren, newVChildren) => {
 
 // Main diff function to compute differences between old and new virtual DOM
 const diff = (oldVTree, newVTree) => {
+    console.log("Diffing:", oldVTree, newVTree);
+    if (oldVTree == null) {
+        // Old tree is null or undefined; create a new node
+        return () => render(newVTree);
+    }
+
     if (!newVTree) {
         // New tree is undefined; remove the node
         return $node => {
@@ -95,7 +104,7 @@ const diff = (oldVTree, newVTree) => {
         }
     }
 
-    if (oldVTree != null || oldVTree.tagName !== newVTree.tagName) {
+    if (oldVTree.tagName !== newVTree.tagName) {
         return $node => {
             const $newNode = render(newVTree);
             $node.replaceWith($newNode);

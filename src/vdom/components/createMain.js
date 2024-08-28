@@ -4,7 +4,6 @@ export const createMain = (toDoList) =>
   
   createElement("main", {
     attrs: {
-      func: console.log(toDoList),
       class: "main",
     },
     children: [

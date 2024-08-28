@@ -1,113 +1,68 @@
 // functionality
-import createElement from './vdom/createElement';
 import render from './vdom/render';
 import mount from './vdom/mount';
-import diff from './vdom/diff';
-import { updateURLWithCount } from './vdom/updateURLWithCount';
 
-// elements
+// components
 import { createHeader } from './vdom/components/createHeader';
 import { createMain } from './vdom/components/createMain';
 import { createFooter } from './vdom/components/createFooter';
-import { createListItem } from './vdom/components/createListItem';
-import { addElementHandler } from './dom/addElementHandler';
+// DOM manipulation; to be removed?
 import { removeElementHandler } from './dom/removeElementHandler';
-import { obtainNumberOfToDoItems } from './dom/obtainNumberOfToDOItems';
 
-let number = 0
-let toDoList = []
+// events
+import { handleEvent } from './vdom/events/eventHandling/handleEvent';
+import { registerEvent } from './vdom/events/eventHandling/registerEvent';
 
-const createVApp = (toDoList) => {
+import { enterPress } from './vdom/events/enterPress';
+registerEvent('keydown', enterPress);
+
+export let toDoList = []
+export let vApp;
+export let $rootEl;
+
+export const createVApp = (toDoList) => {
   console.log("Creating vApp with toDoList:", toDoList);
-  return createElement('div', {
+  return {
+    tagName: 'div',
     attrs: {
       id: 'root',
       class: 'todoapp',
     },
     children: [
       createHeader(),
-      createMain(toDoList),
-      createFooter(toDoList.length)
-    ],
+      createMain([...toDoList]),  // Create a new array to ensure immutability
+      ...(toDoList.length > 0 ? [createFooter(toDoList.length)] : [])],
+  };
+};
 
-  });
+let _vApp;
+export const getVApp = () => _vApp;
+export const setVApp = (newVApp) => {
+  _vApp = newVApp;
+};
 
-}
-let vApp = createVApp(toDoList);
-const $app = render(vApp);
-let $rootEl = mount($app, document.getElementById('root'));
-// let $rootEl = mount($app, document.getElementById('app'));
+// Initial setup
+setVApp(createVApp(toDoList));
+$rootEl = mount(render(_vApp), document.getElementById('root'));
 
-// setInterval(() => {
-//   const n = Math.floor(Math.random() * 10);
-//   const vNewApp = createVApp(n);
-//   const patch = diff(vApp, vNewApp);
-
-//   // we might replace the whole $rootEl,
-//   // so we want the patch will return the new $rootEl
-//   $rootEl = patch($rootEl);
-
-//   vApp = vNewApp;
-// }, 1000);
-
-// Example of a specific event handler
-// function handleImageClick(toDoList, event) {
-//   if (event.target.value != "") {
-//     let toDoItem = createListItem(event.target.value)
-//     toDoList.unshift(toDoItem)
-//     // const vNewApp = createVApp(toDoList);
-//     const vNewApp = createVApp(toDoList);
-//     // console.log('vNewApp before patch:', vNewApp);
-
-//     const patch = diff(vApp, vNewApp);
-//     $rootEl = patch($rootEl);
-//     // console.log('Actual DOM after patch:', $rootEl.innerHTML);
-//     vApp = vNewApp;
-
-
-//     updateURLWithCount(toDoList.length);
-//   }
-// }
-// $rootEl.addEventListener('click', (event) => handleImageClick(toDoList, event));
-window.onkeydown = (event) => {
-  if (event.key == "Enter") {
-    let todoInput = document.getElementById("todo-input");
-    let todoInputValue = todoInput.value;
-    let toDoItem = createListItem(todoInputValue)
-
-    if (todoInputValue != "") {
-      toDoList.unshift(toDoItem)
-      // const vNewApp = createVApp(toDoList);
-      const vNewApp = createVApp(toDoList);
-      // console.log('vNewApp before patch:', vNewApp);
-
-      const patch = diff(vApp, vNewApp);
-      $rootEl = patch($rootEl);
-      // console.log('Actual DOM after patch:', $rootEl.innerHTML);
-      vApp = vNewApp;
-
-
-      updateURLWithCount(toDoList.length);
-    }
+export function updateRootEl(newRootEl) {
+  console.log("Updating root element:", newRootEl);
+  $rootEl = newRootEl;
+  const oldRoot = document.getElementById('root');
+  if (oldRoot && oldRoot.parentNode) {
+    console.log("Replacing old root with new root");
+    oldRoot.parentNode.replaceChild($rootEl, oldRoot);
+  } else {
+    console.warn("Could not find old root element to replace");
   }
 }
-// window.onkeydown =  (event, toDoList) => {
-//   if (event.key == "Enter") {
-//     let todoInput = document.getElementById("todo-input");
-//     let todoInputValue = todoInput.value;
-//     if (todoInputValue != "") {
-//       // Create a new to-do element using the current input value
-//       let newToDoElement = render(createListItem(todoInputValue));
 
-//       // Clear the input field by setting its value to an empty string
-//       todoInput.value = "";
-//       addElementHandler(event, "todo-list", newToDoElement)
-//       number = obtainNumberOfToDoItems()
-//       console.log(number)
-//     }
-//   }
-// }
+export function updateVApp(newVApp) {
+  console.log("originalVApp", vApp)
+  vApp = newVApp;
+}
 
+window.onkeydown = handleEvent
 window.onclick = (event) => removeElementHandler(event, "destroy", "li")
 
 
