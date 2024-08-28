@@ -748,14 +748,16 @@ var initializeApp = function initializeApp() {
   (0, _registerEvent.registerEvent)('keydown', function (event) {
     if (event.key !== "Enter") console.log(event.key);
   }); // Keydown for Enter key to add items
+  (0, _registerEvent.registerEvent)('click', function (event) {
+    return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
+  }); // click event, USES DOM MANIPULATION, NEEDS CHANGED
+  (0, _registerEvent.registerEvent)('dblclick', function (event) {
+    console.log('Window was double-clicked!', event);
+  }); // example double click event
 
   window.onkeydown = _handleEvent.handleEvent; // Global event handler
-  window.onclick = function (event) {
-    return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
-  }; // Click event to remove items
-  window.ondblclick = function (event) {
-    console.log('Window was double-clicked!', event);
-  };
+  window.onclick = _handleEvent.handleEvent; // Global event handler
+  window.ondblclick = _handleEvent.handleEvent; // Global event handler
 };
 
 // Update the root element in the DOM
@@ -796,7 +798,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44895" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44889" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

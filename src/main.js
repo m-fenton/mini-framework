@@ -24,11 +24,13 @@ const initializeApp = () => {
 
   // Register events
   registerEvent('keydown', handleEnterKeySubmit); // Keydown for Enter key to add items
-  registerEvent('keydown', function(event){  if (event.key !== "Enter") console.log(event.key);}); // Keydown for Enter key to add items
+  registerEvent('keydown', function (event) { if (event.key !== "Enter") console.log(event.key); }); // Keydown for Enter key to add items
+  registerEvent('click', (event) => removeElementHandler(event, "destroy", "li")); // click event, USES DOM MANIPULATION, NEEDS CHANGED
+  registerEvent('dblclick', function (event) { console.log('Window was double-clicked!', event) }); // example double click event
 
   window.onkeydown = handleEvent; // Global event handler
-  window.onclick = (event) => removeElementHandler(event, "destroy", "li"); // Click event to remove items
-  window.ondblclick = function (event) { console.log('Window was double-clicked!', event) };
+  window.onclick = handleEvent // Global event handler
+  window.ondblclick = handleEvent // Global event handler
 };
 
 // Update the root element in the DOM
