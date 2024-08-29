@@ -28,6 +28,7 @@ const initializeApp = () => {
   registerEvent('click', (event) => removeElementHandler(event, "destroy", "li")); // click event, USES DOM MANIPULATION, NEEDS CHANGED
   registerEvent('dblclick', function (event) { console.log('Window was double-clicked!', event) }); // example double click event
 
+  // Activate event handlers
   window.onkeydown = handleEvent; // Global event handler
   window.onclick = handleEvent // Global event handler
   window.ondblclick = handleEvent // Global event handler
