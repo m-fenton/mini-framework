@@ -707,6 +707,38 @@ function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove)
     }
   }
 }
+},{}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleClickDelete = void 0;
+var handleClickDelete = exports.handleClickDelete = function handleClickDelete(event, todoList) {
+  // const deleteButton = event.target;
+  // const item = deleteButton.closest('.todo-item');
+  console.log("event.target", event.target);
+  if (event.target.classList.contains("destroy")) {
+    console.log("DESTROY");
+  }
+  var listItem = event.target.closest('li');
+  if (listItem) {
+    // Get all li elements
+    var allItems = Array.from(listItem.parentNode.children);
+
+    // Find the index of the clicked item
+    var index = allItems.indexOf(listItem);
+    console.log("todoList[index]", todoList[index]);
+    console.log("Clicked item index: ".concat(index));
+
+    // Your existing delete logic here
+    // ...
+  }
+
+  // item.remove();
+
+  // console.log(`Item ${item.id} deleted`);
+};
 },{}],"main.js":[function(require,module,exports) {
 "use strict";
 
@@ -722,6 +754,7 @@ var _handleEvent = require("./vdom/events/eventHelpers/handleEvent");
 var _registerEvent = require("./vdom/events/eventHelpers/registerEvent");
 var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 var _removeElementHandler = require("./dom/removeElementHandler");
+var _handleClickDelete = require("./vdom/events/handleClickDelete");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Probably to be removed, uses DOM manipulation, not vDOM
 
@@ -749,12 +782,13 @@ var initializeApp = function initializeApp() {
     if (event.key !== "Enter") console.log(event.key);
   }); // Keydown for Enter key to add items
   (0, _registerEvent.registerEvent)('click', function (event) {
-    return (0, _removeElementHandler.removeElementHandler)(event, "destroy", "li");
-  }); // click event, USES DOM MANIPULATION, NEEDS CHANGED
+    return (0, _handleClickDelete.handleClickDelete)(event, toDoList);
+  });
   (0, _registerEvent.registerEvent)('dblclick', function (event) {
     console.log('Window was double-clicked!', event);
   }); // example double click event
 
+  // Activate event handlers
   window.onkeydown = _handleEvent.handleEvent; // Global event handler
   window.onclick = _handleEvent.handleEvent; // Global event handler
   window.ondblclick = _handleEvent.handleEvent; // Global event handler
@@ -773,7 +807,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./dom/removeElementHandler":"dom/removeElementHandler.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -798,7 +832,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40723" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41589" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

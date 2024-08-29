@@ -5,6 +5,7 @@ import { handleEvent } from './vdom/events/eventHelpers/handleEvent';
 import { registerEvent } from './vdom/events/eventHelpers/registerEvent';
 import { handleEnterKeySubmit } from './vdom/events/handleEnterKeySubmit';
 import { removeElementHandler } from './dom/removeElementHandler'; // Probably to be removed, uses DOM manipulation, not vDOM
+import { handleClickDelete } from './vdom/events/handleClickDelete';
 
 // Application State
 export let toDoList = [];
@@ -25,7 +26,7 @@ const initializeApp = () => {
   // Register events
   registerEvent('keydown', handleEnterKeySubmit); // Keydown for Enter key to add items
   registerEvent('keydown', function (event) { if (event.key !== "Enter") console.log(event.key); }); // Keydown for Enter key to add items
-  registerEvent('click', (event) => removeElementHandler(event, "destroy", "li")); // click event, USES DOM MANIPULATION, NEEDS CHANGED
+  registerEvent('click', (event) => handleClickDelete(event, toDoList))
   registerEvent('dblclick', function (event) { console.log('Window was double-clicked!', event) }); // example double click event
 
   // Activate event handlers
