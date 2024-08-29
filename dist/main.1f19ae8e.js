@@ -722,28 +722,48 @@ function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Sym
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 var handleClickDelete = exports.handleClickDelete = function handleClickDelete(event, toDoList) {
-  console.log("event.target", event.target);
-  if (event.target.classList.contains("destroy")) {
-    var listItem = event.target.closest('li');
-    if (listItem) {
-      // Get all li elements
-      var allItems = Array.from(listItem.parentNode.children);
+  if (!event.target.classList.contains("destroy")) {
+    return;
+  }
+  var listItem = event.target.closest('li');
+  if (listItem) {
+    // Get all li elements
+    var allItems = Array.from(listItem.parentNode.children);
 
-      // Find the index of the clicked item
-      var index = allItems.indexOf(listItem);
-      console.log("toDoList[index]", toDoList[index]);
-      console.log("Clicked item index: ".concat(index));
-      // Check if the index is within the bounds of the array
-      if (index >= 0 && index < toDoList.length) {
-        // Use splice to remove the entry at the specific index
-        toDoList.splice(index, 1);
-        console.log(toDoList);
-      }
-      _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
+    // Find the index of the clicked item
+    var index = allItems.indexOf(listItem);
+
+    // Check if the index is within the bounds of the array
+    if (index >= 0 && index < toDoList.length) {
+      // Use splice to remove the entry at the specific index
+      toDoList.splice(index, 1);
+      console.log(toDoList);
+    }
+    _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
+  }
+};
+},{"../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickToggleCompleted.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleClickToggleCompleted = void 0;
+var handleClickToggleCompleted = exports.handleClickToggleCompleted = function handleClickToggleCompleted(event) {
+  if (!event.target.classList.contains("toggle")) {
+    return;
+  }
+  var listItem = event.target.closest('li');
+  if (listItem) {
+    ;
+    if (!listItem.classList.contains("completed")) {
+      listItem.classList.add("completed");
+    } else {
+      listItem.classList.remove("completed");
     }
   }
 };
-},{"../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
+},{}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -758,6 +778,7 @@ var _handleEvent = require("./vdom/events/eventHelpers/handleEvent");
 var _registerEvent = require("./vdom/events/eventHelpers/registerEvent");
 var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 var _handleClickDelete = require("./vdom/events/handleClickDelete");
+var _handleClickToggleCompleted = require("./vdom/events/handleClickToggleCompleted");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Application State
 var toDoList = exports.toDoList = [];
@@ -785,6 +806,9 @@ var initializeApp = function initializeApp() {
   (0, _registerEvent.registerEvent)('click', function (event) {
     return (0, _handleClickDelete.handleClickDelete)(event, toDoList);
   });
+  (0, _registerEvent.registerEvent)('click', function (event) {
+    return (0, _handleClickToggleCompleted.handleClickToggleCompleted)(event, toDoList);
+  });
   (0, _registerEvent.registerEvent)('dblclick', function (event) {
     console.log('Window was double-clicked!', event);
   }); // example double click event
@@ -808,7 +832,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -833,7 +857,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45517" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43801" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
