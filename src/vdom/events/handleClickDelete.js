@@ -1,27 +1,27 @@
-export const handleClickDelete = (event, todoList) => {
-  // const deleteButton = event.target;
-  // const item = deleteButton.closest('.todo-item');
+import { updateVApp } from "../updateVApp";
+
+export const handleClickDelete = (event, toDoList) => {
+
   console.log("event.target", event.target)
   if (event.target.classList.contains("destroy")) {
-    console.log("DESTROY");
-}
+    const listItem = event.target.closest('li');
+    if (listItem) {
+      // Get all li elements
+      const allItems = Array.from(listItem.parentNode.children);
 
-  const listItem = event.target.closest('li');
-  if (listItem) {
-    // Get all li elements
-    const allItems = Array.from(listItem.parentNode.children);
+      // Find the index of the clicked item
+      const index = allItems.indexOf(listItem);
+      console.log("toDoList[index]", toDoList[index])
 
-    // Find the index of the clicked item
-    const index = allItems.indexOf(listItem);
-    console.log("todoList[index]", todoList[index])
-
-    console.log(`Clicked item index: ${index}`);
-
-    // Your existing delete logic here
-    // ...
+      console.log(`Clicked item index: ${index}`);
+      // Check if the index is within the bounds of the array
+      if (index >= 0 && index < toDoList.length) {
+        // Use splice to remove the entry at the specific index
+        toDoList.splice(index, 1);
+        console.log(toDoList)
+      }
+      updateVApp(...toDoList)
+    }
   }
 
-  // item.remove();
-
-  // console.log(`Item ${item.id} deleted`);
 };

@@ -1,8 +1,6 @@
-import { getVApp, setVApp, updateRootEl, $rootEl, toDoList } from "../../main";
-import { createVApp } from "../createVApp";
-import diff from "../diff";
-import { updateURLWithCount } from "../routing/updateURLWithCount";
+import { toDoList } from "../../main";
 import { createListItem } from "../components/createListItem";
+import { updateVApp } from "../updateVApp";
 
 export const handleEnterKeySubmit = (event) => {
   // Early return if the key pressed is not "Enter"
@@ -18,20 +16,8 @@ export const handleEnterKeySubmit = (event) => {
   const toDoItem = createListItem(todoInputValue);
   toDoList.push(toDoItem);
 
-  // Generate the new virtual DOM representation
-  const currentVApp = getVApp();
-  const vNewApp = createVApp([...toDoList]);
-
-  // Calculate the difference and patch the DOM
-  const patch = diff(currentVApp, vNewApp);
-  const newRootEl = patch($rootEl);
-
-  // Update the root element and the virtual app state
-  updateRootEl(newRootEl);
-  setVApp(vNewApp);
-
-  // Update the URL with the current count of to-do items
-  updateURLWithCount(toDoList.length);
+  // updateVApp
+  updateVApp(...toDoList)
 
   // Clear the input field after processing the entry
   todoInput.value = "";

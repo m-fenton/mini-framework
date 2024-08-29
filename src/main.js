@@ -4,7 +4,6 @@ import { createVApp } from './vdom/createVApp';
 import { handleEvent } from './vdom/events/eventHelpers/handleEvent';
 import { registerEvent } from './vdom/events/eventHelpers/registerEvent';
 import { handleEnterKeySubmit } from './vdom/events/handleEnterKeySubmit';
-import { removeElementHandler } from './dom/removeElementHandler'; // Probably to be removed, uses DOM manipulation, not vDOM
 import { handleClickDelete } from './vdom/events/handleClickDelete';
 
 // Application State

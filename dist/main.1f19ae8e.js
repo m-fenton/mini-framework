@@ -424,7 +424,41 @@ var handleEvent = exports.handleEvent = function handleEvent(event) {
   var eventType = event.type; // Get event type (e.g., 'keydown')
   (0, _triggerEvent.triggerEvent)(eventType, event); // Trigger the event from our custom event system
 };
-},{"./triggerEvent":"vdom/events/eventHelpers/triggerEvent.js"}],"vdom/diff.js":[function(require,module,exports) {
+},{"./triggerEvent":"vdom/events/eventHelpers/triggerEvent.js"}],"vdom/components/createListItem.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createListItem = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// creates an item for the toDoList
+var createListItem = exports.createListItem = function createListItem(toDoString) {
+  return (0, _createElement.default)("li", {
+    children: [(0, _createElement.default)("div", {
+      attrs: {
+        class: "view"
+      },
+      children: [(0, _createElement.default)("input", {
+        attrs: {
+          class: "toggle",
+          type: "checkbox"
+        }
+      }), (0, _createElement.default)("label", {
+        attrs: {
+          class: "label"
+        },
+        children: [toDoString]
+      }), (0, _createElement.default)("button", {
+        attrs: {
+          class: "destroy"
+        }
+      })]
+    })]
+  });
+};
+},{"../createElement":"vdom/createElement.js"}],"vdom/diff.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -607,41 +641,38 @@ function updateURLWithCount(count) {
     count: count
   }, '', newUrl);
 }
-},{}],"vdom/components/createListItem.js":[function(require,module,exports) {
+},{}],"vdom/updateVApp.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.createListItem = void 0;
-var _createElement = _interopRequireDefault(require("../createElement"));
+exports.updateVApp = updateVApp;
+var _main = require("../main");
+var _createVApp = require("./createVApp");
+var _diff = _interopRequireDefault(require("./diff"));
+var _updateURLWithCount = require("./routing/updateURLWithCount");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-// creates an item for the toDoList
-var createListItem = exports.createListItem = function createListItem(toDoString) {
-  return (0, _createElement.default)("li", {
-    children: [(0, _createElement.default)("div", {
-      attrs: {
-        class: "view"
-      },
-      children: [(0, _createElement.default)("input", {
-        attrs: {
-          class: "toggle",
-          type: "checkbox"
-        }
-      }), (0, _createElement.default)("label", {
-        attrs: {
-          class: "label"
-        },
-        children: [toDoString]
-      }), (0, _createElement.default)("button", {
-        attrs: {
-          class: "destroy"
-        }
-      })]
-    })]
-  });
-};
-},{"../createElement":"vdom/createElement.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+function updateVApp() {
+  // Generate the new virtual DOM representation
+  var currentVApp = (0, _main.getVApp)();
+  for (var _len = arguments.length, toDoList = new Array(_len), _key = 0; _key < _len; _key++) {
+    toDoList[_key] = arguments[_key];
+  }
+  var vNewApp = (0, _createVApp.createVApp)([].concat(toDoList));
+
+  // Calculate the difference and patch the DOM
+  var patch = (0, _diff.default)(currentVApp, vNewApp);
+  var newRootEl = patch(_main.$rootEl);
+
+  // Update the root element and the virtual app state
+  (0, _main.updateRootEl)(newRootEl);
+  (0, _main.setVApp)(vNewApp);
+
+  // Update the URL with the current count of to-do items
+  (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
+}
+},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js","./routing/updateURLWithCount":"vdom/routing/updateURLWithCount.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -649,11 +680,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.handleEnterKeySubmit = void 0;
 var _main = require("../../main");
-var _createVApp = require("../createVApp");
-var _diff = _interopRequireDefault(require("../diff"));
-var _updateURLWithCount = require("../routing/updateURLWithCount");
 var _createListItem = require("../components/createListItem");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var _updateVApp = require("../updateVApp");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -673,73 +701,49 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
   var toDoItem = (0, _createListItem.createListItem)(todoInputValue);
   _main.toDoList.push(toDoItem);
 
-  // Generate the new virtual DOM representation
-  var currentVApp = (0, _main.getVApp)();
-  var vNewApp = (0, _createVApp.createVApp)(_toConsumableArray(_main.toDoList));
-
-  // Calculate the difference and patch the DOM
-  var patch = (0, _diff.default)(currentVApp, vNewApp);
-  var newRootEl = patch(_main.$rootEl);
-
-  // Update the root element and the virtual app state
-  (0, _main.updateRootEl)(newRootEl);
-  (0, _main.setVApp)(vNewApp);
-
-  // Update the URL with the current count of to-do items
-  (0, _updateURLWithCount.updateURLWithCount)(_main.toDoList.length);
+  // updateVApp
+  _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
 
   // Clear the input field after processing the entry
   todoInput.value = "";
 };
-},{"../../main":"main.js","../createVApp":"vdom/createVApp.js","../diff":"vdom/diff.js","../routing/updateURLWithCount":"vdom/routing/updateURLWithCount.js","../components/createListItem":"vdom/components/createListItem.js"}],"dom/removeElementHandler.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.removeElementHandler = removeElementHandler;
-function removeElementHandler(event, elementClickedOnClassOrId, elementToRemove) {
-  if (event.target.classList.contains(elementClickedOnClassOrId) || event.target.id === elementClickedOnClassOrId) {
-    // Remove the parent element of the target (usually a list item)
-    var listItem = event.target.closest(elementToRemove);
-    if (listItem) {
-      listItem.remove();
-    }
-  }
-}
-},{}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
+},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.handleClickDelete = void 0;
-var handleClickDelete = exports.handleClickDelete = function handleClickDelete(event, todoList) {
-  // const deleteButton = event.target;
-  // const item = deleteButton.closest('.todo-item');
+var _updateVApp = require("../updateVApp");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var handleClickDelete = exports.handleClickDelete = function handleClickDelete(event, toDoList) {
   console.log("event.target", event.target);
   if (event.target.classList.contains("destroy")) {
-    console.log("DESTROY");
+    var listItem = event.target.closest('li');
+    if (listItem) {
+      // Get all li elements
+      var allItems = Array.from(listItem.parentNode.children);
+
+      // Find the index of the clicked item
+      var index = allItems.indexOf(listItem);
+      console.log("toDoList[index]", toDoList[index]);
+      console.log("Clicked item index: ".concat(index));
+      // Check if the index is within the bounds of the array
+      if (index >= 0 && index < toDoList.length) {
+        // Use splice to remove the entry at the specific index
+        toDoList.splice(index, 1);
+        console.log(toDoList);
+      }
+      _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
+    }
   }
-  var listItem = event.target.closest('li');
-  if (listItem) {
-    // Get all li elements
-    var allItems = Array.from(listItem.parentNode.children);
-
-    // Find the index of the clicked item
-    var index = allItems.indexOf(listItem);
-    console.log("todoList[index]", todoList[index]);
-    console.log("Clicked item index: ".concat(index));
-
-    // Your existing delete logic here
-    // ...
-  }
-
-  // item.remove();
-
-  // console.log(`Item ${item.id} deleted`);
 };
-},{}],"main.js":[function(require,module,exports) {
+},{"../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -753,11 +757,8 @@ var _createVApp = require("./vdom/createVApp");
 var _handleEvent = require("./vdom/events/eventHelpers/handleEvent");
 var _registerEvent = require("./vdom/events/eventHelpers/registerEvent");
 var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
-var _removeElementHandler = require("./dom/removeElementHandler");
 var _handleClickDelete = require("./vdom/events/handleClickDelete");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-// Probably to be removed, uses DOM manipulation, not vDOM
-
 // Application State
 var toDoList = exports.toDoList = [];
 var $rootEl;
@@ -807,7 +808,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./dom/removeElementHandler":"dom/removeElementHandler.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -832,7 +833,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41589" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "45517" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
