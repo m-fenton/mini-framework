@@ -345,8 +345,8 @@ var createFooter = exports.createFooter = function createFooter(count) {
       })]
     }), (0, _createElement.default)("button", {
       attrs: {
-        class: "clear-completed",
-        disabled: "" // or remove this line if you want the button to be enabled
+        class: "clear-completed"
+        // disabled: "", // or remove this line if you want the button to be enabled
       },
       children: ["Clear completed"]
     })]
@@ -626,22 +626,7 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/routing/updateURLWithCount.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.updateURLWithCount = updateURLWithCount;
-function updateURLWithCount(count) {
-  // Remove any existing count from the pathname
-  var basePath = window.location.pathname.replace(/\/\d*$/, ''); // Remove trailing digits
-  var newUrl = "".concat(basePath, "/").concat(count);
-  history.replaceState({
-    count: count
-  }, '', newUrl);
-}
-},{}],"vdom/updateVApp.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/updateVApp.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -651,7 +636,6 @@ exports.updateVApp = updateVApp;
 var _main = require("../main");
 var _createVApp = require("./createVApp");
 var _diff = _interopRequireDefault(require("./diff"));
-var _updateURLWithCount = require("./routing/updateURLWithCount");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function updateVApp() {
   // Generate the new virtual DOM representation
@@ -668,11 +652,8 @@ function updateVApp() {
   // Update the root element and the virtual app state
   (0, _main.updateRootEl)(newRootEl);
   (0, _main.setVApp)(vNewApp);
-
-  // Update the URL with the current count of to-do items
-  (0, _updateURLWithCount.updateURLWithCount)(toDoList.length);
 }
-},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js","./routing/updateURLWithCount":"vdom/routing/updateURLWithCount.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -763,7 +744,63 @@ var handleClickToggleCompleted = exports.handleClickToggleCompleted = function h
     }
   }
 };
-},{}],"main.js":[function(require,module,exports) {
+},{}],"vdom/events/handleClickClearCompleted.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleClickClearCompleted = void 0;
+var _updateVApp = require("../updateVApp");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var handleClickClearCompleted = exports.handleClickClearCompleted = function handleClickClearCompleted(event, toDoList) {
+  if (!event.target.classList.contains("clear-completed")) {
+    return;
+  }
+  // Select all <li> elements inside the <ul> with the class "todo-list"
+  var todoListItems = document.querySelectorAll('.todo-list li');
+
+  // Initialize an empty array to store the indices of completed items
+  var completedItemIndices = [];
+
+  // Loop through each <li> element
+  todoListItems.forEach(function (item, index) {
+    // Check if the item has the class "completed"
+    if (item.classList.contains('completed')) {
+      // If it does, push the index to the array
+      completedItemIndices.push(index);
+      item.classList.remove("completed");
+    }
+  });
+
+  // Sort the completed indices in descending order
+  // This is important to avoid index shifts when removing items
+  completedItemIndices.sort(function (a, b) {
+    return b - a;
+  });
+
+  // Remove items from toDoList based on the indices in completedItemIndices
+  completedItemIndices.forEach(function (index) {
+    toDoList.splice(index, 1);
+  });
+
+  // Log the array of indices to the console
+  _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
+
+  // Select all checkboxes with class "toggle"
+  var checkboxes = document.querySelectorAll('.toggle');
+
+  // Iterate over each checkbox and set its `checked` property to false
+  checkboxes.forEach(function (checkbox) {
+    checkbox.checked = false;
+  });
+};
+},{"../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -779,6 +816,7 @@ var _registerEvent = require("./vdom/events/eventHelpers/registerEvent");
 var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 var _handleClickDelete = require("./vdom/events/handleClickDelete");
 var _handleClickToggleCompleted = require("./vdom/events/handleClickToggleCompleted");
+var _handleClickClearCompleted = require("./vdom/events/handleClickClearCompleted");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Application State
 var toDoList = exports.toDoList = [];
@@ -809,6 +847,9 @@ var initializeApp = function initializeApp() {
   (0, _registerEvent.registerEvent)('click', function (event) {
     return (0, _handleClickToggleCompleted.handleClickToggleCompleted)(event, toDoList);
   });
+  (0, _registerEvent.registerEvent)('click', function (event) {
+    return (0, _handleClickClearCompleted.handleClickClearCompleted)(event, toDoList);
+  });
   (0, _registerEvent.registerEvent)('dblclick', function (event) {
     console.log('Window was double-clicked!', event);
   }); // example double click event
@@ -832,7 +873,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -857,7 +898,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43801" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35979" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

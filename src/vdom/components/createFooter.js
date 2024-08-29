@@ -51,7 +51,7 @@ export const createFooter = (count) => {
       createElement("button", {
         attrs: {
           class: "clear-completed",
-          disabled: "", // or remove this line if you want the button to be enabled
+          // disabled: "", // or remove this line if you want the button to be enabled
         },
         children: ["Clear completed"]
       })
