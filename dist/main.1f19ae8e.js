@@ -800,7 +800,52 @@ var handleClickClearCompleted = exports.handleClickClearCompleted = function han
     checkbox.checked = false;
   });
 };
-},{"../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
+},{"../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickToggleAll.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleClickToggleAll = void 0;
+var handleClickToggleAll = exports.handleClickToggleAll = function handleClickToggleAll(event) {
+  console.log("Event Target:", event.target);
+
+  // Check if the click event is on the button or label with class "toggle-all-label"
+  if (!event.target.classList.contains("toggle-all-label")) {
+    return; // Exit if the click is not on the relevant button/label
+  }
+  console.log("Toggle all button clicked");
+
+  // Select all <li> elements inside the <ul> with the class "todo-list"
+  var todoListItems = document.querySelectorAll('.todo-list li');
+
+  // Determine if all items have the class "completed"
+  var allCompleted = Array.from(todoListItems).every(function (item) {
+    return item.classList.contains('completed');
+  });
+
+  // Select all checkboxes within the todo list
+  var checkboxes = document.querySelectorAll('.toggle');
+
+  // If all items are completed, remove the "completed" class from all
+  if (allCompleted) {
+    todoListItems.forEach(function (item) {
+      return item.classList.remove('completed');
+    });
+    checkboxes.forEach(function (checkbox) {
+      checkbox.checked = false; // Uncheck all checkboxes
+    });
+  } else {
+    // Otherwise, add the "completed" class to all items
+    todoListItems.forEach(function (item) {
+      return item.classList.add('completed');
+    });
+    checkboxes.forEach(function (checkbox) {
+      checkbox.checked = true; // Check all checkboxes
+    });
+  }
+};
+},{}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -817,6 +862,7 @@ var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 var _handleClickDelete = require("./vdom/events/handleClickDelete");
 var _handleClickToggleCompleted = require("./vdom/events/handleClickToggleCompleted");
 var _handleClickClearCompleted = require("./vdom/events/handleClickClearCompleted");
+var _handleClickToggleAll = require("./vdom/events/handleClickToggleAll");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Application State
 var toDoList = exports.toDoList = [];
@@ -845,10 +891,13 @@ var initializeApp = function initializeApp() {
     return (0, _handleClickDelete.handleClickDelete)(event, toDoList);
   });
   (0, _registerEvent.registerEvent)('click', function (event) {
-    return (0, _handleClickToggleCompleted.handleClickToggleCompleted)(event, toDoList);
+    return (0, _handleClickToggleCompleted.handleClickToggleCompleted)(event);
   });
   (0, _registerEvent.registerEvent)('click', function (event) {
     return (0, _handleClickClearCompleted.handleClickClearCompleted)(event, toDoList);
+  });
+  (0, _registerEvent.registerEvent)('click', function (event) {
+    return (0, _handleClickToggleAll.handleClickToggleAll)(event);
   });
   (0, _registerEvent.registerEvent)('dblclick', function (event) {
     console.log('Window was double-clicked!', event);
@@ -873,7 +922,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleAll":"vdom/events/handleClickToggleAll.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -898,7 +947,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35979" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37807" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

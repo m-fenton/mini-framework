@@ -7,6 +7,7 @@ import { handleEnterKeySubmit } from './vdom/events/handleEnterKeySubmit';
 import { handleClickDelete } from './vdom/events/handleClickDelete';
 import { handleClickToggleCompleted } from './vdom/events/handleClickToggleCompleted';
 import { handleClickClearCompleted } from './vdom/events/handleClickClearCompleted';
+import { handleClickToggleAll } from './vdom/events/handleClickToggleAll';
 
 // Application State
 export let toDoList = [];
@@ -28,8 +29,9 @@ const initializeApp = () => {
   registerEvent('keydown', handleEnterKeySubmit); // Keydown for Enter key to add items
   registerEvent('keydown', function (event) { if (event.key !== "Enter") console.log(event.key); }); // Keydown for Enter key to add items
   registerEvent('click', (event) => handleClickDelete(event, toDoList))
-  registerEvent('click', (event) => handleClickToggleCompleted(event, toDoList))
+  registerEvent('click', (event) => handleClickToggleCompleted(event))
   registerEvent('click', (event) => handleClickClearCompleted(event, toDoList))
+  registerEvent('click', (event) => handleClickToggleAll(event))
 
   
   
