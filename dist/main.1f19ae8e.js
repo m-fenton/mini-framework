@@ -127,29 +127,225 @@ exports.default = void 0;
 var _default = exports.default = function _default(tagName, _ref) {
   var attrs = _ref.attrs,
     children = _ref.children;
-  return {
+  var vElem = Object.create(null);
+  Object.assign(vElem, {
     tagName: tagName,
     attrs: attrs,
     children: children
+  });
+  return vElem;
+};
+},{}],"vdom/render.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var renderElem = function renderElem(_ref) {
+  var tagName = _ref.tagName,
+    attrs = _ref.attrs,
+    children = _ref.children;
+  // create the element
+  //   e.g. <div></div>
+  var $el = document.createElement(tagName);
+
+  // add all attributs as specified in vNode.attrs
+  //   e.g. <div id="app"></div>
+  for (var _i = 0, _Object$entries = Object.entries(attrs); _i < _Object$entries.length; _i++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+      k = _Object$entries$_i[0],
+      v = _Object$entries$_i[1];
+    $el.setAttribute(k, v);
+  }
+
+  // append all children as specified in vNode.children
+  //   e.g. <div id="app"><img></div>
+  var _iterator = _createForOfIteratorHelper(children),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var child = _step.value;
+      $el.appendChild(render(child));
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  return $el;
+};
+var render = function render(vNode) {
+  if (typeof vNode === 'string') {
+    return document.createTextNode(vNode);
+  }
+
+  // we assume everything else to be a virtual element
+  return renderElem(vNode);
+};
+var _default = exports.default = render;
+},{}],"vdom/mount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = exports.default = function _default($node, $target) {
+  $target.replaceWith($node);
+  return $node;
+};
+},{}],"vdom/diff.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _render = _interopRequireDefault(require("./render"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
+  var patches = [];
+
+  // setting newAttrs
+  var _loop = function _loop() {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+      k = _Object$entries$_i[0],
+      v = _Object$entries$_i[1];
+    patches.push(function ($node) {
+      $node.setAttribute(k, v);
+      return $node;
+    });
+  };
+  for (var _i = 0, _Object$entries = Object.entries(newAttrs); _i < _Object$entries.length; _i++) {
+    _loop();
+  }
+
+  // removing attrs
+  var _loop2 = function _loop2(k) {
+    if (!(k in newAttrs)) {
+      patches.push(function ($node) {
+        $node.removeAttribute(k);
+        return $node;
+      });
+    }
+  };
+  for (var k in oldAttrs) {
+    _loop2(k);
+  }
+  return function ($node) {
+    for (var _i2 = 0, _patches = patches; _i2 < _patches.length; _i2++) {
+      var patch = _patches[_i2];
+      patch($node);
+    }
+    return $node;
   };
 };
-},{}],"main.js":[function(require,module,exports) {
+var diffChildren = function diffChildren(oldVChildren, newVChildren) {
+  return function ($node) {
+    return $node;
+  };
+};
+var diff = function diff(oldVTree, newVTree) {
+  // let's assume oldVTree is not undefined!
+  if (newVTree === undefined) {
+    return function ($node) {
+      $node.remove();
+      // the patch should return the new root node.
+      // since there is none in this case,
+      // we will just return undefined.
+      return undefined;
+    };
+  }
+  if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
+    if (oldVTree !== newVTree) {
+      // could be 2 cases:
+      // 1. both trees are string and they have different values
+      // 2. one of the trees is text node and
+      //    the other one is elem node
+      // Either case, we will just render(newVTree)!
+      return function ($node) {
+        var $newNode = (0, _render.default)(newVTree);
+        $node.replaceWith($newNode);
+        return $newNode;
+      };
+    } else {
+      // this means that both trees are string
+      // and they have the same values
+      return function ($node) {
+        return $node;
+      };
+    }
+  }
+  if (oldVTree.tagName !== newVTree.tagName) {
+    // we assume that they are totally different and 
+    // will not attempt to find the differences.
+    // simply render the newVTree and mount it.
+    return function ($node) {
+      var $newNode = (0, _render.default)(newVTree);
+      $node.replaceWith($newNode);
+      return $newNode;
+    };
+  }
+  var patchAttrs = diffAttrs(oldVTree.attrs, newVTree.attrs);
+  var patchChildren = diffChildren(oldVTree.children, newVTree.children);
+  return function ($node) {
+    patchAttrs($node);
+    patchChildren($node);
+    return $node;
+  };
+};
+var _default = exports.default = diff;
+},{"./render":"vdom/render.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
+var _render = _interopRequireDefault(require("./vdom/render"));
+var _mount = _interopRequireDefault(require("./vdom/mount"));
+var _diff = _interopRequireDefault(require("./vdom/diff"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-var vApp = (0, _createElement.default)('div', {
-  attrs: {
-    id: 'app'
-  },
-  children: [(0, _createElement.default)('img', {
+function _readOnlyError(r) { throw new TypeError('"' + r + '" is read-only'); }
+var createVApp = function createVApp(count) {
+  return (0, _createElement.default)('div', {
     attrs: {
-      src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
-    }
-  })]
-});
-console.log(vApp);
-},{"./vdom/createElement":"vdom/createElement.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+      id: 'app',
+      dataCount: count // we use the count here
+    },
+    children: ['The current count is: ', String(count),
+    // and here
+    (0, _createElement.default)('img', {
+      attrs: {
+        src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif'
+      },
+      children: []
+    })]
+  });
+};
+var count = 0;
+var vApp = createVApp(count);
+var $app = (0, _render.default)(vApp);
+var $rootEl = (0, _mount.default)($app, document.getElementById('app'));
+setInterval(function () {
+  count++;
+  var vNewApp = createVApp(count);
+  var patch = (0, _diff.default)(vApp, vNewApp);
+  $rootEl = patch($rootEl);
+  vNewApp, _readOnlyError("vApp");
+}, 1000);
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -174,7 +370,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50919" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62469" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
