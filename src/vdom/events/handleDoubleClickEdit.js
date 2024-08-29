@@ -1,23 +1,26 @@
-const handleDoubleClickEdit = (event) => {
-    const item = event.target;
-    const originalText = item.textContent;
+import { createListItem } from "../components/createListItem";
+import createElement from "../createElement";
+import { updateVApp } from "../updateVApp";
 
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.value = originalText;
-    item.replaceWith(input);
+export const handleDoubleClickEdit = (event, toDoList) => {
+    if (!event.target.classList.contains("label")) { return }
+    const listItem = event.target.closest('li');
+    if (listItem) {
+console.log("How am I going to handle this?")
+        // listItem.classList.add("editing")
+        // Get all li elements
+        // const allItems = Array.from(listItem.parentNode.children);
 
-    input.addEventListener('blur', () => {
-        const newValue = input.value.trim() || originalText;
-        input.replaceWith(document.createTextNode(newValue));
-        console.log(`Item edited to: ${newValue}`);
-    });
+        // // Find the index of the clicked item
+        // const index = allItems.indexOf(listItem);
 
-    input.focus();
+        // Check if the index is within the bounds of the array
+    //     if (index >= 0 && index < toDoList.length) {
+    //         // Use splice to remove the entry at the specific index
+    //         //toDoList[index] = createInputBox(listItem.textContent)
+    //         console.log("toDoList", toDoList)
+    //     }
+    //     updateVApp(...toDoList)
+    }
+
 };
-
-// Example of registering the event
-registerEvent('dblclick', 'label', handleDoubleClickEdit);
-
-
-//NEEDS TO BE CHANGED MASSIVELY TO WORK, JUST A PLACEHOLDER FORM CHAT

@@ -845,7 +845,41 @@ var handleClickToggleAll = exports.handleClickToggleAll = function handleClickTo
     });
   }
 };
-},{}],"main.js":[function(require,module,exports) {
+},{}],"vdom/events/handleDoubleClickEdit.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleDoubleClickEdit = void 0;
+var _createListItem = require("../components/createListItem");
+var _createElement = _interopRequireDefault(require("../createElement"));
+var _updateVApp = require("../updateVApp");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubleClickEdit(event, toDoList) {
+  if (!event.target.classList.contains("label")) {
+    return;
+  }
+  var listItem = event.target.closest('li');
+  if (listItem) {
+    console.log("How am I going to handle this?");
+    // listItem.classList.add("editing")
+    // Get all li elements
+    // const allItems = Array.from(listItem.parentNode.children);
+
+    // // Find the index of the clicked item
+    // const index = allItems.indexOf(listItem);
+
+    // Check if the index is within the bounds of the array
+    //     if (index >= 0 && index < toDoList.length) {
+    //         // Use splice to remove the entry at the specific index
+    //         //toDoList[index] = createInputBox(listItem.textContent)
+    //         console.log("toDoList", toDoList)
+    //     }
+    //     updateVApp(...toDoList)
+  }
+};
+},{"../components/createListItem":"vdom/components/createListItem.js","../createElement":"vdom/createElement.js","../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -863,6 +897,7 @@ var _handleClickDelete = require("./vdom/events/handleClickDelete");
 var _handleClickToggleCompleted = require("./vdom/events/handleClickToggleCompleted");
 var _handleClickClearCompleted = require("./vdom/events/handleClickClearCompleted");
 var _handleClickToggleAll = require("./vdom/events/handleClickToggleAll");
+var _handleDoubleClickEdit = require("./vdom/events/handleDoubleClickEdit");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Application State
 var toDoList = exports.toDoList = [];
@@ -883,10 +918,12 @@ var initializeApp = function initializeApp() {
   exports.$rootEl = $rootEl = (0, _mount.default)((0, _render.default)(vApp), document.getElementById('root')); // Mount the initial app
 
   // Register events
+  // Keydown
   (0, _registerEvent.registerEvent)('keydown', _handleEnterKeySubmit.handleEnterKeySubmit); // Keydown for Enter key to add items
   (0, _registerEvent.registerEvent)('keydown', function (event) {
     if (event.key !== "Enter") console.log(event.key);
   }); // Keydown for Enter key to add items
+  // Click
   (0, _registerEvent.registerEvent)('click', function (event) {
     return (0, _handleClickDelete.handleClickDelete)(event, toDoList);
   });
@@ -899,8 +936,9 @@ var initializeApp = function initializeApp() {
   (0, _registerEvent.registerEvent)('click', function (event) {
     return (0, _handleClickToggleAll.handleClickToggleAll)(event);
   });
+  // Double Click
   (0, _registerEvent.registerEvent)('dblclick', function (event) {
-    console.log('Window was double-clicked!', event);
+    return (0, _handleDoubleClickEdit.handleDoubleClickEdit)(event, toDoList);
   }); // example double click event
 
   // Activate event handlers
@@ -922,7 +960,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleAll":"vdom/events/handleClickToggleAll.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleAll":"vdom/events/handleClickToggleAll.js","./vdom/events/handleDoubleClickEdit":"vdom/events/handleDoubleClickEdit.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -947,7 +985,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37807" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38479" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
