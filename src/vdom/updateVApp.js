@@ -15,4 +15,5 @@ export function updateVApp(...toDoList) {
     // Update the root element and the virtual app state
     updateRootEl(newRootEl);
     setVApp(vNewApp);
+    
 }

@@ -218,7 +218,40 @@ var _default = exports.default = function _default(tagName) {
   });
   return vElem;
 };
-},{}],"vdom/components/createHeader.js":[function(require,module,exports) {
+},{}],"vdom/components/createInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Input = void 0;
+var _createElement = _interopRequireDefault(require("../createElement"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// creates input container for editing
+var Input = exports.Input = function Input() {
+  var defaultValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  return (0, _createElement.default)("div", {
+    attrs: {
+      class: "input-container"
+    },
+    children: [(0, _createElement.default)("input", {
+      attrs: {
+        id: "todo-input",
+        class: "new-todo",
+        type: "text",
+        placeholder: "What needs to be done?",
+        value: defaultValue
+      }
+    }), (0, _createElement.default)("label", {
+      attrs: {
+        class: "visually-hidden",
+        for: "todo-input"
+      }
+      // children: ["New Todo Input"]
+    })]
+  });
+};
+},{"../createElement":"vdom/createElement.js"}],"vdom/components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -226,6 +259,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.createHeader = void 0;
 var _createElement = _interopRequireDefault(require("../createElement"));
+var _createInput = require("./createInput");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createHeader = exports.createHeader = function createHeader() {
@@ -235,29 +269,10 @@ var createHeader = exports.createHeader = function createHeader() {
     },
     children: [(0, _createElement.default)("h1", {
       children: ["todos"]
-    }), (0, _createElement.default)("div", {
-      attrs: {
-        class: "input-container"
-      },
-      children: [(0, _createElement.default)("input", {
-        attrs: {
-          id: "todo-input",
-          class: "new-todo",
-          type: "text",
-          placeholder: "What needs to be done?",
-          value: ""
-        }
-      }), (0, _createElement.default)("label", {
-        attrs: {
-          class: "visually-hidden",
-          for: "todo-input"
-        }
-        // children: ["New Todo Input"]
-      })]
-    })]
+    }), (0, _createInput.Input)()]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"vdom/components/createMain.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js","./createInput":"vdom/components/createInput.js"}],"vdom/components/createMain.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -852,34 +867,52 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.handleDoubleClickEdit = void 0;
-var _createListItem = require("../components/createListItem");
-var _createElement = _interopRequireDefault(require("../createElement"));
+var _createInput = require("../components/createInput");
 var _updateVApp = require("../updateVApp");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubleClickEdit(event, toDoList) {
   if (!event.target.classList.contains("label")) {
     return;
   }
   var listItem = event.target.closest('li');
   if (listItem) {
-    console.log("How am I going to handle this?");
     // listItem.classList.add("editing")
-    // Get all li elements
-    // const allItems = Array.from(listItem.parentNode.children);
+    //  Get all li elements
+    var allItems = Array.from(listItem.parentNode.children);
 
-    // // Find the index of the clicked item
-    // const index = allItems.indexOf(listItem);
+    // Find the index of the clicked item
+    var index = allItems.indexOf(listItem);
 
-    // Check if the index is within the bounds of the array
-    //     if (index >= 0 && index < toDoList.length) {
-    //         // Use splice to remove the entry at the specific index
-    //         //toDoList[index] = createInputBox(listItem.textContent)
-    //         console.log("toDoList", toDoList)
-    //     }
-    //     updateVApp(...toDoList)
+    //    Check if the index is within the bounds of the array
+    if (index >= 0 && index < toDoList.length) {
+      // Use splice to remove the entry at the specific index
+      toDoList[index] = (0, _createInput.Input)(listItem.textContent);
+      console.log("toDoList", toDoList);
+    }
+    _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
   }
+  // Now find all input elements inside the list item
+  var inputs = document.querySelectorAll('.input-container');
+  console.log("inputs before", inputs);
+  // Check if there are at least two inputs and select the second one
+  if (inputs.length >= 2) {
+    var secondInput = inputs[1]; // The second input is at index 1
+
+    // Find the child input element within the second input
+    var childInput = secondInput.querySelector('input');
+    if (childInput) {
+      childInput.focus(); // Focus on the child input field
+      childInput.select(); // Select all text in the child input field
+    }
+  }
+  console.log("inputs after", inputs);
 };
-},{"../components/createListItem":"vdom/components/createListItem.js","../createElement":"vdom/createElement.js","../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
+},{"../components/createInput":"vdom/components/createInput.js","../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -985,7 +1018,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "38479" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36853" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
