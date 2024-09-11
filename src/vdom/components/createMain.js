@@ -2,7 +2,7 @@ import createElement from "../createElement";
 
 // creates the main section of the todo page; where the list goes
 export const createMain = (toDoList) =>
-  
+
   createElement("main", {
     attrs: {
       class: "main",
@@ -12,7 +12,8 @@ export const createMain = (toDoList) =>
         attrs: {
           class: "toggle-all-container",
         },
-        children: [
+        // input and label are only shown when toDoList.length !== 0.
+        children: toDoList.length == 0 ? [] : [
           createElement("input", {
             attrs: {
               class: "toggle-all",

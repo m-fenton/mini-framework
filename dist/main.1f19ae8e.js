@@ -291,7 +291,8 @@ var createMain = exports.createMain = function createMain(toDoList) {
       attrs: {
         class: "toggle-all-container"
       },
-      children: [(0, _createElement.default)("input", {
+      // input and label are only shown when toDoList.length !== 0.
+      children: toDoList.length == 0 ? [] : [(0, _createElement.default)("input", {
         attrs: {
           class: "toggle-all",
           type: "checkbox"
@@ -1018,7 +1019,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36853" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43155" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -22,7 +22,6 @@ export const handleDoubleClickEdit = (event, toDoList) => {
     }
     // Now find all input elements inside the list item
     const inputs = document.querySelectorAll('.input-container');
-    console.log("inputs before", inputs)
     // Check if there are at least two inputs and select the second one
     if (inputs.length >= 2) {
         const secondInput = inputs[1];  // The second input is at index 1
@@ -35,6 +34,5 @@ export const handleDoubleClickEdit = (event, toDoList) => {
             childInput.select();   // Select all text in the child input field
         }
     }
-    console.log("inputs after", inputs)
 
 };
