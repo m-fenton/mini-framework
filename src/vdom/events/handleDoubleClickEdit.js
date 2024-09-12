@@ -1,7 +1,10 @@
 import { Input } from "../components/createInput";
+import { createListItem } from "../components/createListItem";
 import { updateVApp } from "../updateVApp";
 
 export const handleDoubleClickEdit = (event, toDoList) => {
+
+    let index
     if (!event.target.classList.contains("label")) { return }
     const listItem = event.target.closest('li');
     if (listItem) {
@@ -10,7 +13,7 @@ export const handleDoubleClickEdit = (event, toDoList) => {
         const allItems = Array.from(listItem.parentNode.children);
 
         // Find the index of the clicked item
-        const index = allItems.indexOf(listItem);
+         index = allItems.indexOf(listItem);
 
         //    Check if the index is within the bounds of the array
         if (index >= 0 && index < toDoList.length) {
@@ -32,6 +35,10 @@ export const handleDoubleClickEdit = (event, toDoList) => {
         if (childInput) {
             childInput.focus();    // Focus on the child input field
             childInput.select();   // Select all text in the child input field
+            childInput.onblur = function () {
+                toDoList[index] = createListItem(childInput.value)
+                updateVApp(...toDoList)
+            };
         }
     }
 

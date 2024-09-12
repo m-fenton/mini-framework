@@ -869,6 +869,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.handleDoubleClickEdit = void 0;
 var _createInput = require("../components/createInput");
+var _createListItem = require("../components/createListItem");
 var _updateVApp = require("../updateVApp");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -877,6 +878,7 @@ function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Sym
 function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
 function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
 var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubleClickEdit(event, toDoList) {
+  var index;
   if (!event.target.classList.contains("label")) {
     return;
   }
@@ -887,7 +889,7 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
     var allItems = Array.from(listItem.parentNode.children);
 
     // Find the index of the clicked item
-    var index = allItems.indexOf(listItem);
+    index = allItems.indexOf(listItem);
 
     //    Check if the index is within the bounds of the array
     if (index >= 0 && index < toDoList.length) {
@@ -899,7 +901,6 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
   }
   // Now find all input elements inside the list item
   var inputs = document.querySelectorAll('.input-container');
-  console.log("inputs before", inputs);
   // Check if there are at least two inputs and select the second one
   if (inputs.length >= 2) {
     var secondInput = inputs[1]; // The second input is at index 1
@@ -909,11 +910,14 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
     if (childInput) {
       childInput.focus(); // Focus on the child input field
       childInput.select(); // Select all text in the child input field
+      childInput.onblur = function () {
+        toDoList[index] = (0, _createListItem.createListItem)(childInput.value);
+        _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
+      };
     }
   }
-  console.log("inputs after", inputs);
 };
-},{"../components/createInput":"vdom/components/createInput.js","../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
+},{"../components/createInput":"vdom/components/createInput.js","../components/createListItem":"vdom/components/createListItem.js","../updateVApp":"vdom/updateVApp.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1019,7 +1023,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43155" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39559" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
