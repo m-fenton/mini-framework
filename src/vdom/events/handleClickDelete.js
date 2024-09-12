@@ -5,6 +5,7 @@ export const handleClickDelete = (event, toDoList) => {
   if (!event.target.classList.contains("destroy")) { return }
   const listItem = event.target.closest('li');
   if (listItem) {
+
     // Get all li elements
     const allItems = Array.from(listItem.parentNode.children);
 
@@ -17,6 +18,9 @@ export const handleClickDelete = (event, toDoList) => {
       toDoList.splice(index, 1);
       console.log(toDoList)
     }
+    // This cheeky line solves a bug where the completed class was
+    // incorrectly getting applied to the next item on the list
+    listItem.remove();
     updateVApp(...toDoList)
   }
 }

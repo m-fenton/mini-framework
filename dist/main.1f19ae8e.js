@@ -816,6 +816,9 @@ var handleClickDelete = exports.handleClickDelete = function handleClickDelete(e
       toDoList.splice(index, 1);
       console.log(toDoList);
     }
+    // This cheeky line solves a bug where the completed class was
+    // incorrectly getting applied to the next item on the list
+    listItem.remove();
     _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
   }
 };
@@ -1101,7 +1104,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46877" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33117" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
