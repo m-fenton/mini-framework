@@ -669,7 +669,38 @@ function updateVApp() {
   (0, _main.updateRootEl)(newRootEl);
   (0, _main.setVApp)(vNewApp);
 }
-},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/routing/routing.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.routing = routing;
+function routing() {
+  // const basePath = window.location.pathname
+  // console.log("basePath:", basePath)
+
+  // const fullUrl = window.location.href;  
+  // console.log("Full URL:", fullUrl);
+
+  // Function to check the current hash
+  var checkHash = function checkHash() {
+    if (window.location.hash === "#/completed") {
+      console.log("You are on the /completed route");
+    } else {
+      console.log("You are on the ".concat(window.location.hash, " route"));
+    }
+  };
+  // Initial check when the function is first called
+  checkHash();
+
+  // Assign the handler to the hashchange event directly
+  window.onhashchange = checkHash;
+
+  // If you're using history-based routing, handle popstate as well
+  window.onpopstate = checkHash;
+}
+},{}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -679,6 +710,7 @@ exports.handleEnterKeySubmit = void 0;
 var _main = require("../../main");
 var _createListItem = require("../components/createListItem");
 var _updateVApp = require("../updateVApp");
+var _routing = require("../routing/routing");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -718,12 +750,11 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
       console.log("index", index);
       _main.toDoList[index] = (0, _createListItem.createListItem)(_input.value);
       _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
-      console.log("here", _main.toDoList);
     }
     ;
   }
 };
-},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
+},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../updateVApp":"vdom/updateVApp.js","../routing/routing":"vdom/routing/routing.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -952,6 +983,7 @@ var _handleClickToggleCompleted = require("./vdom/events/handleClickToggleComple
 var _handleClickClearCompleted = require("./vdom/events/handleClickClearCompleted");
 var _handleClickToggleCompletedAll = require("./vdom/events/handleClickToggleCompletedAll");
 var _handleDoubleClickEdit = require("./vdom/events/handleDoubleClickEdit");
+var _routing = require("./vdom/routing/routing");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Application State
 var toDoList = exports.toDoList = [];
@@ -970,6 +1002,9 @@ var setVApp = exports.setVApp = function setVApp(newVApp) {
 var initializeApp = function initializeApp() {
   setVApp((0, _createVApp.createVApp)(toDoList)); // Create initial VApp
   exports.$rootEl = $rootEl = (0, _mount.default)((0, _render.default)(vApp), document.getElementById('root')); // Mount the initial app
+
+  // start up routing functionality
+  (0, _routing.routing)();
 
   // Register events
   // Keydown
@@ -1011,7 +1046,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleCompletedAll":"vdom/events/handleClickToggleCompletedAll.js","./vdom/events/handleDoubleClickEdit":"vdom/events/handleDoubleClickEdit.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleCompletedAll":"vdom/events/handleClickToggleCompletedAll.js","./vdom/events/handleDoubleClickEdit":"vdom/events/handleDoubleClickEdit.js","./vdom/routing/routing":"vdom/routing/routing.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1036,7 +1071,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33133" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34503" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

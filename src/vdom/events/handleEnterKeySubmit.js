@@ -2,6 +2,8 @@ import { toDoList } from "../../main";
 import { createListItem } from "../components/createListItem";
 import { updateVApp } from "../updateVApp";
 
+import { routing } from "../routing/routing";
+
 export const handleEnterKeySubmit = (event) => {
   // Early return if the key pressed is not "Enter"
   if (event.key !== "Enter") return;
@@ -34,12 +36,10 @@ export const handleEnterKeySubmit = (event) => {
       console.log("secondInputContainer", secondInputContainer)
 
       const index = toDoList.findIndex(item => item.tagName === "div");
-            console.log("index", index)
+      console.log("index", index)
 
       toDoList[index] = createListItem(input.value)
       updateVApp(...toDoList)
-      console.log("here", toDoList)
     };
-
   }
 };

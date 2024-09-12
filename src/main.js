@@ -9,6 +9,7 @@ import { handleClickToggleCompleted } from './vdom/events/handleClickToggleCompl
 import { handleClickClearCompleted } from './vdom/events/handleClickClearCompleted';
 import { handleClickToggleCompletedAll } from './vdom/events/handleClickToggleCompletedAll';
 import { handleDoubleClickEdit } from './vdom/events/handleDoubleClickEdit';
+import { routing } from './vdom/routing/routing';
 
 // Application State
 export let toDoList = [];
@@ -25,6 +26,9 @@ export const setVApp = (newVApp) => {
 const initializeApp = () => {
   setVApp(createVApp(toDoList)); // Create initial VApp
   $rootEl = mount(render(vApp), document.getElementById('root')); // Mount the initial app
+
+  // start up routing functionality
+  routing()
 
   // Register events
   // Keydown
