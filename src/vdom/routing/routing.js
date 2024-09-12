@@ -1,15 +1,9 @@
 export function routing() {
-
-    // Select all <li> elements inside the <ul> with the class "todo-list"
-
-
-
-
     // Function to check the current hash
     const checkHash = () => {
         // Get all the list items (this will be used in all cases)
         let todoListItems = document.querySelectorAll('.todo-list li');
-        
+
         switch (window.location.hash) {
             case "#/":
                 console.log("You are on the All route");

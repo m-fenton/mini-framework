@@ -474,7 +474,66 @@ var createListItem = exports.createListItem = function createListItem(toDoString
     })]
   });
 };
-},{"../createElement":"vdom/createElement.js"}],"vdom/diff.js":[function(require,module,exports) {
+},{"../createElement":"vdom/createElement.js"}],"vdom/routing/routing.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.routing = routing;
+function routing() {
+  // Function to check the current hash
+  var checkHash = function checkHash() {
+    // Get all the list items (this will be used in all cases)
+    var todoListItems = document.querySelectorAll('.todo-list li');
+    switch (window.location.hash) {
+      case "#/":
+        console.log("You are on the All route");
+
+        // Show all list items
+        todoListItems.forEach(function (item) {
+          item.style.display = 'list-item'; // Restore the display for all items
+        });
+        break;
+      case "#/active":
+        console.log("You are on the Active route");
+
+        // Show only items that don't have the class "completed"
+        todoListItems.forEach(function (item) {
+          if (item.classList.contains('completed')) {
+            item.style.display = 'none'; // Hide completed items
+          } else {
+            item.style.display = 'list-item'; // Show active (non-completed) items
+          }
+        });
+        break;
+      case "#/completed":
+        console.log("You are on the Completed route");
+
+        // Show only items that have the class "completed"
+        todoListItems.forEach(function (item) {
+          if (item.classList.contains('completed')) {
+            item.style.display = 'list-item'; // Show completed items
+          } else {
+            item.style.display = 'none'; // Hide active (non-completed) items
+          }
+        });
+        break;
+      default:
+        console.log("Unknown route");
+    }
+  };
+
+  // Initial check when the function is first called
+  checkHash();
+
+  // Assign the handler to the hashchange event directly
+  window.onhashchange = checkHash;
+
+  // If you're using history-based routing, handle popstate as well
+  window.onpopstate = checkHash;
+}
+},{}],"vdom/diff.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -669,68 +728,7 @@ function updateVApp() {
   (0, _main.updateRootEl)(newRootEl);
   (0, _main.setVApp)(vNewApp);
 }
-},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/routing/routing.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.routing = routing;
-function routing() {
-  // Select all <li> elements inside the <ul> with the class "todo-list"
-
-  // Function to check the current hash
-  var checkHash = function checkHash() {
-    // Get all the list items (this will be used in all cases)
-    var todoListItems = document.querySelectorAll('.todo-list li');
-    switch (window.location.hash) {
-      case "#/":
-        console.log("You are on the All route");
-
-        // Show all list items
-        todoListItems.forEach(function (item) {
-          item.style.display = 'list-item'; // Restore the display for all items
-        });
-        break;
-      case "#/active":
-        console.log("You are on the Active route");
-
-        // Show only items that don't have the class "completed"
-        todoListItems.forEach(function (item) {
-          if (item.classList.contains('completed')) {
-            item.style.display = 'none'; // Hide completed items
-          } else {
-            item.style.display = 'list-item'; // Show active (non-completed) items
-          }
-        });
-        break;
-      case "#/completed":
-        console.log("You are on the Completed route");
-
-        // Show only items that have the class "completed"
-        todoListItems.forEach(function (item) {
-          if (item.classList.contains('completed')) {
-            item.style.display = 'list-item'; // Show completed items
-          } else {
-            item.style.display = 'none'; // Hide active (non-completed) items
-          }
-        });
-        break;
-      default:
-        console.log("Unknown route");
-    }
-  };
-
-  // Initial check when the function is first called
-  checkHash();
-
-  // Assign the handler to the hashchange event directly
-  window.onhashchange = checkHash;
-
-  // If you're using history-based routing, handle popstate as well
-  window.onpopstate = checkHash;
-}
-},{}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -739,8 +737,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.handleEnterKeySubmit = void 0;
 var _main = require("../../main");
 var _createListItem = require("../components/createListItem");
-var _updateVApp = require("../updateVApp");
 var _routing = require("../routing/routing");
+var _updateVApp = require("../updateVApp");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -755,7 +753,6 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
   if (inputContainers.length == 1) {
     var input = inputContainers[0].querySelector('input');
     var todoInputValue = input.value.trim();
-    console.log("todoInputValue", todoInputValue);
     // Early return if the input value is empty
     if (!todoInputValue) return;
     var toDoItem = (0, _createListItem.createListItem)(todoInputValue);
@@ -764,7 +761,6 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
     // updateVApp
     _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
     input.value = "";
-    return;
   }
   if (inputContainers.length == 2) {
     var secondInputContainer = inputContainers[1]; // The second input is at index 1
@@ -772,19 +768,17 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
     // Find the child input element within the second input
     var _input = secondInputContainer.querySelector('input');
     if (_input) {
-      console.log("toDoList", _main.toDoList);
-      console.log("secondInputContainer", secondInputContainer);
       var index = _main.toDoList.findIndex(function (item) {
         return item.tagName === "div";
       });
-      console.log("index", index);
       _main.toDoList[index] = (0, _createListItem.createListItem)(_input.value);
       _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
     }
     ;
   }
+  (0, _routing.routing)();
 };
-},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../updateVApp":"vdom/updateVApp.js","../routing/routing":"vdom/routing/routing.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
+},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../routing/routing":"vdom/routing/routing.js","../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1104,7 +1098,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33117" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35643" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
