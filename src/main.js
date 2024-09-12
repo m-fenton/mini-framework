@@ -11,25 +11,25 @@ const createVApp = count => createElement('div', {
   children: [
     'The current count is: ',
     String(count), // and here
-    createElement('img', {
+    ...Array.from({ length: count }, () => createElement('img', {
       attrs: {
         src: 'https://media.giphy.com/media/cuPm4p4pClZVC/giphy.gif',
       },
-      children: [],
-    }),
+    })),
   ],
 });
 
-let count = 0;
-const vApp = createVApp(count);
+let vApp = createVApp(0);
 const $app = render(vApp);
 let $rootEl = mount($app, document.getElementById('app'));
 
 setInterval(() => {
-  count++;
-  const vNewApp = createVApp(count);
+  const n = Math.floor(Math.random() * 10);
+  const vNewApp = createVApp(n);
   const patch = diff(vApp, vNewApp);
 
+  // we might replace the whole $rootEl,
+  // so we want the patch will return the new $rootEl
   $rootEl = patch($rootEl);
 
   vApp = vNewApp;
