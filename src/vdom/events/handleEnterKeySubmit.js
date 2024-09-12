@@ -5,21 +5,41 @@ import { updateVApp } from "../updateVApp";
 export const handleEnterKeySubmit = (event) => {
   // Early return if the key pressed is not "Enter"
   if (event.key !== "Enter") return;
+  const inputContainers = document.querySelectorAll('.input-container');
+  // Check if there's only one input
+  if (inputContainers.length == 1) {
+    const input = inputContainers[0].querySelector('input');
+    const todoInputValue = input.value.trim();
+    console.log("todoInputValue", todoInputValue)
+    // Early return if the input value is empty
+    if (!todoInputValue) return;
 
-  const todoInput = document.getElementById("todo-input");
-  const todoInputValue = todoInput?.value.trim();  // Use optional chaining and trim for extra safety
+    const toDoItem = createListItem(todoInputValue);
+    toDoList.push(toDoItem);
 
-  // Early return if the input value is empty
-  if (!todoInputValue) return;
+    // updateVApp
+    updateVApp(...toDoList)
 
-  // Create a new to-do item and add it to the list
-  const toDoItem = createListItem(todoInputValue);
-  toDoList.push(toDoItem);
+    input.value = "";
+    return
+  }
+  if (inputContainers.length == 2) {
+    const secondInputContainer = inputContainers[1];  // The second input is at index 1
 
-  // updateVApp
-  updateVApp(...toDoList)
+    // Find the child input element within the second input
+    const input = secondInputContainer.querySelector('input');
 
-  // Clear the input field after processing the entry
-  todoInput.value = "";
+    if (input) {
+      console.log("toDoList", toDoList)
+      console.log("secondInputContainer", secondInputContainer)
 
+      const index = toDoList.findIndex(item => item.tagName === "div");
+            console.log("index", index)
+
+      toDoList[index] = createListItem(input.value)
+      updateVApp(...toDoList)
+      console.log("here", toDoList)
+    };
+
+  }
 };

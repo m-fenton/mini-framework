@@ -7,7 +7,7 @@ import { handleEnterKeySubmit } from './vdom/events/handleEnterKeySubmit';
 import { handleClickDelete } from './vdom/events/handleClickDelete';
 import { handleClickToggleCompleted } from './vdom/events/handleClickToggleCompleted';
 import { handleClickClearCompleted } from './vdom/events/handleClickClearCompleted';
-import { handleClickToggleAll } from './vdom/events/handleClickToggleAll';
+import { handleClickToggleCompletedAll } from './vdom/events/handleClickToggleCompletedAll';
 import { handleDoubleClickEdit } from './vdom/events/handleDoubleClickEdit';
 
 // Application State
@@ -29,13 +29,12 @@ const initializeApp = () => {
   // Register events
   // Keydown
   registerEvent('keydown', handleEnterKeySubmit); // Keydown for Enter key to add items
-  registerEvent('keydown', function (event) { if (event.key !== "Enter") console.log(event.key); }); // Keydown for Enter key to add items
   // Click
   registerEvent('click', (event) => handleClickDelete(event, toDoList))
   registerEvent('click', (event) => handleClickToggleCompleted(event))
   registerEvent('click', (event) => handleClickClearCompleted(event, toDoList))
-  registerEvent('click', (event) => handleClickToggleAll(event))
-// Double Click
+  registerEvent('click', (event) => handleClickToggleCompletedAll(event))
+  // Double Click
   registerEvent('dblclick', (event) => handleDoubleClickEdit(event, toDoList)); // example double click event
 
   // Activate event handlers

@@ -436,7 +436,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.handleEvent = void 0;
 var _triggerEvent = require("./triggerEvent");
 var handleEvent = exports.handleEvent = function handleEvent(event) {
-  console.log("Event triggered: ".concat(event.type)); // Log the event type
+  //  console.log(`Event triggered: ${event.type}`); // Log the event type
   var eventType = event.type; // Get event type (e.g., 'keydown')
   (0, _triggerEvent.triggerEvent)(eventType, event); // Trigger the event from our custom event system
 };
@@ -688,21 +688,40 @@ function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length)
 var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKeySubmit(event) {
   // Early return if the key pressed is not "Enter"
   if (event.key !== "Enter") return;
-  var todoInput = document.getElementById("todo-input");
-  var todoInputValue = todoInput === null || todoInput === void 0 ? void 0 : todoInput.value.trim(); // Use optional chaining and trim for extra safety
+  var inputContainers = document.querySelectorAll('.input-container');
+  // Check if there's only one input
+  if (inputContainers.length == 1) {
+    var input = inputContainers[0].querySelector('input');
+    var todoInputValue = input.value.trim();
+    console.log("todoInputValue", todoInputValue);
+    // Early return if the input value is empty
+    if (!todoInputValue) return;
+    var toDoItem = (0, _createListItem.createListItem)(todoInputValue);
+    _main.toDoList.push(toDoItem);
 
-  // Early return if the input value is empty
-  if (!todoInputValue) return;
+    // updateVApp
+    _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
+    input.value = "";
+    return;
+  }
+  if (inputContainers.length == 2) {
+    var secondInputContainer = inputContainers[1]; // The second input is at index 1
 
-  // Create a new to-do item and add it to the list
-  var toDoItem = (0, _createListItem.createListItem)(todoInputValue);
-  _main.toDoList.push(toDoItem);
-
-  // updateVApp
-  _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
-
-  // Clear the input field after processing the entry
-  todoInput.value = "";
+    // Find the child input element within the second input
+    var _input = secondInputContainer.querySelector('input');
+    if (_input) {
+      console.log("toDoList", _main.toDoList);
+      console.log("secondInputContainer", secondInputContainer);
+      var index = _main.toDoList.findIndex(function (item) {
+        return item.tagName === "div";
+      });
+      console.log("index", index);
+      _main.toDoList[index] = (0, _createListItem.createListItem)(_input.value);
+      _updateVApp.updateVApp.apply(void 0, _toConsumableArray(_main.toDoList));
+      console.log("here", _main.toDoList);
+    }
+    ;
+  }
 };
 },{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
 "use strict";
@@ -816,21 +835,18 @@ var handleClickClearCompleted = exports.handleClickClearCompleted = function han
     checkbox.checked = false;
   });
 };
-},{"../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickToggleAll.js":[function(require,module,exports) {
+},{"../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickToggleCompletedAll.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.handleClickToggleAll = void 0;
-var handleClickToggleAll = exports.handleClickToggleAll = function handleClickToggleAll(event) {
-  console.log("Event Target:", event.target);
-
+exports.handleClickToggleCompletedAll = void 0;
+var handleClickToggleCompletedAll = exports.handleClickToggleCompletedAll = function handleClickToggleCompletedAll(event) {
   // Check if the click event is on the button or label with class "toggle-all-label"
   if (!event.target.classList.contains("toggle-all-label")) {
     return; // Exit if the click is not on the relevant button/label
   }
-  console.log("Toggle all button clicked");
 
   // Select all <li> elements inside the <ul> with the class "todo-list"
   var todoListItems = document.querySelectorAll('.todo-list li');
@@ -900,18 +916,18 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
     _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
   }
   // Now find all input elements inside the list item
-  var inputs = document.querySelectorAll('.input-container');
+  var inputContainers = document.querySelectorAll('.input-container');
   // Check if there are at least two inputs and select the second one
-  if (inputs.length >= 2) {
-    var secondInput = inputs[1]; // The second input is at index 1
+  if (inputContainers.length >= 2) {
+    var secondInputContainers = inputContainers[1]; // The second input is at index 1
 
     // Find the child input element within the second input
-    var childInput = secondInput.querySelector('input');
-    if (childInput) {
-      childInput.focus(); // Focus on the child input field
-      childInput.select(); // Select all text in the child input field
-      childInput.onblur = function () {
-        toDoList[index] = (0, _createListItem.createListItem)(childInput.value);
+    var input = secondInputContainers.querySelector('input');
+    if (input) {
+      input.focus(); // Focus on the child input field
+      input.select(); // Select all text in the child input field
+      input.onblur = function () {
+        toDoList[index] = (0, _createListItem.createListItem)(input.value);
         _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
       };
     }
@@ -934,7 +950,7 @@ var _handleEnterKeySubmit = require("./vdom/events/handleEnterKeySubmit");
 var _handleClickDelete = require("./vdom/events/handleClickDelete");
 var _handleClickToggleCompleted = require("./vdom/events/handleClickToggleCompleted");
 var _handleClickClearCompleted = require("./vdom/events/handleClickClearCompleted");
-var _handleClickToggleAll = require("./vdom/events/handleClickToggleAll");
+var _handleClickToggleCompletedAll = require("./vdom/events/handleClickToggleCompletedAll");
 var _handleDoubleClickEdit = require("./vdom/events/handleDoubleClickEdit");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Application State
@@ -958,9 +974,6 @@ var initializeApp = function initializeApp() {
   // Register events
   // Keydown
   (0, _registerEvent.registerEvent)('keydown', _handleEnterKeySubmit.handleEnterKeySubmit); // Keydown for Enter key to add items
-  (0, _registerEvent.registerEvent)('keydown', function (event) {
-    if (event.key !== "Enter") console.log(event.key);
-  }); // Keydown for Enter key to add items
   // Click
   (0, _registerEvent.registerEvent)('click', function (event) {
     return (0, _handleClickDelete.handleClickDelete)(event, toDoList);
@@ -972,7 +985,7 @@ var initializeApp = function initializeApp() {
     return (0, _handleClickClearCompleted.handleClickClearCompleted)(event, toDoList);
   });
   (0, _registerEvent.registerEvent)('click', function (event) {
-    return (0, _handleClickToggleAll.handleClickToggleAll)(event);
+    return (0, _handleClickToggleCompletedAll.handleClickToggleCompletedAll)(event);
   });
   // Double Click
   (0, _registerEvent.registerEvent)('dblclick', function (event) {
@@ -998,7 +1011,7 @@ function updateRootEl(newRootEl) {
 
 // Initialize the application
 initializeApp();
-},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleAll":"vdom/events/handleClickToggleAll.js","./vdom/events/handleDoubleClickEdit":"vdom/events/handleDoubleClickEdit.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/createVApp":"vdom/createVApp.js","./vdom/events/eventHelpers/handleEvent":"vdom/events/eventHelpers/handleEvent.js","./vdom/events/eventHelpers/registerEvent":"vdom/events/eventHelpers/registerEvent.js","./vdom/events/handleEnterKeySubmit":"vdom/events/handleEnterKeySubmit.js","./vdom/events/handleClickDelete":"vdom/events/handleClickDelete.js","./vdom/events/handleClickToggleCompleted":"vdom/events/handleClickToggleCompleted.js","./vdom/events/handleClickClearCompleted":"vdom/events/handleClickClearCompleted.js","./vdom/events/handleClickToggleCompletedAll":"vdom/events/handleClickToggleCompletedAll.js","./vdom/events/handleDoubleClickEdit":"vdom/events/handleDoubleClickEdit.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1023,7 +1036,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39559" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33133" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
