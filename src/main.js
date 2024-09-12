@@ -28,7 +28,7 @@ const initializeApp = () => {
   $rootEl = mount(render(vApp), document.getElementById('root')); // Mount the initial app
 
   // start up routing functionality
-  routing()
+  routing(...toDoList)
 
   // Register events
   // Keydown
