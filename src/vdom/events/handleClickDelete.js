@@ -25,7 +25,6 @@ export const handleClickDelete = (event, toDoList) => {
     updateVApp(...toDoList)
   }
 
-  checkItemsCompleted()
 }
 
 

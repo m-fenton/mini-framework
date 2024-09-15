@@ -41,11 +41,6 @@ export const handleEnterKeySubmit = (event) => {
       updateVApp(...toDoList)
     };
   }
-
-  // Double checks number of active items when a new item is added
-  checkItemsCompleted()
-
-
   // rerunning routing ensures that new active items are hidden if we're on the completed tab
   routing()
 

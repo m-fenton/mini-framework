@@ -701,34 +701,7 @@ var diff = function diff(oldVTree, newVTree) {
   };
 };
 var _default = exports.default = diff;
-},{"./render":"vdom/render.js"}],"vdom/updateVApp.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.updateVApp = updateVApp;
-var _main = require("../main");
-var _createVApp = require("./createVApp");
-var _diff = _interopRequireDefault(require("./diff"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-function updateVApp() {
-  // Generate the new virtual DOM representation
-  var currentVApp = (0, _main.getVApp)();
-  for (var _len = arguments.length, toDoList = new Array(_len), _key = 0; _key < _len; _key++) {
-    toDoList[_key] = arguments[_key];
-  }
-  var vNewApp = (0, _createVApp.createVApp)([].concat(toDoList));
-
-  // Calculate the difference and patch the DOM
-  var patch = (0, _diff.default)(currentVApp, vNewApp);
-  var newRootEl = patch(_main.$rootEl);
-
-  // Update the root element and the virtual app state
-  (0, _main.updateRootEl)(newRootEl);
-  (0, _main.setVApp)(vNewApp);
-}
-},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/events/eventHelpers/checkItemsCompleted.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"vdom/events/eventHelpers/checkItemsCompleted.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -746,7 +719,38 @@ function checkItemsCompleted() {
     }
   });
 }
-},{}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+},{}],"vdom/updateVApp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateVApp = updateVApp;
+var _main = require("../main");
+var _createVApp = require("./createVApp");
+var _diff = _interopRequireDefault(require("./diff"));
+var _checkItemsCompleted = require("./events/eventHelpers/checkItemsCompleted");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function updateVApp() {
+  // Generate the new virtual DOM representation
+  var currentVApp = (0, _main.getVApp)();
+  for (var _len = arguments.length, toDoList = new Array(_len), _key = 0; _key < _len; _key++) {
+    toDoList[_key] = arguments[_key];
+  }
+  var vNewApp = (0, _createVApp.createVApp)([].concat(toDoList));
+
+  // Calculate the difference and patch the DOM
+  var patch = (0, _diff.default)(currentVApp, vNewApp);
+  var newRootEl = patch(_main.$rootEl);
+
+  // Update the root element and the virtual app state
+  (0, _main.updateRootEl)(newRootEl);
+  (0, _main.setVApp)(vNewApp);
+
+  // checks the nubmer of ative items,
+  (0, _checkItemsCompleted.checkItemsCompleted)();
+}
+},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js","./events/eventHelpers/checkItemsCompleted":"vdom/events/eventHelpers/checkItemsCompleted.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -795,10 +799,6 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
     }
     ;
   }
-
-  // Double checks number of active items when a new item is added
-  (0, _checkItemsCompleted.checkItemsCompleted)();
-
   // rerunning routing ensures that new active items are hidden if we're on the completed tab
   (0, _routing.routing)();
 };
@@ -840,7 +840,6 @@ var handleClickDelete = exports.handleClickDelete = function handleClickDelete(e
     listItem.remove();
     _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
   }
-  (0, _checkItemsCompleted.checkItemsCompleted)();
 };
 },{"../updateVApp":"vdom/updateVApp.js","./eventHelpers/checkItemsCompleted":"vdom/events/eventHelpers/checkItemsCompleted.js"}],"vdom/events/handleClickToggleCompleted.js":[function(require,module,exports) {
 "use strict";
@@ -1130,7 +1129,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46359" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41843" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

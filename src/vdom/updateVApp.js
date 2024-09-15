@@ -1,6 +1,7 @@
 import { getVApp, setVApp, $rootEl, updateRootEl } from "../main";
 import { createVApp } from "./createVApp";
 import diff from "./diff";
+import { checkItemsCompleted } from "./events/eventHelpers/checkItemsCompleted";
 
 export function updateVApp(...toDoList) {
 
@@ -15,5 +16,7 @@ export function updateVApp(...toDoList) {
     // Update the root element and the virtual app state
     updateRootEl(newRootEl);
     setVApp(vNewApp);
-    
+
+    // checks the nubmer of ative items,
+    checkItemsCompleted()
 }
