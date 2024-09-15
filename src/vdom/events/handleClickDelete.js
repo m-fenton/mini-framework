@@ -1,4 +1,5 @@
 import { updateVApp } from "../updateVApp";
+import { checkItemsCompleted } from "./eventHelpers/checkItemsCompleted";
 
 export const handleClickDelete = (event, toDoList) => {
 
@@ -23,6 +24,8 @@ export const handleClickDelete = (event, toDoList) => {
     listItem.remove();
     updateVApp(...toDoList)
   }
+
+  checkItemsCompleted()
 }
 
 

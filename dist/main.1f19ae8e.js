@@ -728,7 +728,25 @@ function updateVApp() {
   (0, _main.updateRootEl)(newRootEl);
   (0, _main.setVApp)(vNewApp);
 }
-},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
+},{"../main":"main.js","./createVApp":"vdom/createVApp.js","./diff":"vdom/diff.js"}],"vdom/events/eventHelpers/checkItemsCompleted.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.checkItemsCompleted = checkItemsCompleted;
+function checkItemsCompleted() {
+  var toDoCountElement = document.querySelector(".todo-count");
+  var todoListItems = document.querySelectorAll('.todo-list li');
+  todoListItems.forEach(function (item) {
+    if (item.classList.contains('completed')) {
+      var newNum = Number(toDoCountElement.textContent[0]) - 1;
+      var newStr = newNum + " items left!";
+      toDoCountElement.textContent = newStr;
+    }
+  });
+}
+},{}],"vdom/events/handleEnterKeySubmit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -739,6 +757,7 @@ var _main = require("../../main");
 var _createListItem = require("../components/createListItem");
 var _routing = require("../routing/routing");
 var _updateVApp = require("../updateVApp");
+var _checkItemsCompleted = require("./eventHelpers/checkItemsCompleted");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -776,9 +795,14 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
     }
     ;
   }
+
+  // Double checks number of active items when a new item is added
+  (0, _checkItemsCompleted.checkItemsCompleted)();
+
+  // rerunning routing ensures that new active items are hidden if we're on the completed tab
   (0, _routing.routing)();
 };
-},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../routing/routing":"vdom/routing/routing.js","../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
+},{"../../main":"main.js","../components/createListItem":"vdom/components/createListItem.js","../routing/routing":"vdom/routing/routing.js","../updateVApp":"vdom/updateVApp.js","./eventHelpers/checkItemsCompleted":"vdom/events/eventHelpers/checkItemsCompleted.js"}],"vdom/events/handleClickDelete.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -786,6 +810,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.handleClickDelete = void 0;
 var _updateVApp = require("../updateVApp");
+var _checkItemsCompleted = require("./eventHelpers/checkItemsCompleted");
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
@@ -815,8 +840,9 @@ var handleClickDelete = exports.handleClickDelete = function handleClickDelete(e
     listItem.remove();
     _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
   }
+  (0, _checkItemsCompleted.checkItemsCompleted)();
 };
-},{"../updateVApp":"vdom/updateVApp.js"}],"vdom/events/handleClickToggleCompleted.js":[function(require,module,exports) {
+},{"../updateVApp":"vdom/updateVApp.js","./eventHelpers/checkItemsCompleted":"vdom/events/eventHelpers/checkItemsCompleted.js"}],"vdom/events/handleClickToggleCompleted.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -828,8 +854,6 @@ var handleClickToggleCompleted = exports.handleClickToggleCompleted = function h
     return;
   }
   var toDoCountElement = document.querySelector(".todo-count");
-  console.log("toDoCountElement.textContent", toDoCountElement.textContent);
-  console.log("toDoCountElement.textContent[0]", toDoCountElement.textContent[0]);
   var listItem = event.target.closest('li');
   if (listItem) {
     if (!listItem.classList.contains("completed")) {
@@ -1106,7 +1130,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40707" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46359" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

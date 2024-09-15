@@ -5,8 +5,6 @@ export const handleClickToggleCompleted = (event) => {
 
 
     const toDoCountElement = document.querySelector(".todo-count")
-    console.log("toDoCountElement.textContent",toDoCountElement.textContent)
-    console.log("toDoCountElement.textContent[0]",toDoCountElement.textContent[0])
 
     const listItem = event.target.closest('li');
     if (listItem) {
