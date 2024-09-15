@@ -11,7 +11,7 @@ export const createVApp = (toDoList) => {
         },
         children: [
             createHeader(),
-            createMain([...toDoList]),  // Create a new array to ensure immutability
+            createMain([...toDoList]),  
             ...(toDoList.length > 0 ? [createFooter(toDoList.length)] : [])], //Only runs createFooter if toDoList has a length, this acts to hide the footer unless it's needed
     };
 };

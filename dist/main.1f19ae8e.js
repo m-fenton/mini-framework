@@ -333,7 +333,7 @@ var createFooter = exports.createFooter = function createFooter(count) {
       attrs: {
         class: "todo-count"
       },
-      children: ["".concat(count, " Items Left")] // Show the current count of toDoList items
+      children: ["".concat(count, " items left")] // Show the current count of toDoList items
     }), (0, _createElement.default)("ul", {
       attrs: {
         class: "filters"
@@ -827,13 +827,21 @@ var handleClickToggleCompleted = exports.handleClickToggleCompleted = function h
   if (!event.target.classList.contains("toggle")) {
     return;
   }
+  var toDoCountElement = document.querySelector(".todo-count");
+  console.log("toDoCountElement.textContent", toDoCountElement.textContent);
+  console.log("toDoCountElement.textContent[0]", toDoCountElement.textContent[0]);
   var listItem = event.target.closest('li');
   if (listItem) {
-    ;
     if (!listItem.classList.contains("completed")) {
       listItem.classList.add("completed");
+      var newNum = Number(toDoCountElement.textContent[0]) - 1;
+      var newStr = newNum + " items left!";
+      toDoCountElement.textContent = newStr;
     } else {
       listItem.classList.remove("completed");
+      var _newNum = Number(toDoCountElement.textContent[0]) + 1;
+      var _newStr = _newNum + " items left!";
+      toDoCountElement.textContent = _newStr;
     }
   }
 };
@@ -1098,7 +1106,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35643" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40707" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
