@@ -1,14 +1,10 @@
 # Mini-Framework
 
-##  Special thanks to:
-Rodrigo Pombo  
-[Build Your Own React](https://pomb.us/build-your-own-react/)  
-YCM Jason  
-[Building a Simple Virtual DOM from Scratch](https://dev.to/ycmjason/building-a-simple-virtual-dom-from-scratch-3d05)
+
 
 Welcome to Mini-Framework, a lightweight and powerful JavaScript framework for building modern web applications. Designed with simplicity and performance in mind, Mini-Framework empowers developers to create dynamic, responsive, and efficient web experiences.
 
-## Does the documentation contain an explanation on how the framework works?
+## How does the framework works?
 
 ## Abstracting the DOM
 
@@ -27,3 +23,9 @@ Here's how it works: when any property of your state object changes, the framewo
 ## Event handling
 
 This custom event handling system centralizes the registration and execution of event handlers for various event types (e.g., `keydown`, `click`, `dblclick`). It allows developers to associate specific functions with events using a simple registration process. When an event occurs, global listeners capture it, pass it to a handler, and trigger the relevant registered functions. The system uses a diff approach to ensure the actual DOM is updated efficiently based on the state changes, making it highly responsive and suitable for building interactive applications.
+
+##  Special thanks to:
+Rodrigo Pombo  
+[Build Your Own React](https://pomb.us/build-your-own-react/)  
+YCM Jason  
+[Building a Simple Virtual DOM from Scratch](https://dev.to/ycmjason/building-a-simple-virtual-dom-from-scratch-3d05)
