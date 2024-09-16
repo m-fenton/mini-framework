@@ -13,7 +13,10 @@ Welcome to Mini-Framework, a lightweight and powerful JavaScript framework for b
 - 🛠️ Minimal setup, maximum flexibility
 
 
-
+# Table of Contents
+- [Overview](#overview)
+- [Explanation and code examples](#explanation-and-code-examples)
+- [How does the framework work](#how-does-the-framework-work)
 
 
 
