@@ -1,5 +1,23 @@
 # Mini-Framework
 
+# Table of Contents
+- [Introduction](#introduction)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Conclusion](#conclusion)
+
+# Introduction
+This is the introduction section.
+
+# Setup
+This section describes the setup process.
+
+# Usage
+Here is how to use the system.
+
+# Conclusion
+Final thoughts and summary.
+
 
 
 Welcome to Mini-Framework, a lightweight and powerful JavaScript framework for building modern web applications. Designed with simplicity and performance in mind, Mini-Framework empowers developers to create dynamic, responsive, and efficient web experiences.
