@@ -1,14 +1,15 @@
-import createElement from "../createElement";
+import minion from "../../minion/framework"
+
 
 // creates input container for editing
 export const Input = (defaultValue = "") =>
   
-    createElement("div", {
+    minion.createElement("div", {
         attrs: {
             class: "input-container"
         },
         children: [
-            createElement("input", {
+            minion.createElement("input", {
                 attrs: {
                     id: "todo-input",
                     class: "new-todo",
@@ -17,7 +18,7 @@ export const Input = (defaultValue = "") =>
                     value: defaultValue,
                 }
             }),
-            createElement("label", {
+            minion.createElement("label", {
                 attrs: {
                     class: "visually-hidden",
                     for: "todo-input"

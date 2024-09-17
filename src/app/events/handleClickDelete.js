@@ -1,5 +1,5 @@
-import { updateVApp } from "../updateVApp";
-import { checkItemsCompleted } from "./eventHelpers/checkItemsCompleted";
+import minion from "../../minion/framework";
+import { checkItemsCompleted } from "./checkItemsCompleted";
 
 export const handleClickDelete = (event, toDoList) => {
 
@@ -22,7 +22,7 @@ export const handleClickDelete = (event, toDoList) => {
     // This cheeky line solves a bug where the completed class was
     // incorrectly getting applied to the next item on the list
     listItem.remove();
-    updateVApp(...toDoList)
+    minion.updateVApp(...toDoList)
   }
 
   checkItemsCompleted()

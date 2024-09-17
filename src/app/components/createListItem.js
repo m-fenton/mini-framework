@@ -1,30 +1,30 @@
-import createElement from "../createElement";
+import minion from "../../minion/framework"
 
 // creates an item for the toDoList
 export const createListItem = (toDoString) =>
 
-    createElement("li", {
+    minion.createElement("li", {
         children: [
-            createElement("div", {
+            minion.createElement("div", {
                 attrs: {
                     class: "view",
                 },
                 children: [
-                    createElement("input", {
+                    minion.createElement("input", {
                         attrs: {
                             class: "toggle",
                             type: "checkbox",
                         },
                     }),
                     
-                    createElement("label", {
+                    minion.createElement("label", {
                         attrs: {
                             class: "label",
                         },
                         children: [toDoString],
                     }),
                    
-                    createElement("button", {
+                    minion.createElement("button", {
                         attrs: {
                             class: "destroy",
                         },

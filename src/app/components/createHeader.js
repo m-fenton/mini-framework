@@ -1,13 +1,13 @@
-import createElement from "../createElement";
+import minion from "../../minion/framework";
 import { Input } from "./createInput";
 
 // Function to create the footer element
-export const createHeader = () => createElement("header", {
+export const createHeader = () => minion.createElement("header", {
     attrs: {
         class: "header",
     },
     children: [
-        createElement("h1", {
+        minion.createElement("h1", {
             children: ["todos"]
         }),
         Input()

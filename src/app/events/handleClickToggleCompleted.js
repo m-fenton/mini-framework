@@ -1,4 +1,3 @@
-
 export const handleClickToggleCompleted = (event) => {
 
     if (!event.target.classList.contains("toggle")) { return }

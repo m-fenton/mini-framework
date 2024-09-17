@@ -1,6 +1,6 @@
 import { Input } from "../components/createInput";
 import { createListItem } from "../components/createListItem";
-import { updateVApp } from "../updateVApp";
+import minion from "../../minion/framework";
 
 export const handleDoubleClickEdit = (event, toDoList) => {
 
@@ -21,7 +21,7 @@ export const handleDoubleClickEdit = (event, toDoList) => {
             toDoList[index] = Input(listItem.textContent)
             console.log("toDoList", toDoList)
         }
-        updateVApp(...toDoList)
+        minion.updateVApp(...toDoList)
     }
     // Now find all input elements inside the list item
     const inputContainers = document.querySelectorAll('.input-container');
@@ -37,7 +37,7 @@ export const handleDoubleClickEdit = (event, toDoList) => {
             input.select();   // Select all text in the child input field
             input.onblur = function () {
                 toDoList[index] = createListItem(input.value)
-                updateVApp(...toDoList)
+                minion.updateVApp(...toDoList)
             };
         }
     }

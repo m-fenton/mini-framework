@@ -1,13 +1,10 @@
-import { toDoList } from "../../main";
+import minion from "../../minion/framework";
 import { createListItem } from "../components/createListItem";
-import { routing } from "../routing/routing";
-import { updateVApp } from "../updateVApp";
-import { checkItemsCompleted } from "./eventHelpers/checkItemsCompleted";
+import { checkItemsCompleted } from "./checkItemsCompleted";
+
+import { toDoList } from "../main";
 
 export const handleEnterKeySubmit = (event) => {
-
-
-
 
   // Early return if the key pressed is not "Enter"
   if (event.key !== "Enter") return;
@@ -22,8 +19,8 @@ export const handleEnterKeySubmit = (event) => {
     const toDoItem = createListItem(todoInputValue);
     toDoList.push(toDoItem);
 
-    // updateVApp
-    updateVApp(...toDoList)
+    // minion.updateVApp
+    minion.updateVApp(...toDoList)
 
     input.value = "";
 
@@ -38,7 +35,7 @@ export const handleEnterKeySubmit = (event) => {
       const index = toDoList.findIndex(item => item.tagName === "div");
 
       toDoList[index] = createListItem(input.value)
-      updateVApp(...toDoList)
+      minion.updateVApp(...toDoList)
     };
   }
 
@@ -46,7 +43,7 @@ export const handleEnterKeySubmit = (event) => {
   checkItemsCompleted()
 
 
-  // rerunning routing ensures that new active items are hidden if we're on the completed tab
-  routing()
+  // rerunning minion.routing ensures that new active items are hidden if we're on the completed tab
+  minion.routing()
 
 };

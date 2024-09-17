@@ -1,4 +1,4 @@
-import { updateVApp } from "../updateVApp";
+import minion from "../../minion/framework";
 
 export const handleClickClearCompleted = (event, toDoList) => {
     if (!event.target.classList.contains("clear-completed")) { return }
@@ -29,7 +29,7 @@ export const handleClickClearCompleted = (event, toDoList) => {
     });
 
     // Log the array of indices to the console
-    updateVApp(...toDoList)
+   minion.updateVApp(...toDoList)
 
     // Select all checkboxes with class "toggle"
     const checkboxes = document.querySelectorAll('.toggle');
