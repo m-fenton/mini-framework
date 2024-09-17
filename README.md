@@ -241,9 +241,9 @@ The routing system manages changes in the URL's hash fragment, which is the part
 
 ## State management
 
-Provide the framework with the initial state of your app, which it wraps in a proxy object. This proxy triggers updates automatically whenever the state changes. The framework compares the current virtual DOM with its previous version using a diffing algorithm and renders any new or changed content.
+The global `toDoList` Array is acting as the application's central state. It holds the list of todo items and is updated as the user interacts with the application (e.g., adding, deleting, completing tasks).
 
-Here's how it works: when any property of your state object changes, the framework automatically updates the actual DOM. A diff function compares the updated virtual DOM with the previous one and returns a patch function, which applies the necessary changes to the real DOM. If your app is named `app`, the `updateVapp` function passes the root DOM node to the patch function, which then updates the DOM, rendering new elements and placing them in the correct position.
+Various event handlers (e.g., `handleEnterKeySubmit`, `handleClickDelete`, `handleClickToggleCompleted`) update the application state (`toDoList`) when the user interacts with the application. These updates likely trigger re-rendering of the virtual DOM or UI.
 
 ## Event handling
 
