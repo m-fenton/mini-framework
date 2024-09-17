@@ -7,21 +7,17 @@ import { handleClickClearCompleted } from './events/handleClickClearCompleted';
 import { handleClickToggleCompletedAll } from './events/handleClickToggleCompletedAll';
 import { handleDoubleClickEdit } from './events/handleDoubleClickEdit';
 
-// Application State
+import { vToDoApp } from './components/createToDoApp';
+
+let $rootEl
+
 export let toDoList = [];
-export let $rootEl;
-let vApp;
-
-// Getters and Setters for Virtual DOM
-export const getVApp = () => vApp;
-export const setVApp = (newVApp) => {
-  vApp = newVApp;
-};
-
 // Initialize Application
 const initializeApp = () => {
-  setVApp(minion.createVApp(toDoList)); // Create initial VApp
-  $rootEl = minion.mount(minion.render(vApp), document.getElementById('root')); // minion.mount the initial app
+  
+  let vApp = vToDoApp(toDoList)
+  // minion.setVApp(vApp); // Create initial VApp
+  minion.mount(minion.render(vApp), document.getElementById('root')); // minion.mount the initial app
 
   // start up minion.routing functionality
   minion.routing(...toDoList)
@@ -42,18 +38,6 @@ const initializeApp = () => {
   window.onclick = minion.handleEvent // Global event handler
   window.ondblclick = minion.handleEvent // Global event handler
 };
-
-// Update the root element in the DOM
-export function updateRootEl(newRootEl) {
-  $rootEl = newRootEl; // Update the reference
-  const oldRoot = document.getElementById('root');
-
-  if (oldRoot && oldRoot.parentNode) {
-    oldRoot.parentNode.replaceChild($rootEl, oldRoot); // Replace the old root element with the new one
-  } else {
-    console.warn("Could not find old root element to replace");
-  }
-}
 
 // Initialize the application
 initializeApp();

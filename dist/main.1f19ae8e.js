@@ -117,7 +117,635 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../minion/framework.js":[function(require,module,exports) {
+})({"../minion/core/render.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var renderElem = function renderElem() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null,
+    tagName = _ref.tagName,
+    attrs = _ref.attrs,
+    children = _ref.children;
+  // console.log("Rendering element:", tagName, attrs, children);
+  // create the element
+  //   e.g. <div></div>
+  var $el = document.createElement(tagName);
+
+  // add all attributs as specified in vNode.attrs
+  //   e.g. <div id="app"></div>
+  for (var _i = 0, _Object$entries = Object.entries(attrs); _i < _Object$entries.length; _i++) {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+      k = _Object$entries$_i[0],
+      v = _Object$entries$_i[1];
+    $el.setAttribute(k, v);
+  }
+
+  // append all children as specified in vNode.children
+  //   e.g. <div id="app"><img></div>
+  var _iterator = _createForOfIteratorHelper(children),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var child = _step.value;
+      // console.log("Rendering child:", child);
+      if (render(child) == null) {
+        // console.log("Skipping null child");
+        continue;
+      }
+      $el.appendChild(render(child));
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  return $el;
+};
+var render = function render(vNode) {
+  // console.log("Rendering vNode:", vNode);
+  if (vNode == null) {
+    return;
+  }
+  if (typeof vNode === 'string') {
+    // console.log("Rendering text node:", vNode);
+    return document.createTextNode(vNode);
+  }
+
+  // we assume everything else to be a virtual element
+  // console.log("Rendering element:", vNode);
+  return renderElem(vNode);
+};
+var _default = exports.default = render;
+},{}],"../minion/dom/mount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = exports.default = function _default($node, $target) {
+  $target.replaceWith($node);
+  return $node;
+};
+},{}],"components/createInput.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Input = void 0;
+var _framework = _interopRequireDefault(require("../../minion/framework"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// creates input container for editing
+var Input = exports.Input = function Input() {
+  var defaultValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  return _framework.default.createElement("div", {
+    attrs: {
+      class: "input-container"
+    },
+    children: [_framework.default.createElement("input", {
+      attrs: {
+        id: "todo-input",
+        class: "new-todo",
+        type: "text",
+        placeholder: "What needs to be done?",
+        value: defaultValue
+      }
+    }), _framework.default.createElement("label", {
+      attrs: {
+        class: "visually-hidden",
+        for: "todo-input"
+      }
+      // children: ["New Todo Input"]
+    })]
+  });
+};
+},{"../../minion/framework":"../minion/framework.js"}],"components/createHeader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createHeader = void 0;
+var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _createInput = require("./createInput");
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Function to create the footer element
+var createHeader = exports.createHeader = function createHeader() {
+  return _framework.default.createElement("header", {
+    attrs: {
+      class: "header"
+    },
+    children: [_framework.default.createElement("h1", {
+      children: ["todos"]
+    }), (0, _createInput.Input)()]
+  });
+};
+},{"../../minion/framework":"../minion/framework.js","./createInput":"components/createInput.js"}],"components/createMain.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createMain = void 0;
+var _framework = _interopRequireDefault(require("../../minion/framework"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// creates the main section of the todo page; where the list goes
+var createMain = exports.createMain = function createMain(toDoList) {
+  return _framework.default.createElement("main", {
+    attrs: {
+      class: "main"
+    },
+    children: [_framework.default.createElement("div", {
+      attrs: {
+        class: "toggle-all-container"
+      },
+      // input and label are only shown when toDoList.length !== 0.
+      children: toDoList.length == 0 ? [] : [_framework.default.createElement("input", {
+        attrs: {
+          class: "toggle-all",
+          type: "checkbox"
+        }
+      }), _framework.default.createElement("label", {
+        attrs: {
+          class: "toggle-all-label",
+          for: "toggle-all"
+        }
+      })]
+    }), _framework.default.createElement("ul", {
+      attrs: {
+        class: "todo-list"
+      },
+      children: toDoList
+    })]
+  });
+};
+},{"../../minion/framework":"../minion/framework.js"}],"components/createFooter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createFooter = void 0;
+var _framework = _interopRequireDefault(require("../../minion/framework"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Function to create the footer element
+var createFooter = exports.createFooter = function createFooter(count) {
+  if (count < 1) {
+    return null;
+  }
+  return _framework.default.createElement("footer", {
+    attrs: {
+      class: "footer"
+    },
+    children: [_framework.default.createElement("span", {
+      attrs: {
+        class: "todo-count"
+      },
+      children: ["".concat(count, " items left")] // Show the current count of toDoList items
+    }), _framework.default.createElement("ul", {
+      attrs: {
+        class: "filters"
+      },
+      children: [_framework.default.createElement("li", {
+        children: [_framework.default.createElement("a", {
+          attrs: {
+            class: "",
+            href: "#/"
+          },
+          children: ["All"]
+        }), _framework.default.createElement("a", {
+          attrs: {
+            class: "",
+            href: "#/active"
+          },
+          children: ["Active"]
+        }), _framework.default.createElement("a", {
+          attrs: {
+            class: "",
+            href: "#/completed"
+          },
+          children: ["Completed"]
+        })]
+      })]
+    }), _framework.default.createElement("button", {
+      attrs: {
+        class: "clear-completed"
+        // disabled: "", // or remove this line if you want the button to be enabled
+      },
+      children: ["Clear completed"]
+    })]
+  });
+};
+},{"../../minion/framework":"../minion/framework.js"}],"../minion/core/createVApp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.createVApp = void 0;
+var _createHeader = require("../../app/components/createHeader");
+var _createMain = require("../../app/components/createMain");
+var _createFooter = require("../../app/components/createFooter");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var createVApp = exports.createVApp = function createVApp(toDoList) {
+  return {
+    tagName: 'div',
+    attrs: {
+      id: 'root',
+      class: 'todoapp'
+    },
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(_toConsumableArray(toDoList))].concat(_toConsumableArray(toDoList.length > 0 ? [(0, _createFooter.createFooter)(toDoList.length)] : [])) //Only runs createFooter if toDoList has a length, this acts to hide the footer unless it's needed
+  };
+};
+},{"../../app/components/createHeader":"components/createHeader.js","../../app/components/createMain":"components/createMain.js","../../app/components/createFooter":"components/createFooter.js"}],"../minion/core/createElement.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = exports.default = function _default(tagName) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+    _ref$attrs = _ref.attrs,
+    attrs = _ref$attrs === void 0 ? {} : _ref$attrs,
+    _ref$children = _ref.children,
+    children = _ref$children === void 0 ? [] : _ref$children;
+  var vElem = Object.create(null);
+  Object.assign(vElem, {
+    tagName: tagName,
+    attrs: attrs,
+    children: children
+  });
+  return vElem;
+};
+},{}],"../minion/eventHandling/registerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.registerEvent = exports.eventRegistry = void 0;
+var eventRegistry = exports.eventRegistry = {}; // Object to store event listeners
+
+// Function to register events and their handlers
+var registerEvent = exports.registerEvent = function registerEvent(eventType, handler) {
+  if (!eventRegistry[eventType]) {
+    eventRegistry[eventType] = []; // Initialize if not already initialized
+  }
+  eventRegistry[eventType].push(handler); // Store handler for the event type
+};
+},{}],"../minion/eventHandling/triggerEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.triggerEvent = triggerEvent;
+var _registerEvent = require("./registerEvent");
+// Function to trigger events and run all associated handlers
+function triggerEvent(eventType, event) {
+  if (_registerEvent.eventRegistry[eventType]) {
+    _registerEvent.eventRegistry[eventType].forEach(function (handler) {
+      return handler(event);
+    });
+  }
+}
+;
+},{"./registerEvent":"../minion/eventHandling/registerEvent.js"}],"../minion/eventHandling/handleEvent.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.handleEvent = void 0;
+var _triggerEvent = require("./triggerEvent");
+var handleEvent = exports.handleEvent = function handleEvent(event) {
+  //  console.log(`Event triggered: ${event.type}`); // Log the event type
+  var eventType = event.type; // Get event type (e.g., 'keydown')
+  (0, _triggerEvent.triggerEvent)(eventType, event); // Trigger the event from our custom event system
+};
+},{"./triggerEvent":"../minion/eventHandling/triggerEvent.js"}],"../minion/routing/routing.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.routing = routing;
+function routing() {
+  // Function to check the current hash
+  var checkHash = function checkHash() {
+    // Get all the list items (this will be used in all cases)
+    var todoListItems = document.querySelectorAll('.todo-list li');
+    switch (window.location.hash) {
+      case "#/":
+        console.log("You are on the All route");
+
+        // Show all list items
+        todoListItems.forEach(function (item) {
+          item.style.display = 'list-item'; // Restore the display for all items
+        });
+        break;
+      case "#/active":
+        console.log("You are on the Active route");
+
+        // Show only items that don't have the class "completed"
+        todoListItems.forEach(function (item) {
+          if (item.classList.contains('completed')) {
+            item.style.display = 'none'; // Hide completed items
+          } else {
+            item.style.display = 'list-item'; // Show active (non-completed) items
+          }
+        });
+        break;
+      case "#/completed":
+        console.log("You are on the Completed route");
+
+        // Show only items that have the class "completed"
+        todoListItems.forEach(function (item) {
+          if (item.classList.contains('completed')) {
+            item.style.display = 'list-item'; // Show completed items
+          } else {
+            item.style.display = 'none'; // Hide active (non-completed) items
+          }
+        });
+        break;
+      default:
+        console.log("Unknown route");
+    }
+  };
+
+  // Initial check when the function is first called
+  checkHash();
+
+  // Assign the handler to the hashchange event directly
+  window.onhashchange = checkHash;
+
+  // If you're using history-based routing, handle popstate as well
+  window.onpopstate = checkHash;
+}
+},{}],"../minion/core/setVApp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.vApp = exports.setVApp = void 0;
+var vApp;
+var setVApp = exports.setVApp = function setVApp(newVApp) {
+  exports.vApp = vApp = newVApp;
+};
+},{}],"../minion/core/getVApp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getVApp = void 0;
+var _setVApp = require("./setVApp");
+var getVApp = exports.getVApp = function getVApp() {
+  return _setVApp.vApp;
+};
+},{"./setVApp":"../minion/core/setVApp.js"}],"../minion/state/state.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.$rootEl = void 0;
+// Application State
+var $rootEl;
+},{}],"../minion/core/updateRootEl.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateRootEl = updateRootEl;
+// Update the root element in the DOM
+function updateRootEl(newRootEl) {
+  $rootEl = newRootEl; // Update the reference
+  var oldRoot = document.getElementById('root');
+  if (oldRoot && oldRoot.parentNode) {
+    oldRoot.parentNode.replaceChild($rootEl, oldRoot); // Replace the old root element with the new one
+  } else {
+    console.warn("Could not find old root element to replace");
+  }
+}
+},{}],"../minion/core/diff.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _render = _interopRequireDefault(require("./render"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+// Helper function to zip two arrays together
+var zip = function zip(xs, ys) {
+  var zipped = [];
+  for (var i = 0; i < Math.min(xs.length, ys.length); i++) {
+    zipped.push([xs[i], ys[i]]);
+  }
+  return zipped;
+};
+
+// Diffing attributes between two virtual DOM nodes
+var diffAttrs = function diffAttrs(oldAttrs, newAttrs) {
+  var patches = [];
+
+  // Setting new or updated attributes
+  var _loop = function _loop() {
+    var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
+      k = _Object$entries$_i[0],
+      v = _Object$entries$_i[1];
+    if (oldAttrs[k] !== v) {
+      patches.push(function ($node) {
+        $node.setAttribute(k, v);
+        return $node;
+      });
+    }
+  };
+  for (var _i = 0, _Object$entries = Object.entries(newAttrs); _i < _Object$entries.length; _i++) {
+    _loop();
+  }
+
+  // Removing old attributes that are not present in the new node
+  var _loop2 = function _loop2(k) {
+    if (!(k in newAttrs)) {
+      patches.push(function ($node) {
+        $node.removeAttribute(k);
+        return $node;
+      });
+    }
+  };
+  for (var k in oldAttrs) {
+    _loop2(k);
+  }
+  return function ($node) {
+    for (var _i2 = 0, _patches = patches; _i2 < _patches.length; _i2++) {
+      var patch = _patches[_i2];
+      patch($node);
+    }
+    return $node;
+  };
+};
+
+// Diffing children between two virtual DOM nodes
+var diffChildren = function diffChildren(oldVChildren, newVChildren) {
+  var childPatches = [];
+  oldVChildren.forEach(function (oldVChild, i) {
+    childPatches.push(diff(oldVChild, newVChildren[i]));
+  });
+  var additionalPatches = [];
+  var _iterator = _createForOfIteratorHelper(newVChildren.slice(oldVChildren.length)),
+    _step;
+  try {
+    var _loop3 = function _loop3() {
+      var additionalVChild = _step.value;
+      additionalPatches.push(function ($node) {
+        $node.appendChild((0, _render.default)(additionalVChild));
+        return $node;
+      });
+    };
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      _loop3();
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  return function ($parent) {
+    if (!$parent) {
+      // If $parent is undefined, create a new element
+      $parent = (0, _render.default)(newVChildren[0]);
+    } else {
+      // Applying child patches
+      var _iterator2 = _createForOfIteratorHelper(zip(childPatches, $parent.childNodes)),
+        _step2;
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var _step2$value = _slicedToArray(_step2.value, 2),
+            _patch = _step2$value[0],
+            $child = _step2$value[1];
+          if (_patch) {
+            _patch($child);
+          }
+        }
+        // Adding additional patches (new children)
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+      for (var _i3 = 0, _additionalPatches = additionalPatches; _i3 < _additionalPatches.length; _i3++) {
+        var patch = _additionalPatches[_i3];
+        patch($parent);
+      }
+    }
+    return $parent;
+  };
+};
+
+// Main diff function to compute differences between old and new virtual DOM
+var diff = function diff(oldVTree, newVTree) {
+  // console.log("Diffing:", oldVTree, newVTree);
+  if (oldVTree == null) {
+    // Old tree is null or undefined; create a new node
+    return function () {
+      return (0, _render.default)(newVTree);
+    };
+  }
+  if (!newVTree) {
+    // New tree is undefined; remove the node
+    return function ($node) {
+      $node.remove();
+      return undefined;
+    };
+  }
+  if (typeof oldVTree === 'string' || typeof newVTree === 'string') {
+    if (oldVTree !== newVTree) {
+      return function ($node) {
+        var $newNode = (0, _render.default)(newVTree);
+        $node.replaceWith($newNode);
+        return $newNode;
+      };
+    } else {
+      return function ($node) {
+        return $node;
+      };
+    }
+  }
+  if (oldVTree.tagName !== newVTree.tagName) {
+    return function ($node) {
+      var $newNode = (0, _render.default)(newVTree);
+      $node.replaceWith($newNode);
+      return $newNode;
+    };
+  }
+  var patchAttrs = diffAttrs(oldVTree.attrs, newVTree.attrs);
+  var patchChildren = diffChildren(oldVTree.children, newVTree.children);
+  return function ($node) {
+    patchAttrs($node);
+    patchChildren($node);
+    return $node;
+  };
+};
+var _default = exports.default = diff;
+},{"./render":"../minion/core/render.js"}],"../minion/core/updateVApp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.updateVApp = updateVApp;
+var _getVApp = require("./getVApp");
+var _setVApp = require("./setVApp");
+var _state = require("../state/state");
+var _updateRootEl = require("./updateRootEl");
+var _createVApp = require("./createVApp");
+var _diff = _interopRequireDefault(require("./diff"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+function updateVApp() {
+  // Generate the new virtual DOM representation
+  var currentVApp = (0, _getVApp.getVApp)();
+  for (var _len = arguments.length, toDoList = new Array(_len), _key = 0; _key < _len; _key++) {
+    toDoList[_key] = arguments[_key];
+  }
+  var vNewApp = (0, _createVApp.createVApp)([].concat(toDoList));
+
+  // Calculate the difference and patch the DOM
+  var patch = (0, _diff.default)(currentVApp, vNewApp);
+  var newRootEl = patch(_state.$rootEl);
+
+  // Update the root element and the virtual app state
+  (0, _updateRootEl.updateRootEl)(newRootEl);
+  (0, _setVApp.setVApp)(vNewApp);
+}
+},{"./getVApp":"../minion/core/getVApp.js","./setVApp":"../minion/core/setVApp.js","../state/state":"../minion/state/state.js","./updateRootEl":"../minion/core/updateRootEl.js","./createVApp":"../minion/core/createVApp.js","./diff":"../minion/core/diff.js"}],"../minion/framework.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -128,24 +756,32 @@ var _render = _interopRequireDefault(require("./core/render"));
 var _mount = _interopRequireDefault(require("./dom/mount"));
 var _createVApp = require("./core/createVApp");
 var _createElement = _interopRequireDefault(require("./core/createElement"));
-var _handleEvent = require("./eventhandling/handleEvent");
-var _registerEvent = require("./eventhandling/registerEvent");
+var _handleEvent = require("./eventHandling/handleEvent");
+var _registerEvent = require("./eventHandling/registerEvent");
 var _routing = require("./routing/routing");
+var _getVApp = require("./core/getVApp");
+var _setVApp = require("./core/setVApp");
+var _updateVApp = require("./core/updateVApp");
+var _updateRootEl = require("./core/updateRootEl");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Creates the framework object
 var minion = {
   render: _render.default,
   mount: _mount.default,
   createVApp: _createVApp.createVApp,
+  getVApp: _getVApp.getVApp,
+  setVApp: _setVApp.setVApp,
+  updateVApp: _updateVApp.updateVApp,
+  updateRootEl: _updateRootEl.updateRootEl,
   createElement: _createElement.default,
-  handleEvent: _handleEvent.handleEvent,
   registerEvent: _registerEvent.registerEvent,
+  handleEvent: _handleEvent.handleEvent,
   routing: _routing.routing
 };
 
 // Export the whole framework as a single object
 var _default = exports.default = minion;
-},{}],"components/createListItem.js":[function(require,module,exports) {
+},{"./core/render":"../minion/core/render.js","./dom/mount":"../minion/dom/mount.js","./core/createVApp":"../minion/core/createVApp.js","./core/createElement":"../minion/core/createElement.js","./eventHandling/handleEvent":"../minion/eventHandling/handleEvent.js","./eventHandling/registerEvent":"../minion/eventHandling/registerEvent.js","./routing/routing":"../minion/routing/routing.js","./core/getVApp":"../minion/core/getVApp.js","./core/setVApp":"../minion/core/setVApp.js","./core/updateVApp":"../minion/core/updateVApp.js","./core/updateRootEl":"../minion/core/updateRootEl.js"}],"components/createListItem.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -420,40 +1056,7 @@ var handleClickToggleCompletedAll = exports.handleClickToggleCompletedAll = func
     });
   }
 };
-},{}],"components/createInput.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Input = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-// creates input container for editing
-var Input = exports.Input = function Input() {
-  var defaultValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-  return _framework.default.createElement("div", {
-    attrs: {
-      class: "input-container"
-    },
-    children: [_framework.default.createElement("input", {
-      attrs: {
-        id: "todo-input",
-        class: "new-todo",
-        type: "text",
-        placeholder: "What needs to be done?",
-        value: defaultValue
-      }
-    }), _framework.default.createElement("label", {
-      attrs: {
-        class: "visually-hidden",
-        for: "todo-input"
-      }
-      // children: ["New Todo Input"]
-    })]
-  });
-};
-},{"../../minion/framework":"../minion/framework.js"}],"events/handleDoubleClickEdit.js":[function(require,module,exports) {
+},{}],"events/handleDoubleClickEdit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -510,14 +1113,39 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
     }
   }
 };
-},{"../components/createInput":"components/createInput.js","../components/createListItem":"components/createListItem.js","../../minion/framework":"../minion/framework.js"}],"main.js":[function(require,module,exports) {
+},{"../components/createInput":"components/createInput.js","../components/createListItem":"components/createListItem.js","../../minion/framework":"../minion/framework.js"}],"components/createToDoApp.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.toDoList = exports.setVApp = exports.getVApp = exports.$rootEl = void 0;
-exports.updateRootEl = updateRootEl;
+exports.vToDoApp = void 0;
+var _createHeader = require("../../app/components/createHeader");
+var _createMain = require("../../app/components/createMain");
+var _createFooter = require("../../app/components/createFooter");
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+var vToDoApp = exports.vToDoApp = function vToDoApp(toDoList) {
+  return {
+    tagName: 'div',
+    attrs: {
+      id: 'root',
+      class: 'todoapp'
+    },
+    children: [(0, _createHeader.createHeader)(), (0, _createMain.createMain)(_toConsumableArray(toDoList))].concat(_toConsumableArray(toDoList.length > 0 ? [(0, _createFooter.createFooter)(toDoList.length)] : [])) //Only runs createFooter if toDoList has a length, this acts to hide the footer unless it's needed
+  };
+};
+},{"../../app/components/createHeader":"components/createHeader.js","../../app/components/createMain":"components/createMain.js","../../app/components/createFooter":"components/createFooter.js"}],"main.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toDoList = void 0;
 var _framework = _interopRequireDefault(require("../minion/framework"));
 var _handleEnterKeySubmit = require("./events/handleEnterKeySubmit");
 var _handleClickDelete = require("./events/handleClickDelete");
@@ -525,24 +1153,15 @@ var _handleClickToggleCompleted = require("./events/handleClickToggleCompleted")
 var _handleClickClearCompleted = require("./events/handleClickClearCompleted");
 var _handleClickToggleCompletedAll = require("./events/handleClickToggleCompletedAll");
 var _handleDoubleClickEdit = require("./events/handleDoubleClickEdit");
+var _createToDoApp = require("./components/createToDoApp");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-// Application State
-var toDoList = exports.toDoList = [];
 var $rootEl;
-var vApp;
-
-// Getters and Setters for Virtual DOM
-var getVApp = exports.getVApp = function getVApp() {
-  return vApp;
-};
-var setVApp = exports.setVApp = function setVApp(newVApp) {
-  vApp = newVApp;
-};
-
+var toDoList = exports.toDoList = [];
 // Initialize Application
 var initializeApp = function initializeApp() {
-  setVApp(_framework.default.createVApp(toDoList)); // Create initial VApp
-  exports.$rootEl = $rootEl = _framework.default.mount(_framework.default.render(vApp), document.getElementById('root')); // minion.mount the initial app
+  var vApp = (0, _createToDoApp.vToDoApp)(toDoList);
+  // minion.setVApp(vApp); // Create initial VApp
+  _framework.default.mount(_framework.default.render(vApp), document.getElementById('root')); // minion.mount the initial app
 
   // start up minion.routing functionality
   _framework.default.routing.apply(_framework.default, toDoList);
@@ -574,20 +1193,9 @@ var initializeApp = function initializeApp() {
   window.ondblclick = _framework.default.handleEvent; // Global event handler
 };
 
-// Update the root element in the DOM
-function updateRootEl(newRootEl) {
-  exports.$rootEl = $rootEl = newRootEl; // Update the reference
-  var oldRoot = document.getElementById('root');
-  if (oldRoot && oldRoot.parentNode) {
-    oldRoot.parentNode.replaceChild($rootEl, oldRoot); // Replace the old root element with the new one
-  } else {
-    console.warn("Could not find old root element to replace");
-  }
-}
-
 // Initialize the application
 initializeApp();
-},{"../minion/framework":"../minion/framework.js","./events/handleEnterKeySubmit":"events/handleEnterKeySubmit.js","./events/handleClickDelete":"events/handleClickDelete.js","./events/handleClickToggleCompleted":"events/handleClickToggleCompleted.js","./events/handleClickClearCompleted":"events/handleClickClearCompleted.js","./events/handleClickToggleCompletedAll":"events/handleClickToggleCompletedAll.js","./events/handleDoubleClickEdit":"events/handleDoubleClickEdit.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../minion/framework":"../minion/framework.js","./events/handleEnterKeySubmit":"events/handleEnterKeySubmit.js","./events/handleClickDelete":"events/handleClickDelete.js","./events/handleClickToggleCompleted":"events/handleClickToggleCompleted.js","./events/handleClickClearCompleted":"events/handleClickClearCompleted.js","./events/handleClickToggleCompletedAll":"events/handleClickToggleCompletedAll.js","./events/handleDoubleClickEdit":"events/handleDoubleClickEdit.js","./components/createToDoApp":"components/createToDoApp.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -612,7 +1220,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39019" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35937" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

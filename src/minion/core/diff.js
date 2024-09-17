@@ -1,5 +1,4 @@
-import render from './core/render';
-
+import render from "./render";
 // Helper function to zip two arrays together
 const zip = (xs, ys) => {
     const zipped = [];

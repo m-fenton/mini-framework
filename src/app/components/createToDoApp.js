@@ -2,7 +2,7 @@ import { createHeader } from "../../app/components/createHeader";
 import { createMain } from "../../app/components/createMain";
 import { createFooter } from '../../app/components/createFooter';
 
-export const createVApp = (toDoList) => {
+export const vToDoApp = (toDoList) => {
     return {
         tagName: 'div',
         attrs: {
