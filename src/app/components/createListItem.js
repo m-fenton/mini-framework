@@ -1,4 +1,4 @@
-import minion from "../../minion/framework"
+import minion from "../../minion/minion"
 
 // creates an item for the toDoList
 export const createListItem = (toDoString) =>

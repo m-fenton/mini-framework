@@ -1,4 +1,4 @@
-import minion from "../../minion/framework";
+import minion from "../../minion/minion";
 import { checkItemsCompleted } from "./checkItemsCompleted";
 
 export const handleClickDelete = (event, toDoList) => {

@@ -1,4 +1,4 @@
-import minion from "../../minion/framework";
+import minion from "../../minion/minion";
 
 export const handleClickClearCompleted = (event, toDoList) => {
     if (!event.target.classList.contains("clear-completed")) { return }

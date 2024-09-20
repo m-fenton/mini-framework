@@ -1,6 +1,6 @@
 import { Input } from "../components/createInput";
 import { createListItem } from "../components/createListItem";
-import minion from "../../minion/framework";
+import minion from "../../minion/minion";
 
 export const handleDoubleClickEdit = (event, toDoList) => {
 

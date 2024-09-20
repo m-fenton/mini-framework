@@ -1,4 +1,4 @@
-import minion from "../../minion/framework";
+import minion from "../../minion/minion";
 
 // creates the main section of the todo page; where the list goes
 export const createMain = (toDoList) =>

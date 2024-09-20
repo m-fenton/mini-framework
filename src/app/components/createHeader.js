@@ -1,4 +1,4 @@
-import minion from "../../minion/framework";
+import minion from "../../minion/minion";
 import { Input } from "./createInput";
 
 // Function to create the footer element

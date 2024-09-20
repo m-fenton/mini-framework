@@ -1,4 +1,4 @@
-import minion from '../minion/framework';
+import minion from '../minion/minion';
 
 import { handleEnterKeySubmit } from './events/handleEnterKeySubmit';
 import { handleClickDelete } from './events/handleClickDelete';
@@ -16,8 +16,12 @@ export let toDoList = [];
 const initializeApp = () => {
   
   let vApp = vToDoApp(toDoList)
+
+  let $rootElement = document.getElementById('root')
+
+  let $App = minion.render(vApp)
   // minion.setVApp(vApp); // Create initial VApp
-  minion.mount(minion.render(vApp), document.getElementById('root')); // minion.mount the initial app
+ let mountedApp = minion.mount($App, $rootElement); // minion.mount the initial app
 
   // start up minion.routing functionality
   minion.routing(...toDoList)

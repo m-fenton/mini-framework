@@ -1,4 +1,4 @@
-import minion from "../../minion/framework";
+import minion from "../../minion/minion";
 // Function to create the footer element
 export const createFooter = (count) => {
   if (count < 1) {

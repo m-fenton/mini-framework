@@ -1,4 +1,4 @@
-import minion from "../../minion/framework"
+import minion from "../../minion/minion"
 
 
 // creates input container for editing

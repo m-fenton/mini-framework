@@ -204,16 +204,16 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Input = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // creates input container for editing
 var Input = exports.Input = function Input() {
   var defaultValue = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-  return _framework.default.createElement("div", {
+  return _minion.default.createElement("div", {
     attrs: {
       class: "input-container"
     },
-    children: [_framework.default.createElement("input", {
+    children: [_minion.default.createElement("input", {
       attrs: {
         id: "todo-input",
         class: "new-todo",
@@ -221,7 +221,7 @@ var Input = exports.Input = function Input() {
         placeholder: "What needs to be done?",
         value: defaultValue
       }
-    }), _framework.default.createElement("label", {
+    }), _minion.default.createElement("label", {
       attrs: {
         class: "visually-hidden",
         for: "todo-input"
@@ -230,59 +230,59 @@ var Input = exports.Input = function Input() {
     })]
   });
 };
-},{"../../minion/framework":"../minion/framework.js"}],"components/createHeader.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js"}],"components/createHeader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.createHeader = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 var _createInput = require("./createInput");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createHeader = exports.createHeader = function createHeader() {
-  return _framework.default.createElement("header", {
+  return _minion.default.createElement("header", {
     attrs: {
       class: "header"
     },
-    children: [_framework.default.createElement("h1", {
+    children: [_minion.default.createElement("h1", {
       children: ["todos"]
     }), (0, _createInput.Input)()]
   });
 };
-},{"../../minion/framework":"../minion/framework.js","./createInput":"components/createInput.js"}],"components/createMain.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js","./createInput":"components/createInput.js"}],"components/createMain.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.createMain = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // creates the main section of the todo page; where the list goes
 var createMain = exports.createMain = function createMain(toDoList) {
-  return _framework.default.createElement("main", {
+  return _minion.default.createElement("main", {
     attrs: {
       class: "main"
     },
-    children: [_framework.default.createElement("div", {
+    children: [_minion.default.createElement("div", {
       attrs: {
         class: "toggle-all-container"
       },
       // input and label are only shown when toDoList.length !== 0.
-      children: toDoList.length == 0 ? [] : [_framework.default.createElement("input", {
+      children: toDoList.length == 0 ? [] : [_minion.default.createElement("input", {
         attrs: {
           class: "toggle-all",
           type: "checkbox"
         }
-      }), _framework.default.createElement("label", {
+      }), _minion.default.createElement("label", {
         attrs: {
           class: "toggle-all-label",
           for: "toggle-all"
         }
       })]
-    }), _framework.default.createElement("ul", {
+    }), _minion.default.createElement("ul", {
       attrs: {
         class: "todo-list"
       },
@@ -290,47 +290,47 @@ var createMain = exports.createMain = function createMain(toDoList) {
     })]
   });
 };
-},{"../../minion/framework":"../minion/framework.js"}],"components/createFooter.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js"}],"components/createFooter.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.createFooter = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createFooter = exports.createFooter = function createFooter(count) {
   if (count < 1) {
     return null;
   }
-  return _framework.default.createElement("footer", {
+  return _minion.default.createElement("footer", {
     attrs: {
       class: "footer"
     },
-    children: [_framework.default.createElement("span", {
+    children: [_minion.default.createElement("span", {
       attrs: {
         class: "todo-count"
       },
       children: ["".concat(count, " items left")] // Show the current count of toDoList items
-    }), _framework.default.createElement("ul", {
+    }), _minion.default.createElement("ul", {
       attrs: {
         class: "filters"
       },
-      children: [_framework.default.createElement("li", {
-        children: [_framework.default.createElement("a", {
+      children: [_minion.default.createElement("li", {
+        children: [_minion.default.createElement("a", {
           attrs: {
             class: "",
             href: "#/"
           },
           children: ["All"]
-        }), _framework.default.createElement("a", {
+        }), _minion.default.createElement("a", {
           attrs: {
             class: "",
             href: "#/active"
           },
           children: ["Active"]
-        }), _framework.default.createElement("a", {
+        }), _minion.default.createElement("a", {
           attrs: {
             class: "",
             href: "#/completed"
@@ -338,7 +338,7 @@ var createFooter = exports.createFooter = function createFooter(count) {
           children: ["Completed"]
         })]
       })]
-    }), _framework.default.createElement("button", {
+    }), _minion.default.createElement("button", {
       attrs: {
         class: "clear-completed"
         // disabled: "", // or remove this line if you want the button to be enabled
@@ -347,7 +347,7 @@ var createFooter = exports.createFooter = function createFooter(count) {
     })]
   });
 };
-},{"../../minion/framework":"../minion/framework.js"}],"../minion/core/createVApp.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js"}],"../minion/core/createVApp.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -745,7 +745,7 @@ function updateVApp() {
   (0, _updateRootEl.updateRootEl)(newRootEl);
   (0, _setVApp.setVApp)(vNewApp);
 }
-},{"./getVApp":"../minion/core/getVApp.js","./setVApp":"../minion/core/setVApp.js","../state/state":"../minion/state/state.js","./updateRootEl":"../minion/core/updateRootEl.js","./createVApp":"../minion/core/createVApp.js","./diff":"../minion/core/diff.js"}],"../minion/framework.js":[function(require,module,exports) {
+},{"./getVApp":"../minion/core/getVApp.js","./setVApp":"../minion/core/setVApp.js","../state/state":"../minion/state/state.js","./updateRootEl":"../minion/core/updateRootEl.js","./createVApp":"../minion/core/createVApp.js","./diff":"../minion/core/diff.js"}],"../minion/minion.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -788,26 +788,26 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.createListItem = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // creates an item for the toDoList
 var createListItem = exports.createListItem = function createListItem(toDoString) {
-  return _framework.default.createElement("li", {
-    children: [_framework.default.createElement("div", {
+  return _minion.default.createElement("li", {
+    children: [_minion.default.createElement("div", {
       attrs: {
         class: "view"
       },
-      children: [_framework.default.createElement("input", {
+      children: [_minion.default.createElement("input", {
         attrs: {
           class: "toggle",
           type: "checkbox"
         }
-      }), _framework.default.createElement("label", {
+      }), _minion.default.createElement("label", {
         attrs: {
           class: "label"
         },
         children: [toDoString]
-      }), _framework.default.createElement("button", {
+      }), _minion.default.createElement("button", {
         attrs: {
           class: "destroy"
         }
@@ -815,7 +815,7 @@ var createListItem = exports.createListItem = function createListItem(toDoString
     })]
   });
 };
-},{"../../minion/framework":"../minion/framework.js"}],"events/checkItemsCompleted.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js"}],"events/checkItemsCompleted.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -840,7 +840,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.handleEnterKeySubmit = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 var _createListItem = require("../components/createListItem");
 var _checkItemsCompleted = require("./checkItemsCompleted");
 var _main = require("../main");
@@ -865,7 +865,7 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
     _main.toDoList.push(toDoItem);
 
     // minion.updateVApp
-    _framework.default.updateVApp.apply(_framework.default, _toConsumableArray(_main.toDoList));
+    _minion.default.updateVApp.apply(_minion.default, _toConsumableArray(_main.toDoList));
     input.value = "";
   }
   if (inputContainers.length == 2) {
@@ -878,7 +878,7 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
         return item.tagName === "div";
       });
       _main.toDoList[index] = (0, _createListItem.createListItem)(_input.value);
-      _framework.default.updateVApp.apply(_framework.default, _toConsumableArray(_main.toDoList));
+      _minion.default.updateVApp.apply(_minion.default, _toConsumableArray(_main.toDoList));
     }
     ;
   }
@@ -887,16 +887,16 @@ var handleEnterKeySubmit = exports.handleEnterKeySubmit = function handleEnterKe
   (0, _checkItemsCompleted.checkItemsCompleted)();
 
   // rerunning minion.routing ensures that new active items are hidden if we're on the completed tab
-  _framework.default.routing();
+  _minion.default.routing();
 };
-},{"../../minion/framework":"../minion/framework.js","../components/createListItem":"components/createListItem.js","./checkItemsCompleted":"events/checkItemsCompleted.js","../main":"main.js"}],"events/handleClickDelete.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js","../components/createListItem":"components/createListItem.js","./checkItemsCompleted":"events/checkItemsCompleted.js","../main":"main.js"}],"events/handleClickDelete.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.handleClickDelete = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 var _checkItemsCompleted = require("./checkItemsCompleted");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
@@ -926,11 +926,11 @@ var handleClickDelete = exports.handleClickDelete = function handleClickDelete(e
     // This cheeky line solves a bug where the completed class was
     // incorrectly getting applied to the next item on the list
     listItem.remove();
-    _framework.default.updateVApp.apply(_framework.default, _toConsumableArray(toDoList));
+    _minion.default.updateVApp.apply(_minion.default, _toConsumableArray(toDoList));
   }
   (0, _checkItemsCompleted.checkItemsCompleted)();
 };
-},{"../../minion/framework":"../minion/framework.js","./checkItemsCompleted":"events/checkItemsCompleted.js"}],"events/handleClickToggleCompleted.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js","./checkItemsCompleted":"events/checkItemsCompleted.js"}],"events/handleClickToggleCompleted.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -964,7 +964,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.handleClickClearCompleted = void 0;
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1004,7 +1004,7 @@ var handleClickClearCompleted = exports.handleClickClearCompleted = function han
   });
 
   // Log the array of indices to the console
-  _framework.default.updateVApp.apply(_framework.default, _toConsumableArray(toDoList));
+  _minion.default.updateVApp.apply(_minion.default, _toConsumableArray(toDoList));
 
   // Select all checkboxes with class "toggle"
   var checkboxes = document.querySelectorAll('.toggle');
@@ -1014,7 +1014,7 @@ var handleClickClearCompleted = exports.handleClickClearCompleted = function han
     checkbox.checked = false;
   });
 };
-},{"../../minion/framework":"../minion/framework.js"}],"events/handleClickToggleCompletedAll.js":[function(require,module,exports) {
+},{"../../minion/minion":"../minion/minion.js"}],"events/handleClickToggleCompletedAll.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1065,7 +1065,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.handleDoubleClickEdit = void 0;
 var _createInput = require("../components/createInput");
 var _createListItem = require("../components/createListItem");
-var _framework = _interopRequireDefault(require("../../minion/framework"));
+var _minion = _interopRequireDefault(require("../../minion/minion"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1093,7 +1093,7 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
       toDoList[index] = (0, _createInput.Input)(listItem.textContent);
       console.log("toDoList", toDoList);
     }
-    _framework.default.updateVApp.apply(_framework.default, _toConsumableArray(toDoList));
+    _minion.default.updateVApp.apply(_minion.default, _toConsumableArray(toDoList));
   }
   // Now find all input elements inside the list item
   var inputContainers = document.querySelectorAll('.input-container');
@@ -1108,12 +1108,12 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
       input.select(); // Select all text in the child input field
       input.onblur = function () {
         toDoList[index] = (0, _createListItem.createListItem)(input.value);
-        _framework.default.updateVApp.apply(_framework.default, _toConsumableArray(toDoList));
+        _minion.default.updateVApp.apply(_minion.default, _toConsumableArray(toDoList));
       };
     }
   }
 };
-},{"../components/createInput":"components/createInput.js","../components/createListItem":"components/createListItem.js","../../minion/framework":"../minion/framework.js"}],"components/createToDoApp.js":[function(require,module,exports) {
+},{"../components/createInput":"components/createInput.js","../components/createListItem":"components/createListItem.js","../../minion/minion":"../minion/minion.js"}],"components/createToDoApp.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1146,7 +1146,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.toDoList = void 0;
-var _framework = _interopRequireDefault(require("../minion/framework"));
+var _minion = _interopRequireDefault(require("../minion/minion"));
 var _handleEnterKeySubmit = require("./events/handleEnterKeySubmit");
 var _handleClickDelete = require("./events/handleClickDelete");
 var _handleClickToggleCompleted = require("./events/handleClickToggleCompleted");
@@ -1160,42 +1160,43 @@ var toDoList = exports.toDoList = [];
 // Initialize Application
 var initializeApp = function initializeApp() {
   var vApp = (0, _createToDoApp.vToDoApp)(toDoList);
+  var $rootElement = document.getElementById('root');
   // minion.setVApp(vApp); // Create initial VApp
-  _framework.default.mount(_framework.default.render(vApp), document.getElementById('root')); // minion.mount the initial app
+  _minion.default.mount(_minion.default.render(vApp), $rootElement); // minion.mount the initial app
 
   // start up minion.routing functionality
-  _framework.default.routing.apply(_framework.default, toDoList);
+  _minion.default.routing.apply(_minion.default, toDoList);
 
   // Register events
   // Keydown
-  _framework.default.registerEvent('keydown', _handleEnterKeySubmit.handleEnterKeySubmit); // Keydown for Enter key to add items
+  _minion.default.registerEvent('keydown', _handleEnterKeySubmit.handleEnterKeySubmit); // Keydown for Enter key to add items
   // Click
-  _framework.default.registerEvent('click', function (event) {
+  _minion.default.registerEvent('click', function (event) {
     return (0, _handleClickDelete.handleClickDelete)(event, toDoList);
   });
-  _framework.default.registerEvent('click', function (event) {
+  _minion.default.registerEvent('click', function (event) {
     return (0, _handleClickToggleCompleted.handleClickToggleCompleted)(event);
   });
-  _framework.default.registerEvent('click', function (event) {
+  _minion.default.registerEvent('click', function (event) {
     return (0, _handleClickClearCompleted.handleClickClearCompleted)(event, toDoList);
   });
-  _framework.default.registerEvent('click', function (event) {
+  _minion.default.registerEvent('click', function (event) {
     return (0, _handleClickToggleCompletedAll.handleClickToggleCompletedAll)(event);
   });
   // Double Click
-  _framework.default.registerEvent('dblclick', function (event) {
+  _minion.default.registerEvent('dblclick', function (event) {
     return (0, _handleDoubleClickEdit.handleDoubleClickEdit)(event, toDoList);
   }); // example double click event
 
   // Activate event handlers
-  window.onkeydown = _framework.default.handleEvent; // Global event handler
-  window.onclick = _framework.default.handleEvent; // Global event handler
-  window.ondblclick = _framework.default.handleEvent; // Global event handler
+  window.onkeydown = _minion.default.handleEvent; // Global event handler
+  window.onclick = _minion.default.handleEvent; // Global event handler
+  window.ondblclick = _minion.default.handleEvent; // Global event handler
 };
 
 // Initialize the application
 initializeApp();
-},{"../minion/framework":"../minion/framework.js","./events/handleEnterKeySubmit":"events/handleEnterKeySubmit.js","./events/handleClickDelete":"events/handleClickDelete.js","./events/handleClickToggleCompleted":"events/handleClickToggleCompleted.js","./events/handleClickClearCompleted":"events/handleClickClearCompleted.js","./events/handleClickToggleCompletedAll":"events/handleClickToggleCompletedAll.js","./events/handleDoubleClickEdit":"events/handleDoubleClickEdit.js","./components/createToDoApp":"components/createToDoApp.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../minion/minion":"../minion/minion.js","./events/handleEnterKeySubmit":"events/handleEnterKeySubmit.js","./events/handleClickDelete":"events/handleClickDelete.js","./events/handleClickToggleCompleted":"events/handleClickToggleCompleted.js","./events/handleClickClearCompleted":"events/handleClickClearCompleted.js","./events/handleClickToggleCompletedAll":"events/handleClickToggleCompletedAll.js","./events/handleDoubleClickEdit":"events/handleDoubleClickEdit.js","./components/createToDoApp":"components/createToDoApp.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -1220,7 +1221,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35937" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34925" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
