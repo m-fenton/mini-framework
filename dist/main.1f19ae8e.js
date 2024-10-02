@@ -322,9 +322,7 @@ var _createElement = _interopRequireDefault(require("../createElement"));
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Function to create the footer element
 var createFooter = exports.createFooter = function createFooter(count) {
-  if (count < 1) {
-    return null;
-  }
+  console.log("footer count:", count);
   return (0, _createElement.default)("footer", {
     attrs: {
       class: "footer"
@@ -711,13 +709,14 @@ exports.checkItemsCompleted = checkItemsCompleted;
 function checkItemsCompleted() {
   var toDoCountElement = document.querySelector(".todo-count");
   var todoListItems = document.querySelectorAll('.todo-list li');
+  var todoNum = Number(todoListItems.length);
   todoListItems.forEach(function (item) {
     if (item.classList.contains('completed')) {
-      var newNum = Number(toDoCountElement.textContent.split(" ")[0]) - 1;
-      var newStr = newNum + " items left!";
-      toDoCountElement.textContent = newStr;
+      todoNum--;
     }
   });
+  var newStr = todoNum + " items left!";
+  toDoCountElement.textContent = newStr;
 }
 },{}],"vdom/updateVApp.js":[function(require,module,exports) {
 "use strict";
@@ -996,7 +995,6 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
   }
   var listItem = event.target.closest('li');
   if (listItem) {
-    // listItem.classList.add("editing")
     //  Get all li elements
     var allItems = Array.from(listItem.parentNode.children);
 
@@ -1005,9 +1003,9 @@ var handleDoubleClickEdit = exports.handleDoubleClickEdit = function handleDoubl
 
     //    Check if the index is within the bounds of the array
     if (index >= 0 && index < toDoList.length) {
-      // Use splice to remove the entry at the specific index
+      // Use splice to alter the entry at the specific index
       toDoList[index] = (0, _createInput.Input)(listItem.textContent);
-      console.log("toDoList", toDoList);
+      console.log("toDoList.length", toDoList.length);
     }
     _updateVApp.updateVApp.apply(void 0, _toConsumableArray(toDoList));
   }
@@ -1136,7 +1134,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36107" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41699" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

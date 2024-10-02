@@ -8,7 +8,6 @@ export const handleDoubleClickEdit = (event, toDoList) => {
     if (!event.target.classList.contains("label")) { return }
     const listItem = event.target.closest('li');
     if (listItem) {
-        // listItem.classList.add("editing")
         //  Get all li elements
         const allItems = Array.from(listItem.parentNode.children);
 
@@ -17,9 +16,9 @@ export const handleDoubleClickEdit = (event, toDoList) => {
 
         //    Check if the index is within the bounds of the array
         if (index >= 0 && index < toDoList.length) {
-            // Use splice to remove the entry at the specific index
+            // Use splice to alter the entry at the specific index
             toDoList[index] = Input(listItem.textContent)
-            console.log("toDoList", toDoList)
+            console.log("toDoList.length", toDoList.length)
         }
         updateVApp(...toDoList)
     }

@@ -2,9 +2,7 @@ import createElement from "../createElement";
 
 // Function to create the footer element
 export const createFooter = (count) => {
-  if (count < 1) {
-    return null
-  }
+  console.log("footer count:", count)
   return createElement("footer", {
     attrs: {
       class: "footer",
