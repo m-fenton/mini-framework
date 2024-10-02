@@ -6,6 +6,7 @@ export const handleClickToggleCompletedAll = (event) => {
 
     // Select all <li> elements inside the <ul> with the class "todo-list"
     let todoListItems = document.querySelectorAll('.todo-list li');
+    const toDoCountElement = document.querySelector(".todo-count")
 
     // Determine if all items have the class "completed"
     const allCompleted = Array.from(todoListItems).every(item => item.classList.contains('completed'));
@@ -19,11 +20,17 @@ export const handleClickToggleCompletedAll = (event) => {
         checkboxes.forEach(checkbox => {
             checkbox.checked = false; // Uncheck all checkboxes
         });
+        let newNum = Number(todoListItems.length)
+        let newStr = newNum + " items left!"
+        toDoCountElement.textContent = newStr
     } else {
         // Otherwise, add the "completed" class to all items
         todoListItems.forEach(item => item.classList.add('completed'));
         checkboxes.forEach(checkbox => {
             checkbox.checked = true; // Check all checkboxes
         });
+        let newNum = Number(0)
+        let newStr = newNum + " items left!"
+        toDoCountElement.textContent = newStr
     }
 };

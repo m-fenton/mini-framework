@@ -333,7 +333,7 @@ var createFooter = exports.createFooter = function createFooter(count) {
       attrs: {
         class: "todo-count"
       },
-      children: ["".concat(count, " items left")] // Show the current count of toDoList items
+      children: ["".concat(count, " items left!")] // Show the current count of toDoList items
     }), (0, _createElement.default)("ul", {
       attrs: {
         class: "filters"
@@ -713,7 +713,7 @@ function checkItemsCompleted() {
   var todoListItems = document.querySelectorAll('.todo-list li');
   todoListItems.forEach(function (item) {
     if (item.classList.contains('completed')) {
-      var newNum = Number(toDoCountElement.textContent[0]) - 1;
+      var newNum = Number(toDoCountElement.textContent.split(" ")[0]) - 1;
       var newStr = newNum + " items left!";
       toDoCountElement.textContent = newStr;
     }
@@ -857,12 +857,12 @@ var handleClickToggleCompleted = exports.handleClickToggleCompleted = function h
   if (listItem) {
     if (!listItem.classList.contains("completed")) {
       listItem.classList.add("completed");
-      var newNum = Number(toDoCountElement.textContent[0]) - 1;
+      var newNum = Number(toDoCountElement.textContent.split(" ")[0]) - 1;
       var newStr = newNum + " items left!";
       toDoCountElement.textContent = newStr;
     } else {
       listItem.classList.remove("completed");
-      var _newNum = Number(toDoCountElement.textContent[0]) + 1;
+      var _newNum = Number(toDoCountElement.textContent.split(" ")[0]) + 1;
       var _newStr = _newNum + " items left!";
       toDoCountElement.textContent = _newStr;
     }
@@ -939,6 +939,7 @@ var handleClickToggleCompletedAll = exports.handleClickToggleCompletedAll = func
 
   // Select all <li> elements inside the <ul> with the class "todo-list"
   var todoListItems = document.querySelectorAll('.todo-list li');
+  var toDoCountElement = document.querySelector(".todo-count");
 
   // Determine if all items have the class "completed"
   var allCompleted = Array.from(todoListItems).every(function (item) {
@@ -956,6 +957,9 @@ var handleClickToggleCompletedAll = exports.handleClickToggleCompletedAll = func
     checkboxes.forEach(function (checkbox) {
       checkbox.checked = false; // Uncheck all checkboxes
     });
+    var newNum = Number(todoListItems.length);
+    var newStr = newNum + " items left!";
+    toDoCountElement.textContent = newStr;
   } else {
     // Otherwise, add the "completed" class to all items
     todoListItems.forEach(function (item) {
@@ -964,6 +968,9 @@ var handleClickToggleCompletedAll = exports.handleClickToggleCompletedAll = func
     checkboxes.forEach(function (checkbox) {
       checkbox.checked = true; // Check all checkboxes
     });
+    var _newNum = Number(0);
+    var _newStr = _newNum + " items left!";
+    toDoCountElement.textContent = _newStr;
   }
 };
 },{}],"vdom/events/handleDoubleClickEdit.js":[function(require,module,exports) {
@@ -1129,7 +1136,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "40073" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36107" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

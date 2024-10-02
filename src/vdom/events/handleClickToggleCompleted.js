@@ -10,13 +10,13 @@ export const handleClickToggleCompleted = (event) => {
     if (listItem) {
         if (!listItem.classList.contains("completed")) {
             listItem.classList.add("completed")
-            let newNum = Number(toDoCountElement.textContent[0]) -1
+            let newNum = Number(toDoCountElement.textContent.split(" ")[0]) -1
             let newStr = newNum + " items left!"
             toDoCountElement.textContent = newStr
 
         } else {
             listItem.classList.remove("completed")
-            let newNum = Number(toDoCountElement.textContent[0]) + 1
+            let newNum = Number(toDoCountElement.textContent.split(" ")[0]) + 1
             let newStr = newNum + " items left!"
             toDoCountElement.textContent = newStr
         }
